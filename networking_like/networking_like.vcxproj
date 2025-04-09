@@ -70,6 +70,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\bresk\source\repos\networking_like\networking_like\files;C:\Users\bresk\source\repos\networking_like\networking_like\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -104,6 +107,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,7 +132,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="networking_like.cpp" />
+    <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
+    <ClCompile Include="files\Networking\Packets\Packet.cpp" />
+    <ClCompile Include="files\Networking\Packets\PacketData.cpp" />
+    <ClCompile Include="files\Networking\Shared\NetPeer.cpp" />
+    <ClCompile Include="files\Networking\Shared\NetworkUser.cpp" />
+    <ClCompile Include="files\Utils\Imports\enet_wrapper.cpp" />
+    <ClCompile Include="files\Utils\Input\Input.cpp" />
+    <ClCompile Include="files\Utils\Logs\Log.cpp" />
+    <ClCompile Include="files\Utils\Logs\LogScope.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="files\Networking\Client\ClientPeerlist.h" />
+    <ClInclude Include="files\Networking\Packets\Data\ClientConnect.h" />
+    <ClInclude Include="files\Networking\Packets\Data\ClientConnectBegin.h" />
+    <ClInclude Include="files\Networking\Packets\Data\ClientConnectConfirm.h" />
+    <ClInclude Include="files\Networking\Packets\Data\ClientConnectRelay.h" />
+    <ClInclude Include="files\Networking\Packets\Packet.h" />
+    <ClInclude Include="files\Networking\Packets\PacketData.h" />
+    <ClInclude Include="files\Networking\Packets\PacketHelper.h" />
+    <ClInclude Include="files\Networking\Server\ServerPeerlist.h" />
+    <ClInclude Include="files\Networking\Shared\NetPeer.h" />
+    <ClInclude Include="files\Networking\Shared\NetworkUser.h" />
+    <ClInclude Include="files\Utils\General\RenderUtils.h" />
+    <ClInclude Include="files\Utils\General\SerializationUtils.h" />
+    <ClInclude Include="files\Utils\General\MathUtils.h" />
+    <ClInclude Include="files\Utils\General\TimeUtils.h" />
+    <ClInclude Include="files\Utils\Imports\common.h" />
+    <ClInclude Include="files\Utils\Imports\enet_wrapper.h" />
+    <ClInclude Include="files\Utils\Imports\raylib_wrapper.h" />
+    <ClInclude Include="files\Utils\Input\Input.h" />
+    <ClInclude Include="files\Utils\Logs\Log.h" />
+    <ClInclude Include="files\Utils\Logs\LogScope.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TODO.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

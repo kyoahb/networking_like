@@ -5,18 +5,143 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{efea45ed-a695-4a85-b599-e70f5e1d62f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Utils\Logs">
+      <UniqueIdentifier>{58d3a12b-44a2-423d-a26d-ab8973a06d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Imports">
+      <UniqueIdentifier>{6a8c4eff-34fb-40be-8a8a-a0ef644e3871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\General">
+      <UniqueIdentifier>{65677134-57af-42e6-b0b2-1d9d6ef27dab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Input">
+      <UniqueIdentifier>{727f53a8-ce77-4246-a18a-abf7edd1940d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking">
+      <UniqueIdentifier>{ec90a9fa-84f9-481f-adad-52ed99a3da62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\Packets">
+      <UniqueIdentifier>{b008996f-dfaf-4919-8614-3c06934fee42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\Client">
+      <UniqueIdentifier>{7e17cd43-c471-49d9-9ce9-5f845d19ca8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\Server">
+      <UniqueIdentifier>{f82290aa-aff6-43a1-829a-99d64962e0a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\Shared">
+      <UniqueIdentifier>{5958eb87-f96a-425a-96ff-7f7167ab8074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\Packets\Data">
+      <UniqueIdentifier>{bdd54da1-3697-44ab-b148-f2d28ce94418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\Packets\Data\CLIENT_CONNECT">
+      <UniqueIdentifier>{b27f1cee-a4b8-42b1-856c-fe72777ea16a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="networking_like.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="files\Utils\Imports\enet_wrapper.cpp">
+      <Filter>Utils\Imports</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Utils\Logs\Log.cpp">
+      <Filter>Utils\Logs</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Utils\Logs\LogScope.cpp">
+      <Filter>Utils\Logs</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Utils\Input\Input.cpp">
+      <Filter>Utils\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Packets\Packet.cpp">
+      <Filter>Networking\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Shared\NetPeer.cpp">
+      <Filter>Networking\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp">
+      <Filter>Networking\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Packets\PacketData.cpp">
+      <Filter>Networking\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Shared\NetworkUser.cpp">
+      <Filter>Networking\Shared</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="files\Utils\Imports\common.h">
+      <Filter>Utils\Imports</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\Imports\enet_wrapper.h">
+      <Filter>Utils\Imports</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\Imports\raylib_wrapper.h">
+      <Filter>Utils\Imports</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\Logs\Log.h">
+      <Filter>Utils\Logs</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\Logs\LogScope.h">
+      <Filter>Utils\Logs</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\General\MathUtils.h">
+      <Filter>Utils\General</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\General\SerializationUtils.h">
+      <Filter>Utils\General</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\General\TimeUtils.h">
+      <Filter>Utils\General</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\General\RenderUtils.h">
+      <Filter>Utils\General</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\Input\Input.h">
+      <Filter>Utils\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\NetworkUser.h">
+      <Filter>Networking\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Packet.h">
+      <Filter>Networking\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\PacketHelper.h">
+      <Filter>Networking\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\ServerPeerlist.h">
+      <Filter>Networking\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\ClientPeerlist.h">
+      <Filter>Networking\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\NetPeer.h">
+      <Filter>Networking\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\PacketData.h">
+      <Filter>Networking\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\ClientConnectRelay.h">
+      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\ClientConnectBegin.h">
+      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\ClientConnect.h">
+      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\ClientConnectConfirm.h">
+      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TODO.md">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
