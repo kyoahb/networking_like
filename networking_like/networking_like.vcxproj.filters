@@ -41,6 +41,9 @@
     <Filter Include="Networking\Packets\Data\CLIENT_CONNECT">
       <UniqueIdentifier>{b27f1cee-a4b8-42b1-856c-fe72777ea16a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Networking\Shared\FutureResults">
+      <UniqueIdentifier>{324580a1-0a1d-46c1-8fcb-99d0e0b48b19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,6 +75,12 @@
     </ClCompile>
     <ClCompile Include="files\Networking\Shared\NetworkUser.cpp">
       <Filter>Networking\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Client\Client.cpp">
+      <Filter>Networking\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Server\ServerPeerlist.cpp">
+      <Filter>Networking\Server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +146,15 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Packets\Data\ClientConnectConfirm.h">
       <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Client.h">
+      <Filter>Networking\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\FutureResults\ConnectResult.h">
+      <Filter>Networking\Shared\FutureResults</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\FutureResults\DisconnectResult.h">
+      <Filter>Networking\Shared\FutureResults</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

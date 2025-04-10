@@ -13,6 +13,22 @@ void NetworkUser::start() {
 	update_future = std::async(std::launch::async, &NetworkUser::update_loop, this);
 }
 
+void NetworkUser::stop() {
+	LOG_SCOPE_NET;
+	if (!active) {
+		Log::warn("NetworkUser is not active, cannot stop");
+		return;
+	}
+	active = false;
+
+	if (update_future.valid() && std::this_thread::get_id() != update_thread_id) {
+		update_future.get(); // Wait for the update loop to finish
+	}
+	else {
+		Log::warn("Update loop is in the same thread, cannot stop()");
+	}
+}
+
 void NetworkUser::update_loop() {
 	update_thread_id = std::this_thread::get_id();
 	while (active) {
@@ -67,3 +83,32 @@ void NetworkUser::add_handler_callback(PacketType type, std::function<void(const
 	handlers[type] = callback;
 }
 
+void NetworkUser::receive_event(const ENetEvent& event) {
+	LOG_SCOPE_NET;
+
+	// Check event validity
+	if (event.packet == nullptr) {
+		Log::error("Received event with null packet");
+		return;
+	}
+
+	// Check packet validity
+	Packet received_packet(event.packet);
+	if (!received_packet.is_valid) {
+		Log::error("Received invalid packet");
+		enet_packet_destroy(event.packet);
+		return;
+	}
+
+	// Pass to handler
+	if (event.type == ENET_EVENT_TYPE_RECEIVE) {
+		if (handlers.find(received_packet.header.type) != handlers.end()) {
+			handlers[received_packet.header.type](event, received_packet);
+		}
+		else {
+			Log::warn("No handler found for packet type: " + std::to_string(received_packet.header.type));
+		}
+	}
+
+	enet_packet_destroy(event.packet);
+}
