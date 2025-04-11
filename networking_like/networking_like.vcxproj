@@ -136,6 +136,9 @@
     <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
     <ClCompile Include="files\Networking\Packets\Packet.cpp" />
     <ClCompile Include="files\Networking\Packets\PacketData.cpp" />
+    <ClCompile Include="files\Networking\Server\Protocols\SDisconnect.cpp" />
+    <ClCompile Include="files\Networking\Server\Protocols\SProtocol.cpp" />
+    <ClCompile Include="files\Networking\Server\Server.cpp" />
     <ClCompile Include="files\Networking\Server\ServerPeerlist.cpp" />
     <ClCompile Include="files\Networking\Shared\NetPeer.cpp" />
     <ClCompile Include="files\Networking\Shared\NetworkUser.cpp" />
@@ -155,9 +158,13 @@
     <ClInclude Include="files\Networking\Packets\Packet.h" />
     <ClInclude Include="files\Networking\Packets\PacketData.h" />
     <ClInclude Include="files\Networking\Packets\PacketHelper.h" />
+    <ClInclude Include="files\Networking\Server\Protocols\SDisconnect.h" />
+    <ClInclude Include="files\Networking\Server\Protocols\SProtocol.h" />
+    <ClInclude Include="files\Networking\Server\Server.h" />
     <ClInclude Include="files\Networking\Server\ServerPeerlist.h" />
     <ClInclude Include="files\Networking\Shared\FutureResults\ConnectResult.h" />
     <ClInclude Include="files\Networking\Shared\FutureResults\DisconnectResult.h" />
+    <ClInclude Include="files\Networking\Shared\FutureResults\ShutdownResult.h" />
     <ClInclude Include="files\Networking\Shared\NetPeer.h" />
     <ClInclude Include="files\Networking\Shared\NetworkUser.h" />
     <ClInclude Include="files\Utils\General\RenderUtils.h" />

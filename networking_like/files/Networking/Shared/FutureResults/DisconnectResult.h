@@ -11,8 +11,10 @@ enum class DisconnectResultType : uint8_t {
 enum class DisconnectResultReason : uint8_t {
 	UNKNOWN = 0,
 	USER_REQUESTED = 1,
-	TIMEOUT = 2,
-	ERROR = 3,
+	SERVER_REQUESTED = 2,
+	TIMEOUT = 3,
+	ERROR = 4,
+	SERVER_STOPPING = 5
 };
 
 /*

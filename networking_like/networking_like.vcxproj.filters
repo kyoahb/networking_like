@@ -44,6 +44,9 @@
     <Filter Include="Networking\Shared\FutureResults">
       <UniqueIdentifier>{324580a1-0a1d-46c1-8fcb-99d0e0b48b19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Networking\Server\Protocols">
+      <UniqueIdentifier>{b64b6942-1f7a-41dd-ab55-ffa2e130f2d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,6 +84,15 @@
     </ClCompile>
     <ClCompile Include="files\Networking\Server\ServerPeerlist.cpp">
       <Filter>Networking\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Server\Server.cpp">
+      <Filter>Networking\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Server\Protocols\SProtocol.cpp">
+      <Filter>Networking\Server\Protocols</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Server\Protocols\SDisconnect.cpp">
+      <Filter>Networking\Server\Protocols</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +167,18 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Shared\FutureResults\DisconnectResult.h">
       <Filter>Networking\Shared\FutureResults</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Server.h">
+      <Filter>Networking\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\FutureResults\ShutdownResult.h">
+      <Filter>Networking\Shared\FutureResults</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Protocols\SDisconnect.h">
+      <Filter>Networking\Server\Protocols</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Protocols\SProtocol.h">
+      <Filter>Networking\Server\Protocols</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
