@@ -134,6 +134,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="files\Game\Game.cpp" />
+    <ClCompile Include="files\Game\States\GameState.cpp" />
+    <ClCompile Include="files\Game\States\GameStateManager.cpp" />
+    <ClCompile Include="files\Game\States\MainMenu.cpp" />
     <ClCompile Include="files\Networking\Client\Client.cpp" />
     <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
     <ClCompile Include="files\Networking\Packets\Packet.cpp" />
@@ -144,7 +147,6 @@
     <ClCompile Include="files\Networking\Server\ServerPeerlist.cpp" />
     <ClCompile Include="files\Networking\Shared\NetPeer.cpp" />
     <ClCompile Include="files\Networking\Shared\NetworkUser.cpp" />
-    <ClCompile Include="files\UI\MainMenu.cpp" />
     <ClCompile Include="files\UI\UIMenu.cpp" />
     <ClCompile Include="files\Utils\Imports\enet_wrapper.cpp" />
     <ClCompile Include="files\Utils\Imports\raygui_impl.cpp" />
@@ -194,6 +196,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="files\Game\Game.h" />
+    <ClInclude Include="files\Game\States\GameState.h" />
+    <ClInclude Include="files\Game\States\GameStateManager.h" />
+    <ClInclude Include="files\Game\States\MainMenu.h" />
     <ClInclude Include="files\Networking\Client\Client.h" />
     <ClInclude Include="files\Networking\Client\ClientPeerlist.h" />
     <ClInclude Include="files\Networking\Packets\Data\ClientConnect.h" />
@@ -212,7 +217,6 @@
     <ClInclude Include="files\Networking\Shared\FutureResults\ShutdownResult.h" />
     <ClInclude Include="files\Networking\Shared\NetPeer.h" />
     <ClInclude Include="files\Networking\Shared\NetworkUser.h" />
-    <ClInclude Include="files\UI\MainMenu.h" />
     <ClInclude Include="files\UI\UIMenu.h" />
     <ClInclude Include="files\Utils\General\RenderUtils.h" />
     <ClInclude Include="files\Utils\General\SerializationUtils.h" />

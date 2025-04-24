@@ -10,6 +10,14 @@ Client::Client() : NetworkUser(), peers(ClientPeerlist()) {
 	}
 }
 
+Client::~Client() {
+	LOG_SCOPE_CLIENT;
+	if (is_connected()) {
+		Log::warn("Client is still connected, disconnecting...");
+		disconnect().wait();
+	}
+}
+
 bool Client::is_connected() {
 	LOG_SCOPE_CLIENT;
 	return peers.is_connected();

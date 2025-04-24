@@ -4,16 +4,14 @@ UIMenu::UIMenu() {
 	// Constructor implementation
 }
 
-void UIMenu::show() {
-	visible = true;
+void UIMenu::draw() {
+	// Draw the menu
 }
 
-void UIMenu::hide() {
-	visible = false;
+void UIMenu::activate() {
+	interactable = true;
 }
 
-void UIMenu::update() {
-	if (visible) {
-		// Update logic for the menu
-	}
+void UIMenu::deactivate() {
+	interactable = false;
 }

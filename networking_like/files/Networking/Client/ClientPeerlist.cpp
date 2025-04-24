@@ -28,7 +28,7 @@ void ClientPeerlist::connect(ENetPeer* server_peer) {
 	}
 	connected = true;
 	server.peer = server_peer;
-	server.handle = static_cast<char*>(server_peer->data); // Temporary, server may prefer another handle
+	server.handle = "Server";//static_cast<char*>(server_peer->data); // Temporary, server may prefer another handle
 }
 
 void ClientPeerlist::setup_by_confirmation(const ClientConnectConfirm& connection_confirmation) {

@@ -59,6 +59,9 @@
     <Filter Include="UI\Menus">
       <UniqueIdentifier>{be0744af-a62a-46ff-8246-e7e15b787cc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\State">
+      <UniqueIdentifier>{965506fa-9fe3-4bb6-81a2-71b908739445}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -229,11 +232,17 @@
     <ClCompile Include="files\UI\UIMenu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="files\UI\MainMenu.cpp">
-      <Filter>UI\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="files\Game\Game.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\States\MainMenu.cpp">
+      <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\States\GameState.cpp">
+      <Filter>Game\State</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\States\GameStateManager.cpp">
+      <Filter>Game\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -594,11 +603,17 @@
     <ClInclude Include="files\UI\UIMenu.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="files\UI\MainMenu.h">
-      <Filter>UI\Menus</Filter>
-    </ClInclude>
     <ClInclude Include="files\Game\Game.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\MainMenu.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\GameStateManager.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\GameState.h">
+      <Filter>Game\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
