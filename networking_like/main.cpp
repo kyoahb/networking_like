@@ -3,6 +3,7 @@
 #include "Utils/Input/Input.h"
 
 #include "Networking/Packets/Packet.h"
+#include "UI/MainMenu.h"
 
 int main()
 {
@@ -14,12 +15,13 @@ int main()
     atexit(enet_deinitialize); // Ensure ENet is deinitialized on exit
 
     // Initialise window
-    const int screenWidth = 1920;
-    const int screenHeight = 1080;
+    const int screenWidth = 720;
+    const int screenHeight = 480;
 
     raylib::Window window(screenWidth, screenHeight, "raylib [core] example - 3d camera first person");
 
 
+    MainMenu mainMenu;
     while (!window.ShouldClose()) {
         Input::update();
 
@@ -27,8 +29,8 @@ int main()
 		BeginDrawing();
         window.ClearBackground(WHITE);
 
-
-		raylib::DrawText("Hello World", 190, 200, 20, raylib::RED);
+        mainMenu.show();
+        
         EndDrawing();
 
 

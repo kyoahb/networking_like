@@ -26,4 +26,18 @@ public:
 	
 	NetPeer(ENetPeer* peer, uint8_t _id, std::string _handle);
 	NetPeer() = default;
+
+	bool operator==(const NetPeer& other) const {
+		return this->peer == other.peer;
+	}
 };
+
+namespace std {
+	template<>
+	struct hash<NetPeer> {
+		std::size_t operator()(const NetPeer& np) const {
+			// Hash based on the pointer address
+			return std::hash<ENetPeer*>()(np.peer);
+		}
+	};
+}
