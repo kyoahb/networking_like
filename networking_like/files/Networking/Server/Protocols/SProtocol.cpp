@@ -1,8 +1,7 @@
 #include "SProtocol.h"
 
-SProtocol::SProtocol(std::string _name) {
+SProtocol::SProtocol(std::shared_ptr<Server> _server, std::string _name) : name(_name), server(_server){
 	LOG_SCOPE_SERVER_PROTOCOL;
-	name = _name;
 	Log::trace(get_name() + " constructor called");
 };
 

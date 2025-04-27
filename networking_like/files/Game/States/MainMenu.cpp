@@ -6,7 +6,7 @@ MainMenu::MainMenu() : GameState("MainMenu") {
 
     hostButton = rgc::Button(rgc::Bounds(raylib::Vector2(400, 250), raylib::Vector2(200, 50)), "Host");
     hostButton.OnClick([this]() {
-        onHostButtonClick("127.0.0.1", 1234);
+        onHostButtonClick("127.0.0.1", 7777);
         });
 
 

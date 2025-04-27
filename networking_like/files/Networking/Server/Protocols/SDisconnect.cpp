@@ -1,6 +1,6 @@
 #include "SDisconnect.h"
 
-SDisconnect::SDisconnect() : SProtocol("SDisconnect") {
+SDisconnect::SDisconnect(std::shared_ptr<Server> _server) : SProtocol(_server, "SDisconnect") {
 	LOG_SCOPE_SERVER_PROTOCOL;
 }
 
@@ -8,12 +8,7 @@ SDisconnect::~SDisconnect() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 }
 
-void SDisconnect::init() {
-	LOG_SCOPE_SERVER_PROTOCOL;
-	
-}
-
-void SDisconnect::receive_event(const ENetEvent& event, std::optional<NetPeer> peer) {
+void SDisconnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer) {
 	LOG_SCOPE_SERVER_PROTOCOL;
 
 	// Check if the peer is valid
@@ -28,13 +23,15 @@ void SDisconnect::receive_event(const ENetEvent& event, std::optional<NetPeer> p
 		return;
 	}
 
-	Log::trace("Disconnect event received for peer: " + peer.value().handle);
+	if (event.type == ENET_EVENT_TYPE_DISCONNECT) {
+		Log::trace("Disconnect event received for peer: " + peer.value().handle);
 
-	// Remove pending disconnect if exists
-	auto it = pending_disconnects.find(peer.value());
-	if (it != pending_disconnects.end()) {
-		Log::trace("Pending disconnect found for peer: " + peer.value().handle);
-		pending_disconnects.erase(it);
+		// Remove pending disconnect if exists
+		auto it = pending_disconnects.find(peer.value());
+		if (it != pending_disconnects.end()) {
+			Log::trace("Pending disconnect found for peer: " + peer.value().handle);
+			pending_disconnects.erase(it);
+		}
 	}
 }
 

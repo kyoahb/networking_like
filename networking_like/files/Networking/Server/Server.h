@@ -4,8 +4,8 @@
 #include "ServerPeerlist.h"
 #include "Networking/Shared/FutureResults/DisconnectResult.h"
 #include "Networking/Server/Protocols/SDisconnect.h"
-
-class Server : public NetworkUser {
+#include "Networking/Server/Protocols/SConnect.h"
+class Server : public NetworkUser, public std::enable_shared_from_this<Server> {
 public:
 	
 	ServerPeerlist peers;
@@ -18,11 +18,14 @@ public:
 
 	std::future<DisconnectResult> disconnect_peer(NetPeer& peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);
 
+	void broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
+
+
 private:
 	const int MAX_CLIENTS = 32; // Maximum number of clients
 	const int MAX_CHANNELS = 2; // Maximum number of channels
 	const int BANDWIDTH_LIMIT = 0; // Bandwidth limit in bytes per second (0 = no limit)
-	const int TIMEOUT_LIMIT = 5000; // Timeout limit in milliseconds
+	const int TIMEOUT_LIMIT = 0; // Timeout limit in milliseconds
 	const int CHECK_INTERVAL = 1000; // Check interval in milliseconds
 
 	std::string address_str;
@@ -32,6 +35,7 @@ private:
 	std::vector<std::shared_ptr<SProtocol>> protocols;
 	std::shared_ptr<SDisconnect> disconnect_protocol;
 	// Protocol management methods
+	void add_protocol(std::shared_ptr<SProtocol> protocol);
 	void initialize_protocols();
 	void start_protocols();
 	void stop_protocols();

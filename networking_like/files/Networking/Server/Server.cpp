@@ -1,37 +1,40 @@
 #include "Server.h"
 
-Server::Server(const std::string& _address, int _port) : address_str(_address), port(_port) {
+Server::Server(const std::string& _address, int _port) : NetworkUser(), address_str(_address), port(_port) {
 	LOG_SCOPE_SERVER;
 	Log::trace("Server constructor called with address: " + address_str + " and port: " + std::to_string(port));
 	
 	// Initialize the server
-	enet_address_set_host(&address, address_str.c_str());
+	if (enet_address_set_host(&address, address_str.c_str()) != 0) {
+		Log::error("Failed to set host address");
+	};
+
+	//address.host = ENET_HOST_ANY;
 	address.port = port;
 
 	host = enet_host_create(&address, MAX_CLIENTS, MAX_CHANNELS, BANDWIDTH_LIMIT, TIMEOUT_LIMIT);
-	Log::asserts(host != nullptr, "Failed to create ENet host");
-
-
-	/* Protocols */
-	// Initialize built-in protocols
-	std::shared_ptr<SDisconnect> disconnect = std::make_shared<SDisconnect>();
-	disconnect_protocol = disconnect;
-	protocols.push_back(disconnect);
-
-	initialize_protocols();
-
-
+	Log::asserts(host != NULL, "Failed to create ENet host");
 
 	Log::trace("Server initialized!");
+}
+
+void Server::add_protocol(std::shared_ptr<SProtocol> protocol) {
+	LOG_SCOPE_SERVER;
+
+	protocols.push_back(protocol);
 }
 
 void Server::initialize_protocols() {
 	LOG_SCOPE_SERVER;
 	Log::trace("Initializing protocols");
+	
+	// Built in protocols
+	std::shared_ptr<SDisconnect> disconnect = std::make_shared<SDisconnect>(shared_from_this());
+	disconnect_protocol = disconnect;
+	add_protocol(disconnect);
 
-	for (auto& protocol : protocols) {
-		protocol->init();
-	}
+	std::shared_ptr<SConnect> connect = std::make_shared<SConnect>(shared_from_this());
+	add_protocol(connect);
 }
 
 void Server::start_protocols() {
@@ -66,15 +69,27 @@ void Server::destroy_protocols() {
 	protocols.clear();
 }
 
+void Server::broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding) {
+	LOG_SCOPE_SERVER;
+	Log::trace("Broadcasting packet to all peers");
+	for (auto& peer : peers.peers) {
+		if (peer.peer != nullptr && peer.peer->state != ENET_PEER_STATE_DISCONNECTED) {
+			if (std::find(excluding.begin(), excluding.end(), peer) == excluding.end()) {
+				send_packet(packet, peer);
+			}
+		}
+	}
+}
+
 void Server::dispatch_event_to_protocols(const ENetEvent& event) {
 	std::optional<NetPeer> peer = std::nullopt;
 
 	if (event.peer != nullptr) {
-		peer = peers.get_peer(event.peer);
+		peer = peers.get_peer(event.peer); // Nullptr if peer not in list
 	}
 
 	for (auto& protocol : protocols) {
-		protocol->receive_event(event, peer);
+		protocol->packet_event(event, peer);
 	}
 }
 
@@ -98,6 +113,8 @@ Server::~Server() {
 void Server::start() {
 	LOG_SCOPE_SERVER;
 	
+	initialize_protocols();
+
 	if (active) {
 		Log::warn("Server is already active, cannot start");
 		return;
@@ -212,9 +229,11 @@ std::future<DisconnectResult> Server::disconnect_peer(NetPeer& peer, DisconnectR
 }
 
 void Server::update() {
+	static bool ready = false;
 	LOG_SCOPE_SERVER;
 	ENetEvent event;
 	while (enet_host_service(host, &event, 0) > 0) {
+		Log::info("received event");
 		dispatch_event_to_protocols(event);
 		switch (event.type) {
 		case ENET_EVENT_TYPE_CONNECT:
@@ -227,15 +246,20 @@ void Server::update() {
 			disconnect_event(event);
 			break;
 		default:
-			enet_packet_destroy(event.packet);
+			//enet_packet_destroy(event.packet);
 			break;
 		}
+
 	}
 
 	// Check timeouts
 	enet_host_flush(host);
 
 	update_protocols();
+	if (!ready) {
+		Log::info("Server is ready");
+		ready = true;
+	}
 }
 // Events
 
@@ -251,18 +275,6 @@ void Server::receive_event(const ENetEvent& event) {
 
 void Server::connect_event(const ENetEvent& event) {
 	LOG_SCOPE_SERVER;
-	// Check if the peer is valid
-	if (event.peer == nullptr) {
-		Log::warn("Connect event received for null peer");
-		return;
-	}
-	// Check if the peer is already connected
-	if (event.peer->state == ENET_PEER_STATE_CONNECTED) {
-		Log::warn("Connect event received for already connected peer");
-		return;
-	}
 
 	Log::trace("Connect event received for peer: " + std::to_string(event.peer->connectID));
-	
-	// From here, server has to wait for a CLIENT_CONNECT_BEGIN packet
 }

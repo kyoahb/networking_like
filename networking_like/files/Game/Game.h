@@ -17,8 +17,8 @@ private:
 	void update();
 	
 	raylib::Window window;
-	std::unique_ptr<Server> server;
-	std::unique_ptr<Client> client;
+	std::shared_ptr<Server> server; // Shared with protocols
+	std::shared_ptr<Client> client;
 
 	GameStateManager stateManager;
 };

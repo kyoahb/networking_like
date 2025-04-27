@@ -17,17 +17,19 @@ Game::Game() {
 	std::shared_ptr<MainMenu> mainMenu = std::make_shared<MainMenu>();
 	mainMenu->onHostButtonClick = [this](const std::string& address, int port) {
 		// Make server
-		server = std::make_unique<Server>(address, port);
+		server = std::make_shared<Server>(address, port);
 		server->start();
 
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
 		// Also make client
-		client = std::make_unique<Client>();
+		client = std::make_shared<Client>();
 		client->connect(address, port, "Client");
 		};
 
 	mainMenu->onJoinButtonClick = [this](const std::string& address, int port) {
 		// Make client
-		client = std::make_unique<Client>();
+		client = std::make_shared<Client>();
 		client->connect(address, port, "Client");
 		};
 

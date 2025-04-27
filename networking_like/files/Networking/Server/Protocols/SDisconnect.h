@@ -15,17 +15,22 @@ public:
 	uint64_t request_time = 0; // Time when the disconnect request was made
 };
 
+/*
+ * @brief SDisconnect class
+ *
+ * Represents the disconnect protocol for the server.
+ * Handles disconnect requests and manages pending disconnects.
+ */
 class SDisconnect : public SProtocol {
 public:
-	SDisconnect();
+	SDisconnect(std::shared_ptr<Server> _server);
 	~SDisconnect();
 
-	void init() override;
 	void start() override;
 	void stop() override;
 	void update() override;
 	void destroy() override;
-	void receive_event(const ENetEvent& event, std::optional<NetPeer> peer) override;
+	void packet_event(const ENetEvent& event, std::optional<NetPeer> peer) override;
 
 	// Called from server. Usually this wont happen, but this is a built-in protocol
 	DisconnectResult disconnect_peer(const NetPeer& peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);

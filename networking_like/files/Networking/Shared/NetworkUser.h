@@ -11,7 +11,7 @@ class NetworkUser {
 public:
 	NetworkUser();
 
-	ENetAddress address; // Local address
+	ENetAddress address = { 0 }; // Local address
 	ENetHost* host = nullptr; // Local ENet host
 
 	void start(); // Start network user (involves starting future for update loop)

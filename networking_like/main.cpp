@@ -5,7 +5,7 @@
 
 int main()
 {
-    Log::info("Program started!");
+	Log::info("Program started!");
 
 	// Initialize the game
 	Game game;
