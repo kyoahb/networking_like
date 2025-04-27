@@ -54,7 +54,6 @@ bool NetworkUser::send_packet(const Packet& packet, ENetPeer* peer) {
 
 bool NetworkUser::send_packet(const Packet& packet, const NetPeer& peer) {
 	LOG_SCOPE_NET;
-	Log::trace("Sending packet (type: " + std::to_string(packet.header.type) + " subtype: " + std::to_string(packet.header.subtype) + " to peer : " + peer.handle);
 
 	// Check packet validity
 	if (!packet.is_valid) {
@@ -77,38 +76,4 @@ bool NetworkUser::send_packet(const Packet& packet, const NetPeer& peer) {
 	}
 
 	return true;
-}
-
-void NetworkUser::add_handler_callback(PacketType type, std::function<void(const ENetEvent&, const Packet&)> callback) {
-	handlers[type] = callback;
-}
-
-void NetworkUser::receive_event(const ENetEvent& event) {
-	LOG_SCOPE_NET;
-
-	// Check event validity
-	if (event.packet == nullptr) {
-		Log::error("Received event with null packet");
-		return;
-	}
-
-	// Check packet validity
-	Packet received_packet(event.packet);
-	if (!received_packet.is_valid) {
-		Log::error("Received invalid packet");
-		enet_packet_destroy(event.packet);
-		return;
-	}
-
-	// Pass to handler
-	if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-		if (handlers.find(received_packet.header.type) != handlers.end()) {
-			handlers[received_packet.header.type](event, received_packet);
-		}
-		else {
-			Log::warn("No handler found for packet type: " + std::to_string(received_packet.header.type));
-		}
-	}
-
-	enet_packet_destroy(event.packet);
 }

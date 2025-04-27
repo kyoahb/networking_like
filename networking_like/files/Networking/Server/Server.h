@@ -17,7 +17,7 @@ public:
 	std::future<ShutdownResult> stop();
 
 	std::future<DisconnectResult> disconnect_peer(NetPeer& peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);
-
+	bool send_packet(const Packet& packet, const NetPeer& peer);
 	void broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
 
 

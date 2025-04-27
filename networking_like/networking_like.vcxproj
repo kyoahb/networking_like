@@ -141,6 +141,7 @@
     <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
     <ClCompile Include="files\Networking\Packets\Packet.cpp" />
     <ClCompile Include="files\Networking\Packets\PacketData.cpp" />
+    <ClCompile Include="files\Networking\Packets\PacketHelper.cpp" />
     <ClCompile Include="files\Networking\Server\Protocols\SConnect.cpp" />
     <ClCompile Include="files\Networking\Server\Protocols\SDisconnect.cpp" />
     <ClCompile Include="files\Networking\Server\Protocols\SProtocol.cpp" />

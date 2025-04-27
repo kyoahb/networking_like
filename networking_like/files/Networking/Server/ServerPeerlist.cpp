@@ -16,7 +16,7 @@ void ServerPeerlist::add_peer(ENetPeer* peer, uint8_t id, std::string handle) {
 	add_peer(net_peer);
 }
 
-void ServerPeerlist::add_peer(NetPeer& peer) {
+void ServerPeerlist::add_peer(NetPeer peer) {
 	LOG_SCOPE_SERVER;
 	peers.push_back(peer);
 }

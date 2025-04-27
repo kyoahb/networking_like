@@ -84,6 +84,9 @@ bool Client::wait_for_connection_confirmation() {
 				if (received_packet.header.type == PacketType::CLIENT_CONNECT && received_packet.header.subtype == ClientConnectType::CLIENT_CONNECT_CONFIRM) {
 					ClientConnectConfirm connection_confirmation = SerializationUtils::deserialize<ClientConnectConfirm>(received_packet.data, received_packet.header.size);
 					peers.setup_by_confirmation(connection_confirmation);
+
+					Log::trace("CLIENT_CONNECT:CONFIRM received. Server-given handle for US: " + connection_confirmation.client_decided_handle);
+
 					return true;
 				}
 			}
@@ -215,7 +218,7 @@ DisconnectResult Client::disconnect_thread(DisconnectResultReason reason) {
 
 bool Client::send_packet(const Packet& packet) {
 	LOG_SCOPE_CLIENT;
-	Log::trace("Sending packet (type: " + std::to_string(packet.header.type) + " subtype: " + std::to_string(packet.header.subtype) + " to server");
+	Log::trace("Sending packet " + PacketHelper::types_to_string(packet) + " to server");
 	
 	if (!is_connected()) {
 		Log::error("Client is not connected, cannot send packet");
@@ -301,5 +304,9 @@ void Client::disconnect_event(const ENetEvent& event) {
 void Client::receive_event(const ENetEvent& event) {
 	LOG_SCOPE_CLIENT;
 	
-	NetworkUser::receive_event(event);
+	/*
+	Packet p(event.packet);
+	Log::trace("Received packet: " + PacketHelper::types_to_string(p) + " from " + peers.get_server().handle);
+	*/
+	
 }

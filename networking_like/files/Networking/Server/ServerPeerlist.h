@@ -13,7 +13,7 @@ public:
 	void clear(); // Clear the peer list, used when server stops
 
 	void add_peer(ENetPeer* peer, uint8_t id, std::string handle); // Add a peer to the list
-	void add_peer(NetPeer& peer); // Add a peer to the list
+	void add_peer(NetPeer peer); // Add a peer to the list
 
 	void remove_peer(NetPeer& peer); // Remove a peer from the list
 	void remove_peer(uint8_t id); // Remove a peer from the list

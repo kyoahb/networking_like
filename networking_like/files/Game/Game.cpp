@@ -20,7 +20,7 @@ Game::Game() {
 		server = std::make_shared<Server>(address, port);
 		server->start();
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 		// Also make client
 		client = std::make_shared<Client>();

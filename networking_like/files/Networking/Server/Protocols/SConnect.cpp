@@ -3,12 +3,10 @@
 
 SConnect::SConnect(std::shared_ptr<Server> _server) : SProtocol(_server, "SConnect") {
 	LOG_SCOPE_SERVER_PROTOCOL;
-	Log::trace(get_name() + " constructor called");
 };
 
 SConnect::~SConnect() {
 	LOG_SCOPE_SERVER_PROTOCOL;
-	Log::trace(get_name() + " destructor called");
 }
 
 void SConnect::update() {
@@ -33,7 +31,7 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 	LOG_SCOPE_SERVER_PROTOCOL;
 
 	if (event.type == ENET_EVENT_TYPE_CONNECT) {
-		Log::trace("Connect event received for peer: " + std::to_string(event.peer->connectID));
+		Log::trace("Connect event received for peer: " + std::to_string(event.peer->incomingPeerID));
 		if (peer.has_value()) {
 			Log::warn("Connect event received for known peer: " + peer.value().handle);
 			return;
@@ -46,30 +44,31 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 	}
 	else if (event.type == ENET_EVENT_TYPE_RECEIVE) {
 		Packet packet(event.packet);
+
 		if (packet.header.type != PacketType::CLIENT_CONNECT) return;
 		if (packet.header.subtype != ClientConnectType::CLIENT_CONNECT_BEGIN) {
 			Log::asserts(false, "Invalid packet type for subtype CLIENT_CONNECT_BEGIN");
 		}
+
 		// Received a CLIENT_CONNECT_BEGIN packet
 
 		if (!pending_begins.contains(event.peer)) {
-			Log::warn("Received CLIENT_CONNECT_BEGIN packet from unregistered begins peer: " + std::to_string(event.peer->connectID));
+			Log::warn("Received CLIENT_CONNECT_BEGIN packet from unregistered begins peer: " + std::to_string(event.peer->incomingPeerID));
 			return;
 		}
 		else {
-			Log::trace("Received CLIENT_CONNECT_BEGIN packet from peer: " + std::to_string(event.peer->connectID));
+			Log::trace("Received CLIENT_CONNECT_BEGIN packet from peer: " + std::to_string(event.peer->incomingPeerID));
 			pending_begins.erase(event.peer);
 		}
 
 		ClientConnectBegin client_connect_begin = SerializationUtils::deserialize<ClientConnectBegin>(packet.data, packet.header.size);
 
 		// Get final handle
-		std::string client_decided_handle = "";
-		if (server->peers.get_peer(client_connect_begin.client_preferred_handle).has_value()) {
-			// There is already a peer with this handle, we force the clients name to be unique
-			while (server->peers.get_peer(client_decided_handle).has_value()) {
-				client_decided_handle = client_connect_begin.client_preferred_handle + "_" + std::to_string(rand() % 1000);
-			}
+		std::string client_decided_handle = client_connect_begin.client_preferred_handle;
+
+		// There is already a peer with this handle, we force the clients name to be unique
+		while (server->peers.get_peer(client_decided_handle).has_value()) {
+			client_decided_handle = client_connect_begin.client_preferred_handle + "_" + std::to_string(rand() % 1000);
 		}
 
 		// Can now construct the NetPeer, and attach it to the server
@@ -82,7 +81,7 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 		client_connect_confirm.client_decided_handle = client_decided_handle;
 		client_connect_confirm.client_id = new_peer.id;
 		client_connect_confirm.other_clients = netpeer_list_to_relay_list(server->peers.peers);
-		
+
 		std::string serialised_data = SerializationUtils::serialize<ClientConnectConfirm>(client_connect_confirm);
 		Packet packet_confirm(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_CONFIRM, serialised_data.data(), serialised_data.size(), true);
 		server->send_packet(packet_confirm, new_peer);
@@ -92,7 +91,6 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 		std::string serialised_relay_data = SerializationUtils::serialize<ClientConnectRelay>(client_connect_relay);
 		Packet packet_relay(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_RELAY, serialised_relay_data.data(), serialised_relay_data.size(), true);
 		server->broadcast_packet(packet_relay, { new_peer });
-
 	
 	}
 }

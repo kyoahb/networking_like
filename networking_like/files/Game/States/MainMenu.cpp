@@ -12,7 +12,7 @@ MainMenu::MainMenu() : GameState("MainMenu") {
 
     joinButton = rgc::Button(rgc::Bounds(raylib::Vector2(400, 320), raylib::Vector2(200, 50)), "Join");
     joinButton.OnClick([this]() {
-        onJoinButtonClick("127.0.0.1", 1234);
+        onJoinButtonClick("127.0.0.1", 7777);
         });
 
 

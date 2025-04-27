@@ -11,6 +11,8 @@ SDisconnect::~SDisconnect() {
 void SDisconnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer) {
 	LOG_SCOPE_SERVER_PROTOCOL;
 
+	if (event.type != ENET_EVENT_TYPE_DISCONNECT) return;
+
 	// Check if the peer is valid
 	if (event.peer == nullptr) {
 		Log::warn("Cannot disconnect peer, peer is nullptr");
@@ -23,16 +25,15 @@ void SDisconnect::packet_event(const ENetEvent& event, std::optional<NetPeer> pe
 		return;
 	}
 
-	if (event.type == ENET_EVENT_TYPE_DISCONNECT) {
-		Log::trace("Disconnect event received for peer: " + peer.value().handle);
+	Log::trace("Disconnect event received for peer: " + peer.value().handle);
 
-		// Remove pending disconnect if exists
-		auto it = pending_disconnects.find(peer.value());
-		if (it != pending_disconnects.end()) {
-			Log::trace("Pending disconnect found for peer: " + peer.value().handle);
-			pending_disconnects.erase(it);
-		}
+	// Remove pending disconnect if exists
+	auto it = pending_disconnects.find(peer.value());
+	if (it != pending_disconnects.end()) {
+		Log::trace("Pending disconnect found for peer: " + peer.value().handle);
+		pending_disconnects.erase(it);
 	}
+
 }
 
 void SDisconnect::add_pending_disconnect(NetPeer peer, DisconnectResultReason reason) {

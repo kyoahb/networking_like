@@ -250,6 +250,9 @@
     <ClCompile Include="files\Networking\Server\Protocols\SConnect.cpp">
       <Filter>Networking\Server\Protocols</Filter>
     </ClCompile>
+    <ClCompile Include="files\Networking\Packets\PacketHelper.cpp">
+      <Filter>Networking\Packets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="files\Utils\Imports\common.h">

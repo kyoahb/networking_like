@@ -71,7 +71,7 @@ void Server::destroy_protocols() {
 
 void Server::broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding) {
 	LOG_SCOPE_SERVER;
-	Log::trace("Broadcasting packet to all peers");
+	Log::trace("Broadcasting packet " + PacketHelper::types_to_string(packet) + " to all peers");
 	for (auto& peer : peers.peers) {
 		if (peer.peer != nullptr && peer.peer->state != ENET_PEER_STATE_DISCONNECTED) {
 			if (std::find(excluding.begin(), excluding.end(), peer) == excluding.end()) {
@@ -229,11 +229,9 @@ std::future<DisconnectResult> Server::disconnect_peer(NetPeer& peer, DisconnectR
 }
 
 void Server::update() {
-	static bool ready = false;
 	LOG_SCOPE_SERVER;
 	ENetEvent event;
 	while (enet_host_service(host, &event, 0) > 0) {
-		Log::info("received event");
 		dispatch_event_to_protocols(event);
 		switch (event.type) {
 		case ENET_EVENT_TYPE_CONNECT:
@@ -246,7 +244,7 @@ void Server::update() {
 			disconnect_event(event);
 			break;
 		default:
-			//enet_packet_destroy(event.packet);
+			enet_packet_destroy(event.packet);
 			break;
 		}
 
@@ -256,10 +254,6 @@ void Server::update() {
 	enet_host_flush(host);
 
 	update_protocols();
-	if (!ready) {
-		Log::info("Server is ready");
-		ready = true;
-	}
 }
 // Events
 
@@ -269,12 +263,31 @@ void Server::disconnect_event(const ENetEvent& event) {
 
 void Server::receive_event(const ENetEvent& event) {
 	LOG_SCOPE_SERVER;
+	/*
+	Packet p(event.packet);
+	std::string peer_handle = "No_Handle";
 
-	NetworkUser::receive_event(event);
+	std::optional<NetPeer> peer = peers.get_peer(event.peer);
+	if (peer.has_value()) {
+		peer_handle = peer.value().handle;
+	}
+
+	Log::trace("Received packet: " + PacketHelper::types_to_string(p) + " from " + peer_handle);
+	*/
 }
 
 void Server::connect_event(const ENetEvent& event) {
 	LOG_SCOPE_SERVER;
+}
 
-	Log::trace("Connect event received for peer: " + std::to_string(event.peer->connectID));
+bool Server::send_packet(const Packet& packet, const NetPeer& peer) {
+	LOG_SCOPE_SERVER;
+
+	if (packet.header.direction != PacketDirection::SERVER_TO_CLIENT) {
+		Log::error("Invalid packet header direction, must be S->C");
+	}
+
+	Log::trace("Sending packet " + PacketHelper::types_to_string(packet) + " to peer " + peer.handle);
+
+	return NetworkUser::send_packet(packet, peer);
 }
