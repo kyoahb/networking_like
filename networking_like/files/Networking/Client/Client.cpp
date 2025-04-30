@@ -16,6 +16,9 @@ Client::~Client() {
 		Log::warn("Client is still connected, disconnecting...");
 		disconnect().wait();
 	}
+	if (active) {
+		stop();
+	}
 }
 
 bool Client::is_connected() {
@@ -138,6 +141,7 @@ ConnectResult Client::connect_thread(const std::string& ip, uint16_t port, const
 	}
 
 	// Connection confirmation received
+	Log::trace("Connection complete, start()ing");
 	start();
 	return ConnectResult{ ConnectResultType::SUCCESS, "Connected to server", TimeUtils::get_current_time_millis() - start_time };
 }
@@ -149,7 +153,9 @@ ConnectResult Client::connect_thread(const std::string& ip, uint16_t port, const
 std::future<DisconnectResult> Client::disconnect() {
 	LOG_SCOPE_CLIENT;
 	Log::trace("Disconnecting from server... calling stop()");
-	stop();
+	if (active) {
+		stop();
+	}
 
 	return std::async(std::launch::async, [this]() {
 		return disconnect_thread(DisconnectResultReason::USER_REQUESTED);
@@ -279,8 +285,7 @@ void Client::update() {
 			break;
 		case ENET_EVENT_TYPE_DISCONNECT:
 			disconnect_event(event);
-			
-			active = false;
+		
 			return; // Stop update loop if disconnected
 		default:
 			break;
@@ -292,13 +297,13 @@ void Client::update() {
 
 void Client::disconnect_event(const ENetEvent& event) {
 	LOG_SCOPE_CLIENT;
-	Log::trace("Forceful disconnect event received");
+	Log::trace("Forceful disconnect event received, stopping");
 	
 	enet_packet_destroy(event.packet);
 	peers.clear();
 	enet_peer_reset(event.peer);
 
-	active = false;
+	stop();
 }
 
 void Client::receive_event(const ENetEvent& event) {

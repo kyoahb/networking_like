@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\bresk\source\repos\networking_like\networking_like\files;C:\Users\bresk\source\repos\networking_like\networking_like\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\bresk\source\repos\kyoahb\networking_like\networking_like\include;C:\Users\bresk\source\repos\kyoahb\networking_like\networking_like\files;C:\Users\bresk\source\repos\networking_like\networking_like\files;C:\Users\bresk\source\repos\networking_like\networking_like\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\bresk\source\repos\networking_like\networking_like\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp23</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>

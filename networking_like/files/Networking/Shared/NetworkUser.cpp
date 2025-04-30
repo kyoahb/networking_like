@@ -25,7 +25,7 @@ void NetworkUser::stop() {
 		update_future.get(); // Wait for the update loop to finish
 	}
 	else {
-		Log::warn("Update loop is in the same thread, cannot stop()");
+		Log::warn("Update loop is in the same thread, cannot wait for stop() [will cause deadlock]");
 	}
 }
 

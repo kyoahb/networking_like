@@ -32,8 +32,8 @@ private:
 	int port;
 
 	// Protocols
-	std::vector<std::shared_ptr<SProtocol>> protocols;
-	std::shared_ptr<SDisconnect> disconnect_protocol;
+	std::vector<std::shared_ptr<SProtocol>> protocols = {};
+	std::shared_ptr<SDisconnect> disconnect_protocol = nullptr;
 	// Protocol management methods
 	void add_protocol(std::shared_ptr<SProtocol> protocol);
 	void initialize_protocols();

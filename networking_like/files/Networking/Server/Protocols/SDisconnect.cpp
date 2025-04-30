@@ -30,7 +30,7 @@ void SDisconnect::packet_event(const ENetEvent& event, std::optional<NetPeer> pe
 	// Remove pending disconnect if exists
 	auto it = pending_disconnects.find(peer.value());
 	if (it != pending_disconnects.end()) {
-		Log::trace("Pending disconnect found for peer: " + peer.value().handle);
+		Log::trace("Removing Peer with pending disconnect that has sent a disconnect event: " + peer.value().handle);
 		pending_disconnects.erase(it);
 	}
 
@@ -72,7 +72,7 @@ void SDisconnect::work_pending_disconnects() {
 
 DisconnectResult SDisconnect::disconnect_peer(const NetPeer& peer, DisconnectResultReason reason) {
 	LOG_SCOPE_SERVER_PROTOCOL;
-	Log::trace("Disconnecting peer thread: " + peer.handle);
+	Log::trace("Disconnecting peer thread for client: " + peer.handle);
 
 	// Check if the peer is valid
 	if (peer.peer == nullptr) {
@@ -84,10 +84,11 @@ DisconnectResult SDisconnect::disconnect_peer(const NetPeer& peer, DisconnectRes
 		return DisconnectResult(DisconnectResultType::FAILED, reason, "Peer is already disconnected", 0);
 	}
 
-	// Add pending disconnect
-	add_pending_disconnect(peer, reason);
 	// Send disconnect packet to the peer
 	enet_peer_disconnect(peer.peer, static_cast<uint8_t>(reason));
+	Log::trace("Sent disconnect packet to peer: " + peer.handle);
+	// Add pending disconnect
+	add_pending_disconnect(peer, reason);
 
 	int start_time = TimeUtils::get_current_time_millis();
 	bool acknowledged = false;
@@ -100,6 +101,7 @@ DisconnectResult SDisconnect::disconnect_peer(const NetPeer& peer, DisconnectRes
 			break;
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(CHECK_INTERVAL));
+		Log::trace("Waiting for disconnect confirmation from peer: " + peer.handle + " " + std::to_string(TimeUtils::get_time_since(start_time)) + "ms");
 	}
 
 	DisconnectResult result;
@@ -109,6 +111,7 @@ DisconnectResult SDisconnect::disconnect_peer(const NetPeer& peer, DisconnectRes
 		// Successful
 		result.type = DisconnectResultType::SUCCESS;
 		result.message = "Peer disconnected successfully";
+		Log::trace("Peer disconnected successfully: " + peer.handle);
 	}
 	else {
 		// Failed, forceful disconnect required
@@ -116,6 +119,7 @@ DisconnectResult SDisconnect::disconnect_peer(const NetPeer& peer, DisconnectRes
 		pending_disconnects.erase(peer);
 		result.type = DisconnectResultType::FORCED;
 		result.message = "Peer disconnected forcefully : Time limit exceeded";
+		Log::trace("Peer disconnected forcefully: " + peer.handle);
 	}
 
 	return result;

@@ -150,12 +150,6 @@ std::future<ShutdownResult> Server::stop() {
 ShutdownResult Server::stop_thread() {
 	LOG_SCOPE_SERVER;
 	Log::trace("Server stop thread started");
-
-	// Check if the server is active
-	if (!active) {
-		Log::warn("Server is not active, cannot stop");
-		return ShutdownResult(ShutdownResultType::FAILURE, 0, "Server is already inactive.", 0, 0);
-	}
 	
 	// Send disconnect packets to all peers, and add pending disconnects
 	uint64_t start_time = TimeUtils::get_current_time_millis();
