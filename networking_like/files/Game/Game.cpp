@@ -24,13 +24,8 @@ Game::Game() {
 
 		// Also make client
 		client = std::make_shared<Client>();
+		client->init();
 		client->connect(address, port, "Client").wait();
-
-		std::optional<NetPeer> to_disconnect = server->peers.get_peer(static_cast<uint8_t>(0));
-
-		if (to_disconnect.has_value()) {
-			server->disconnect_peer(to_disconnect.value(), DisconnectResultReason::SERVER_REQUESTED);
-		}
 		};
 
 	mainMenu->onJoinButtonClick = [this](const std::string& address, int port) {

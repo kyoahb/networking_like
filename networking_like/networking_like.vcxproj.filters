@@ -65,6 +65,9 @@
     <Filter Include="Test">
       <UniqueIdentifier>{2ff4e73c-9085-4e85-aa49-ce11d4826a28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Networking\Client\Protocols">
+      <UniqueIdentifier>{26c74f9f-c6e6-4f97-aca3-9e01d3da4243}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -252,6 +255,15 @@
     </ClCompile>
     <ClCompile Include="files\Networking\Packets\PacketHelper.cpp">
       <Filter>Networking\Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Shared\Protocol.cpp">
+      <Filter>Networking\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Client\Protocols\CProtocol.cpp">
+      <Filter>Networking\Client\Protocols</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Client\Protocols\CConnect.cpp">
+      <Filter>Networking\Client\Protocols</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -626,6 +638,15 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Server\Protocols\SConnect.h">
       <Filter>Networking\Server\Protocols</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Protocols\CProtocol.h">
+      <Filter>Networking\Client\Protocols</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\Protocol.h">
+      <Filter>Networking\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Protocols\CConnect.h">
+      <Filter>Networking\Client\Protocols</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

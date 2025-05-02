@@ -11,12 +11,18 @@
 #include "Networking/Packets/Data/ClientConnectBegin.h"
 #include "Networking/Packets/Data/ClientConnectConfirm.h"
 
-class Client : public NetworkUser {
+#include "Protocols/CConnect.h"
+
+#include "Protocols/CProtocol.h"
+
+class Client : public NetworkUser, public std::enable_shared_from_this<Client> {
 public:
 	ClientPeerlist peers;
 
 	Client();
 	~Client();
+
+	void init();
 
 	bool is_connected();
 	std::future<ConnectResult> connect(const std::string& ip, uint16_t port, const std::string& preferred_handle = "Client");
@@ -29,10 +35,17 @@ private:
 	void stop(); // Stop packet update loop
 	void update() override; // Update loop for the client
 
-	ConnectResult connect_thread(const std::string& ip, uint16_t port, const std::string& preferred_handle);
-	bool wait_for_connection_establishment(ENetPeer* server_peer);
-	void send_connection_begin_packet(const std::string& preferred_handle);
-	bool wait_for_connection_confirmation();
+
+	std::vector<std::shared_ptr<CProtocol>> protocols = {}; // List of protocols
+	std::shared_ptr<CConnect> connect_protocol = nullptr; // Pointer to the connection protocol
+
+	void add_protocol(std::shared_ptr<CProtocol> protocol);
+	void initialize_protocols();
+	void start_protocols();
+	void stop_protocols();
+	void update_protocols();
+	void destroy_protocols();
+	void dispatch_event_to_protocols(const ENetEvent& event);
 	
 	DisconnectResult disconnect_thread(DisconnectResultReason reason);
 
