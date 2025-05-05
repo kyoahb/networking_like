@@ -62,6 +62,8 @@ std::future<DisconnectResult> Client::disconnect() {
 DisconnectResult Client::disconnect_thread(DisconnectResultReason reason) {
 	LOG_SCOPE_CLIENT;
 
+	//TODO: Move to CDisconnect protocol
+
 	DisconnectResult result;
 	result.type = DisconnectResultType::UNKNOWN;
 	result.reason = DisconnectResultReason::UNKNOWN;

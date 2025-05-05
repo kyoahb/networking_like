@@ -74,6 +74,12 @@
     <Filter Include="Game\State\States">
       <UniqueIdentifier>{bd26d934-4647-4c46-bf13-844ba6b987a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Event">
+      <UniqueIdentifier>{a99f67a4-db13-4fe2-9255-200886bc734d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Event\Events">
+      <UniqueIdentifier>{8d20a80d-8ccb-4ba4-b13b-358fd84a1ed2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -276,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="files\Game\States\Lobby.cpp">
       <Filter>Game\State\States</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\Events\EventSystem.cpp">
+      <Filter>Game\Event</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -665,6 +674,9 @@
     </ClInclude>
     <ClInclude Include="files\Game\States\Lobby.h">
       <Filter>Game\State\States</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\Events\EventSystem.h">
+      <Filter>Game\Event</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

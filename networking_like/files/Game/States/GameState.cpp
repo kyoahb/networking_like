@@ -9,16 +9,30 @@ GameState::~GameState() {
 	// Destructor implementation
 }
 
-void GameState::draw() {
+void GameState::on_draw() {
 	// Draw the game state
+}
+
+void GameState::on_activate() {
+	// Activate the game state
+}
+
+void GameState::on_deactivate() {
+	// Deactivate the game state
+}
+
+void GameState::draw() {
+	on_draw();
 }
 
 void GameState::activate() {
 	interactable = true;
+	on_activate();
 }
 
 void GameState::deactivate() {
 	interactable = false;
+	on_deactivate();
 }
 
 bool GameState::isActive() const {

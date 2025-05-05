@@ -8,7 +8,7 @@ public:
 	MainMenu(Game& _game);
 	~MainMenu();
 
-	void draw() override;
+	void on_draw() override;
 
 	std::function<void(const std::string& address, int port)> onHostButtonClick;
 	std::function<void(const std::string& address, int port)> onJoinButtonClick;

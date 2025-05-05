@@ -14,7 +14,7 @@ Game::Game() {
     window = raylib::Window(screenWidth, screenHeight, "raylib [core] example - 3d camera first person");
 
 	// Setup main menu
-	std::shared_ptr<MainMenu> mainMenu = std::make_shared<MainMenu>();
+	std::shared_ptr<MainMenu> mainMenu = std::make_shared<MainMenu>(*this);
 	mainMenu->onHostButtonClick = [this](const std::string& address, int port) {
 		// Make server
 		server = std::make_shared<Server>(address, port);
@@ -38,6 +38,11 @@ Game::Game() {
 		window.Close();
 		};
 	stateManager.addState("MainMenu", mainMenu);
+
+
+	// Setup lobby
+	std::shared_ptr<Lobby> lobby = std::make_shared<Lobby>(*this);
+	stateManager.addState("Lobby", lobby);
 }
 
 Game::~Game()

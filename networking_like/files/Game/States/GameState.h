@@ -8,7 +8,14 @@ public:
 	GameState(Game& _game, const std::string& _name);
 	~GameState();
 
-	virtual void draw();
+	// Functions overriden by derived classes
+	virtual void on_draw();
+	virtual void on_activate();
+	virtual void on_deactivate();
+
+
+	// Reserved functions that call overriden ones, and do background work
+	void draw();
 	void activate();
 	void deactivate();
 	bool isActive() const;

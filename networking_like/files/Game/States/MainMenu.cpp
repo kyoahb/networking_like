@@ -1,18 +1,27 @@
 #include "MainMenu.h"
+#include "Game/Game.h"
 
-MainMenu::MainMenu() : GameState("MainMenu") {
+MainMenu::MainMenu(Game& _game) : GameState(_game, "MainMenu") {
     titleLabel = rgc::Label(rgc::Bounds(raylib::Vector2(400, 100), raylib::Vector2(400, 80)), "Game");
 
 
     hostButton = rgc::Button(rgc::Bounds(raylib::Vector2(400, 250), raylib::Vector2(200, 50)), "Host");
     hostButton.OnClick([this]() {
         onHostButtonClick("127.0.0.1", 7777);
+
+        if (!game.stateManager.setState("Lobby")) {
+			Log::asserts(false, "Failed to set state to Lobby from MainMenu");
+        }
         });
 
 
     joinButton = rgc::Button(rgc::Bounds(raylib::Vector2(400, 320), raylib::Vector2(200, 50)), "Join");
     joinButton.OnClick([this]() {
         onJoinButtonClick("127.0.0.1", 7777);
+
+        if (!game.stateManager.setState("Lobby")) {
+            Log::asserts(false, "Failed to set state to Lobby from MainMenu");
+        }
         });
 
 
@@ -26,7 +35,7 @@ MainMenu::~MainMenu() {
 	// Destructor implementation
 }
 
-void MainMenu::draw() {
+void MainMenu::on_draw() {
 	// Draw the main menu
 	titleLabel.Show();
 	hostButton.Show();

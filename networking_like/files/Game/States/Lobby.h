@@ -4,9 +4,10 @@
 
 class Lobby : public GameState {
 public:
-	Lobby();
+	Lobby(Game& _game);
 	~Lobby();
-	void draw() override;
+
+	void on_draw() override;
 
 private:
 	rgc::Button backButton;

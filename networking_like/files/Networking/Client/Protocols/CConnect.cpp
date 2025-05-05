@@ -14,6 +14,17 @@ void CConnect::destroy() {};
 void CConnect::packet_event(const ENetEvent& event) {
 	LOG_SCOPE_CLIENT_PROTOCOL;
 	
+
+	if (event.type == CLIENT_CONNECT_RELAY) {
+		// Received a CLIENT_CONNECT_RELAY packet
+		Packet packet(event.packet);
+		ClientConnectRelay client_connect_relay = SerializationUtils::deserialize<ClientConnectRelay>(packet.data, packet.header.size);
+		client->peers.add_peer(client_connect_relay.client_id, client_connect_relay.client_handle);
+		Log::trace("CLIENT_CONNECT:RELAY received. Added peer: " + client_connect_relay.client_handle);
+	}
+	else if (event.type == CLIENT_CONNECT_CONFIRM) {
+		// Received a CLIENT_CONNECT_CONFIRM packet
+	}
 }
 
 
