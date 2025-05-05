@@ -5,10 +5,9 @@
 
 class MainMenu : public GameState {
 public:
-	MainMenu();
+	MainMenu(Game& _game);
 	~MainMenu();
 
-	void update() override;
 	void draw() override;
 
 	std::function<void(const std::string& address, int port)> onHostButtonClick;

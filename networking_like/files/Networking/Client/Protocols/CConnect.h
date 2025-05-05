@@ -3,6 +3,7 @@
 
 #include "Utils/General/TimeUtils.h"
 #include "Networking/Shared/FutureResults/ConnectResult.h"
+#include "Utils/Network/NetworkHelper.h"
 
 class CConnect : public CProtocol {
 public:

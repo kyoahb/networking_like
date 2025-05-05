@@ -26,20 +26,17 @@ MainMenu::~MainMenu() {
 	// Destructor implementation
 }
 
-void MainMenu::update() {
-	// Update the main menu
-	if (!interactable) return;
-
-	titleLabel.Update();
-	hostButton.Update();
-	joinButton.Update();
-	exitButton.Update();
-}
-
 void MainMenu::draw() {
 	// Draw the main menu
 	titleLabel.Show();
 	hostButton.Show();
 	joinButton.Show();
 	exitButton.Show();
+
+	if (!interactable) return;
+
+	titleLabel.Update();
+	hostButton.Update();
+	joinButton.Update();
+	exitButton.Update();
 }

@@ -9,6 +9,5 @@ public:
 
 	void setState(const std::string& state);
 	void addState(const std::string& state_name, std::shared_ptr<GameState> state);
-	void update();
 	void draw();
 };

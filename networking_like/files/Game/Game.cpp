@@ -24,7 +24,6 @@ Game::Game() {
 
 		// Also make client
 		client = std::make_shared<Client>();
-		client->init();
 		client->connect(address, port, "Client").wait();
 		};
 
@@ -68,7 +67,6 @@ void Game::update() {
 	BeginDrawing();
 	window.ClearBackground(WHITE);
 
-	stateManager.update();
 	stateManager.draw();
 
 	EndDrawing();

@@ -33,6 +33,10 @@ std::future<ConnectResult> Client::connect(const std::string& ip, uint16_t port,
 	LOG_SCOPE_CLIENT;
 	Log::trace("Connecting to server at " + ip + ":" + std::to_string(port) + " with preferred handle: " + preferred_handle);
 
+	if (protocols.empty()) {
+		initialize_protocols();
+	}
+
 	return std::async(std::launch::async, [this, ip, port, preferred_handle]() {
 		ConnectResult cr = connect_protocol->connect(ip, port, preferred_handle);
 		start();
@@ -156,10 +160,6 @@ void Client::start() {
 
 	NetworkUser::start();
 	start_protocols();
-}
-
-void Client::init() {
-	initialize_protocols();
 }
 
 void Client::stop() {

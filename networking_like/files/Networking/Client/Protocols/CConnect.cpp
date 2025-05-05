@@ -65,42 +65,32 @@ ConnectResult CConnect::connect(const std::string& ip, uint16_t port, const std:
 ENetPeer* CConnect::begin_connection(const std::string& ip, uint16_t port, const std::string& preferred_handle) {
 	LOG_SCOPE_CLIENT_PROTOCOL;
 
-	// Initialise connection
-	ENetAddress* address = &(client->address);
-	ENetHost* host = (client->host);
+	enet_address_set_host(&client->address, ip.c_str());
+	client->address.port = port;
 
-	enet_address_set_host(address, ip.c_str());
-	address->port = port;
+	ENetPeer* server_peer = enet_host_connect(client->host, &client->address, 2, 0);
 
-	ENetPeer* server_peer = enet_host_connect(host, address, 2, 0);
-
+	Log::trace("Attempting connection to server at " + ip + ":" + std::to_string(port) + " with preferred handle: " + preferred_handle);
 	return server_peer; // Check if valid will be done in connect()
 }
 
 bool CConnect::wait_for_connection_establishment(ENetPeer* server_peer) {
-	LOG_SCOPE_CLIENT_PROTOCOL;
-
-	const int TIMEOUT_MS = 5000;
-	const int UPDATE_INTERVAL_MS = 1000;
-	unsigned int elapsed_ms = 0;
-	ENetEvent event;
-	while (elapsed_ms < TIMEOUT_MS) {
-		if (enet_host_service(client->host, &event, UPDATE_INTERVAL_MS) > 0) {
-			if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-				Packet received_packet(event.packet);
-				if (received_packet.header.type == PacketType::CLIENT_CONNECT && received_packet.header.subtype == ClientConnectType::CLIENT_CONNECT_CONFIRM) {
-					ClientConnectConfirm connection_confirmation = SerializationUtils::deserialize<ClientConnectConfirm>(received_packet.data, received_packet.header.size);
-					client->peers.setup_by_confirmation(connection_confirmation);
-
-					Log::trace("CLIENT_CONNECT:CONFIRM received. Server-given handle for US: " + connection_confirmation.client_decided_handle);
-
-					return true;
-				}
-			}
-		}
-		elapsed_ms += UPDATE_INTERVAL_MS;
-		Log::trace("Waiting for connection confirmation... " + std::to_string(elapsed_ms) + "ms elapsed");
+	LOG_SCOPE_CLIENT;
+	if (server_peer == nullptr) {
+		Log::error("Server peer is nullptr, cannot wait for connection establishment");
+		return false;
 	}
+
+	// Wait up to 5000ms for CONNECT event
+	const unsigned int TIMEOUT_MS = 5000;
+	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, TIMEOUT_MS, ENET_EVENT_TYPE_CONNECT);
+	
+	if (event.has_value()) {
+		Log::trace("Connection establishment successful. Connected to server");
+		return true;
+	}
+
+	Log::trace("Connection establishment FAILED.");
 	return false;
 }
 
@@ -118,26 +108,21 @@ void CConnect::send_connection_begin_packet(const std::string& preferred_handle)
 
 bool CConnect::wait_for_connection_confirmation() {
 	LOG_SCOPE_CLIENT;
-	const int TIMEOUT_MS = 5000;
-	const int UPDATE_INTERVAL_MS = 1000;
-	unsigned int elapsed_ms = 0;
-	ENetEvent event;
-	while (elapsed_ms < TIMEOUT_MS) {
-		if (enet_host_service(client->host, &event, UPDATE_INTERVAL_MS) > 0) {
-			if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-				Packet received_packet(event.packet);
-				if (received_packet.header.type == PacketType::CLIENT_CONNECT && received_packet.header.subtype == ClientConnectType::CLIENT_CONNECT_CONFIRM) {
-					ClientConnectConfirm connection_confirmation = SerializationUtils::deserialize<ClientConnectConfirm>(received_packet.data, received_packet.header.size);
-					client->peers.setup_by_confirmation(connection_confirmation);
 
-					Log::trace("CLIENT_CONNECT:CONFIRM received. Server-given handle for US: " + connection_confirmation.client_decided_handle);
+	const unsigned int TIMEOUT_MS = 5000;
 
-					return true;
-				}
-			}
-		}
-		elapsed_ms += UPDATE_INTERVAL_MS;
-		Log::trace("Waiting for connection confirmation... " + std::to_string(elapsed_ms) + "ms elapsed");
+	Log::trace("Waiting up to " + std::to_string(TIMEOUT_MS) + "ms for connection confirmation...");
+	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, TIMEOUT_MS, PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, static_cast<uint8_t>(ClientConnectType::CLIENT_CONNECT_CONFIRM));
+	
+	if (event.has_value()) {
+		Packet received_packet(event.value().packet);
+		ClientConnectConfirm connection_confirmation = SerializationUtils::deserialize<ClientConnectConfirm>(received_packet.data, received_packet.header.size);
+		client->peers.setup_by_confirmation(connection_confirmation);
+
+		Log::trace("CLIENT_CONNECT:CONFIRM received. Server-given handle for US: " + connection_confirmation.client_decided_handle);
+
+		return true;
 	}
+	Log::error("Connection confirmation timed out");
 	return false;
 }

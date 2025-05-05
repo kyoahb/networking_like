@@ -13,8 +13,8 @@ void SConnect::update() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 	// Check for pending begins
 	for (auto it = pending_begins.begin(); it != pending_begins.end();) {
-		if (TimeUtils::get_time_since(it->first->connectID) >= TIMEOUT_MS) {
-			Log::warn("CLIENT_CONNECT_BEGIN packet timed out for peer: " + std::to_string(it->first->connectID));
+		if (TimeUtils::get_time_since(it->second) >= TIMEOUT_MS) {
+			Log::warn("CLIENT_CONNECT_BEGIN packet timed out for peer: " + std::to_string(it->first->incomingPeerID));
 			
 			// Disconnect peer
 			NetPeer peer(it->first, 0, "Unknown");
@@ -31,7 +31,7 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 	LOG_SCOPE_SERVER_PROTOCOL;
 
 	if (event.type == ENET_EVENT_TYPE_CONNECT) {
-		Log::trace("Connect event received for peer: " + std::to_string(event.peer->incomingPeerID));
+		Log::trace("Connect event received for peer: " + std::to_string(event.peer->incomingPeerID) + " , waiting for CLIENT_CONNECT_BEGIN packet");
 		if (peer.has_value()) {
 			Log::warn("Connect event received for known peer: " + peer.value().handle);
 			return;

@@ -22,8 +22,6 @@ public:
 	Client();
 	~Client();
 
-	void init();
-
 	bool is_connected();
 	std::future<ConnectResult> connect(const std::string& ip, uint16_t port, const std::string& preferred_handle = "Client");
 	std::future<DisconnectResult> disconnect();

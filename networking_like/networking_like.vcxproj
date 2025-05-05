@@ -136,6 +136,7 @@
     <ClCompile Include="files\Game\Game.cpp" />
     <ClCompile Include="files\Game\States\GameState.cpp" />
     <ClCompile Include="files\Game\States\GameStateManager.cpp" />
+    <ClCompile Include="files\Game\States\Lobby.cpp" />
     <ClCompile Include="files\Game\States\MainMenu.cpp" />
     <ClCompile Include="files\Networking\Client\Client.cpp" />
     <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="files\Utils\Input\Input.cpp" />
     <ClCompile Include="files\Utils\Logs\Log.cpp" />
     <ClCompile Include="files\Utils\Logs\LogScope.cpp" />
+    <ClCompile Include="files\Utils\Network\NetworkHelper.cpp" />
     <ClCompile Include="include\raygui-cpp\Bounds.cpp" />
     <ClCompile Include="include\raygui-cpp\Button.cpp" />
     <ClCompile Include="include\raygui-cpp\CheckBox.cpp" />
@@ -203,6 +205,7 @@
     <ClInclude Include="files\Game\Game.h" />
     <ClInclude Include="files\Game\States\GameState.h" />
     <ClInclude Include="files\Game\States\GameStateManager.h" />
+    <ClInclude Include="files\Game\States\Lobby.h" />
     <ClInclude Include="files\Game\States\MainMenu.h" />
     <ClInclude Include="files\Networking\Client\Client.h" />
     <ClInclude Include="files\Networking\Client\ClientPeerlist.h" />
@@ -237,6 +240,7 @@
     <ClInclude Include="files\Utils\Input\Input.h" />
     <ClInclude Include="files\Utils\Logs\Log.h" />
     <ClInclude Include="files\Utils\Logs\LogScope.h" />
+    <ClInclude Include="files\Utils\Network\NetworkHelper.h" />
     <ClInclude Include="include\AudioDevice.hpp" />
     <ClInclude Include="include\AudioStream.hpp" />
     <ClInclude Include="include\AutomationEventList.hpp" />

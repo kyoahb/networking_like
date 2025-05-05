@@ -21,12 +21,6 @@ void GameStateManager::addState(const std::string& state_name, std::shared_ptr<G
 	states[state_name] = state;
 }
 
-void GameStateManager::update() {
-	if (current_state) {
-		current_state->update();
-	}
-}
-
 void GameStateManager::draw() {
 	if (current_state) {
 		current_state->draw();

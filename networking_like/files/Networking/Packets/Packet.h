@@ -5,13 +5,15 @@
 enum PacketType : uint8_t {
 	UNKNOWN_TYPE = 0,
 	CHAT = 1,
-	CLIENT_CONNECT = 2
+	CLIENT_CONNECT = 2,
+	ANY_TYPE = 255,
 };
 
 enum PacketDirection : uint8_t {
 	UNKNOWN_DIRECTION = 0,
 	CLIENT_TO_SERVER = 1,
 	SERVER_TO_CLIENT = 2,
+	ANY_DIRECTION = 255
 };
 
 /**

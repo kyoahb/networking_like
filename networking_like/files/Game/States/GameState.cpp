@@ -1,15 +1,12 @@
 #include "GameState.h"
+#include "Game/Game.h"
 
-GameState::GameState(const std::string& _name) : name(_name) {
+GameState::GameState(Game& _game, const std::string& _name) : game(_game), name(_name) {
 	// Constructor implementation
 }
 
 GameState::~GameState() {
 	// Destructor implementation
-}
-
-void GameState::update() {
-	// Update the game state
 }
 
 void GameState::draw() {

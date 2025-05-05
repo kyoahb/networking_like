@@ -68,6 +68,12 @@
     <Filter Include="Networking\Client\Protocols">
       <UniqueIdentifier>{26c74f9f-c6e6-4f97-aca3-9e01d3da4243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Network">
+      <UniqueIdentifier>{ba593b23-82ce-40e7-a31e-a75df026ddc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\State\States">
+      <UniqueIdentifier>{bd26d934-4647-4c46-bf13-844ba6b987a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -241,9 +247,6 @@
     <ClCompile Include="files\Game\Game.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="files\Game\States\MainMenu.cpp">
-      <Filter>Game\State</Filter>
-    </ClCompile>
     <ClCompile Include="files\Game\States\GameState.cpp">
       <Filter>Game\State</Filter>
     </ClCompile>
@@ -264,6 +267,15 @@
     </ClCompile>
     <ClCompile Include="files\Networking\Client\Protocols\CConnect.cpp">
       <Filter>Networking\Client\Protocols</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Utils\Network\NetworkHelper.cpp">
+      <Filter>Utils\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\States\MainMenu.cpp">
+      <Filter>Game\State\States</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\States\Lobby.cpp">
+      <Filter>Game\State\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -627,9 +639,6 @@
     <ClInclude Include="files\Game\Game.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="files\Game\States\MainMenu.h">
-      <Filter>Game\State</Filter>
-    </ClInclude>
     <ClInclude Include="files\Game\States\GameStateManager.h">
       <Filter>Game\State</Filter>
     </ClInclude>
@@ -647,6 +656,15 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Client\Protocols\CConnect.h">
       <Filter>Networking\Client\Protocols</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\Network\NetworkHelper.h">
+      <Filter>Utils\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\MainMenu.h">
+      <Filter>Game\State\States</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\Lobby.h">
+      <Filter>Game\State\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
