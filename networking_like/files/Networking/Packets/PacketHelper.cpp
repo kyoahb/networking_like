@@ -22,7 +22,8 @@ std::unordered_map<PacketType, PacketHelper::TypeInfo> PacketHelper::packet_type
         {255, {"ANY", {}}},
         {1, {"BEGIN", {}}},
         {2, {"RELAY", {}}},
-        {3, {"CONFIRM", {}}}
+		{3, {"CONFIRM", {}}},
+		{4, {"DISCONNECT_RELAY", {}}}
     }}}
 };
 

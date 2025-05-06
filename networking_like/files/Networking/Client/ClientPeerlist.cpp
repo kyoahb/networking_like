@@ -156,3 +156,10 @@ NetPeer& ClientPeerlist::get_server() {
 	return server;
 }
 
+std::vector<LocalNetPeer> ClientPeerlist::get_peers() const {
+	LOG_SCOPE_CLIENT;
+	if (!connected) {
+		Log::error("ClientPeerlist is not connected, cannot get peers");
+	}
+	return peers;
+}

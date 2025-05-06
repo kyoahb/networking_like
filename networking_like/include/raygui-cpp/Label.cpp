@@ -1,5 +1,5 @@
 #include "raygui-cpp/Label.h"
-
+#include <string>
 RAYGUI_CPP_BEGIN_NAMESPACE
 
 Label::Label() : text("") {}

@@ -1,5 +1,7 @@
 # TODO
 - Add ability to disable logs / log assertations
-- FIX IT! Client is currently unable to connect
-- Hook disconnect to server
-- Create Client protocols as well
+- Move Client Disconnect function to a CDisconnect protocol just for symmetry between server
+- Fix disconnecting client on ServerShutdown
+- Make Event System, replace some things with event system
+- CLEAN A LOT OF CODE UP
+- FIX STUPID LOBBY

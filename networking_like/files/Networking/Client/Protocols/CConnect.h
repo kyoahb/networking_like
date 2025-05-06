@@ -4,7 +4,8 @@
 #include "Utils/General/TimeUtils.h"
 #include "Networking/Shared/FutureResults/ConnectResult.h"
 #include "Utils/Network/NetworkHelper.h"
-
+#include "Game/Events/EventList.h"
+#include "Networking/Packets/Data/ClientDisconnectRelay.h"
 class CConnect : public CProtocol {
 public:
 	explicit CConnect(std::shared_ptr<Client> _client);

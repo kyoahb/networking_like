@@ -41,6 +41,9 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 		// We now add peer to the set of peers we expect a CLIENT_CONNECT_BEGIN packet from
 		pending_begins[event.peer] = TimeUtils::get_current_time_millis();
 
+		// Fire relevant event
+		Events::Server::ClientConnect::trigger(Events::Server::ClientConnectData(event.peer));
+
 	}
 	else if (event.type == ENET_EVENT_TYPE_RECEIVE) {
 		Packet packet(event.packet);
@@ -91,7 +94,10 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 		std::string serialised_relay_data = SerializationUtils::serialize<ClientConnectRelay>(client_connect_relay);
 		Packet packet_relay(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_RELAY, serialised_relay_data.data(), serialised_relay_data.size(), true);
 		server->broadcast_packet(packet_relay, { new_peer });
-	
+		
+		
+		// Fire event
+		Events::Server::ClientBegin::trigger(Events::Server::ClientBeginData(event.peer, client_connect_begin));
 	}
 }
 

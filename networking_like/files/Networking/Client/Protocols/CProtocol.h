@@ -2,7 +2,6 @@
 #include "Utils/Imports/common.h"
 #include "Networking/Shared/Protocol.h"
 
-
 class Client;
 
 class CProtocol : public Protocol {

@@ -19,7 +19,7 @@ public:
 	std::future<DisconnectResult> disconnect_peer(NetPeer& peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);
 	bool send_packet(const Packet& packet, const NetPeer& peer);
 	void broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
-
+	void broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
 
 private:
 	const int MAX_CLIENTS = 32; // Maximum number of clients

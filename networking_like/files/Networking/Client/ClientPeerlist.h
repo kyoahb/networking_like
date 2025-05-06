@@ -28,6 +28,7 @@ public:
 	NetPeer& get_server();
 
 	bool is_connected();
+	std::vector<LocalNetPeer> get_peers() const;
 
 private:
 	bool connected = false;

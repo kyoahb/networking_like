@@ -5,7 +5,7 @@
 #include "Networking/Packets/Packet.h"
 
 #include "Networking/Shared/Protocol.h"
-
+#include "Game/Events/EventList.h"
 class Server;
 
 class SProtocol : public Protocol {

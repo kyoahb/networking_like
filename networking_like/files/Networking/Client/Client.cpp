@@ -107,10 +107,14 @@ DisconnectResult Client::disconnect_thread(DisconnectResultReason reason) {
 		Log::error("Disconnect confirmation timed out");
 		result.type = DisconnectResultType::FORCED;
 		enet_peer_reset(peers.get_server().peer);
+
+		Events::Client::Disconnect::trigger(Events::Client::DisconnectData("Client requested, but server did not respond, so had to force"));
 	}
 	else {
 		Log::trace("Disconnect confirmation received");
 		result.type = DisconnectResultType::SUCCESS;
+
+		Events::Client::Disconnect::trigger(Events::Client::DisconnectData("Client requested disconnect"));
 	}
 
 	peers.clear();
@@ -162,6 +166,8 @@ void Client::start() {
 
 	NetworkUser::start();
 	start_protocols();
+
+	Events::Client::Start::trigger(Events::Client::StartData());
 }
 
 void Client::stop() {
@@ -174,6 +180,9 @@ void Client::stop() {
 
 	NetworkUser::stop();
 	stop_protocols();
+	disconnect().wait();
+
+	Events::Client::Stop::trigger(Events::Client::StopData());
 }
 
 void Client::update() {

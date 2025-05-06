@@ -1,7 +1,6 @@
 #include "CConnect.h"
 #include "Networking/Client/Client.h"
 
-
 CConnect::CConnect(std::shared_ptr<Client> _client) : CProtocol(_client, "CConnect") {
 	LOG_SCOPE_CLIENT_PROTOCOL;
 
@@ -21,9 +20,26 @@ void CConnect::packet_event(const ENetEvent& event) {
 		ClientConnectRelay client_connect_relay = SerializationUtils::deserialize<ClientConnectRelay>(packet.data, packet.header.size);
 		client->peers.add_peer(client_connect_relay.client_id, client_connect_relay.client_handle);
 		Log::trace("CLIENT_CONNECT:RELAY received. Added peer: " + client_connect_relay.client_handle);
+
+		std::optional<LocalNetPeer> peer = client->peers.get_peer(client_connect_relay.client_id);
+		if (!peer.has_value()) {
+			Log::error("CLIENT_CONNECT:RELAY received, but peer not found in peerlist.");
+		}
+		Events::Client::PeerAdded::trigger(Events::Client::PeerAddedData(peer.value()));
 	}
-	else if (event.type == CLIENT_CONNECT_CONFIRM) {
-		// Received a CLIENT_CONNECT_CONFIRM packet
+	else if (event.type == CLIENT_DISCONNECT_RELAY) {
+		// Received a CLIENT_DISCONNECT_RELAY packet
+		Packet packet(event.packet);
+		ClientDisconnectRelay client_disconnect_relay = SerializationUtils::deserialize<ClientDisconnectRelay>(packet.data, packet.header.size);
+		
+		std::optional<LocalNetPeer> peer = client->peers.get_peer(client_disconnect_relay.client_id);
+		if (!peer.has_value()) {
+			Log::error("CLIENT_DISCONNECT:RELAY received, but peer not found in peerlist.");
+		}
+
+		client->peers.remove_peer(client_disconnect_relay.client_id); // Remove peer from the peerlist
+		Log::trace("CLIENT_DISCONNECT:RELAY received. Removed peer: " + client_disconnect_relay.client_id);
+		Events::Client::PeerRemoved::trigger(Events::Client::PeerRemovedData(peer.value()));
 	}
 }
 
@@ -70,6 +86,7 @@ ConnectResult CConnect::connect(const std::string& ip, uint16_t port, const std:
 
 	// Connection confirmation received
 	Log::trace("Connection complete, start()ing");
+	Events::Client::Connect::trigger(Events::Client::ConnectData(server_peer, ip, static_cast<int>(port)));
 	return ConnectResult{ ConnectResultType::SUCCESS, "Connected to server", TimeUtils::get_current_time_millis() - start_time };
 }
 

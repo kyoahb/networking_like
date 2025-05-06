@@ -133,7 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="files\Game\Events\EventSystem.cpp" />
+    <ClCompile Include="files\Game\Events\EventList.h" />
     <ClCompile Include="files\Game\Game.cpp" />
     <ClCompile Include="files\Game\States\GameState.cpp" />
     <ClCompile Include="files\Game\States\GameStateManager.cpp" />
@@ -203,7 +203,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="files\Game\Events\EventSystem.h" />
+    <ClInclude Include="files\Game\Events\Event.h" />
     <ClInclude Include="files\Game\Game.h" />
     <ClInclude Include="files\Game\States\GameState.h" />
     <ClInclude Include="files\Game\States\GameStateManager.h" />
@@ -217,6 +217,7 @@
     <ClInclude Include="files\Networking\Packets\Data\ClientConnectBegin.h" />
     <ClInclude Include="files\Networking\Packets\Data\ClientConnectConfirm.h" />
     <ClInclude Include="files\Networking\Packets\Data\ClientConnectRelay.h" />
+    <ClInclude Include="files\Networking\Packets\Data\ClientDisconnectRelay.h" />
     <ClInclude Include="files\Networking\Packets\Packet.h" />
     <ClInclude Include="files\Networking\Packets\PacketData.h" />
     <ClInclude Include="files\Networking\Packets\PacketHelper.h" />

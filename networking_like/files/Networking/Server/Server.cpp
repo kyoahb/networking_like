@@ -81,6 +81,18 @@ void Server::broadcast_packet(const Packet& packet, std::vector<NetPeer> excludi
 	}
 }
 
+void Server::broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding) {
+	LOG_SCOPE_SERVER;
+	Log::trace("Broadcasting packet " + PacketHelper::types_to_string(packet) + " to all peers");
+	for (auto& peer : peers.peers) {
+		if (peer.peer != nullptr && peer.peer->state != ENET_PEER_STATE_DISCONNECTED) {
+			if (std::find(excluding.begin(), excluding.end(), peer.peer) == excluding.end()) {
+				send_packet(packet, peer);
+			}
+		}
+	}
+}
+
 void Server::dispatch_event_to_protocols(const ENetEvent& event) {
 	std::optional<NetPeer> peer = std::nullopt;
 
@@ -124,6 +136,8 @@ void Server::start() {
 	start_protocols();
 	update_future = std::async(std::launch::async, &Server::update_loop, this);
 	Log::trace("Server started update loop.");
+
+	Events::Server::Start::trigger(Events::Server::StartData()); // Fire event
 }
 
 std::future<ShutdownResult> Server::stop() {
@@ -144,6 +158,10 @@ std::future<ShutdownResult> Server::stop() {
 	else {
 		Log::warn("Update loop is in the same thread, cannot stop()");
 	}
+
+	// Fire event
+	Events::Server::Stop::trigger(Events::Server::StopData()); // Fire event
+
 	return std::async(std::launch::async, &Server::stop_thread, this);
 }
 
