@@ -39,7 +39,7 @@ std::future<ConnectResult> Client::connect(const std::string& ip, uint16_t port,
 
 	return std::async(std::launch::async, [this, ip, port, preferred_handle]() {
 		ConnectResult cr = connect_protocol->connect(ip, port, preferred_handle);
-		start();
+		if (cr.type == ConnectResultType::SUCCESS) start();
 		return cr;
 	});
 }

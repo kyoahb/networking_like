@@ -2,29 +2,15 @@
 #include "Game/Game.h"
 
 LobbyMember::LobbyMember(std::string _name, int _id, int _y_offset) : name(_name), idStr(std::to_string(_id)), y_offset(_y_offset) {
-
-	nameLabel = rgc::Label(rgc::Bounds(raylib::Vector2(start_x, y_offset), raylib::Vector2(start_x+size_x, size_y+y_offset)), name.c_str());
-	idLabel = rgc::Label(rgc::Bounds(raylib::Vector2(start_x+id_offset_x, y_offset), raylib::Vector2(start_x+id_offset_x+size_x, size_y + y_offset)), idStr.c_str());
 }
 
 void LobbyMember::draw() {
-	nameLabel.Show();
-	idLabel.Show();
-
-	nameLabel.Update();
-	idLabel.Update();
+	ImGui::Text("%s", name.c_str());
+	ImGui::SameLine();
+	ImGui::Text("%s", idStr.c_str());
 }
 
 Lobby::Lobby(Game& _game) : GameState(_game, "Lobby") {
-	backButton = rgc::Button(rgc::Bounds(raylib::Vector2(400, 390), raylib::Vector2(200, 50)), "Back");
-	backButton.OnClick([this]() {
-
-		if (!game.stateManager.setState("MainMenu")) {
-			Log::asserts(false, "Failed to set state to MainMenu from Lobby");
-		}
-	});
-
-	lobbyPanel = rgc::Panel(rgc::Bounds(raylib::Vector2(0, 0), raylib::Vector2(720, 480)), "Lobby Panel");
 
 }
 
@@ -56,15 +42,12 @@ void Lobby::on_deactivate() {
 void Lobby::on_draw() {
 	// Draw the lobby
 
-	lobbyPanel.Show();
-	backButton.Show();
-
+	if (ImGui::Button("Back")) {
+		if (!game.stateManager.setState("MainMenu")) {
+			Log::asserts(false, "Failed to set state to MainMenu from Lobby");
+		}
+	}
 	for (auto& member : members) {
 		member.draw();
 	}
-
-	if (!interactable) return;
-
-	lobbyPanel.Update();
-	backButton.Update();
 }

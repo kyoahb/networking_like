@@ -14,11 +14,5 @@ public:
 	std::function<void(const std::string& address, int port)> onJoinButtonClick;
 	std::function<void()> onExitButtonClick;
 
-private:
-	rgc::Label titleLabel;
-	rgc::Button hostButton;
-	rgc::Button joinButton;
-	rgc::Button exitButton;
-
 };
 

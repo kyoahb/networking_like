@@ -14,7 +14,7 @@ std::optional<ENetEvent> NetworkHelper::wait_for_event(ENetHost* host, unsigned 
 	ENetEvent event;
 
 	unsigned int start_time = TimeUtils::get_current_time_millis();
-	unsigned int remaining_time = timeout_ms;
+	int remaining_time = timeout_ms;
 
 	while (remaining_time > 0) {
 		if (enet_host_service(host, &event, remaining_time) > 0) { // If <0, then an error has occured. Not tracking this yet

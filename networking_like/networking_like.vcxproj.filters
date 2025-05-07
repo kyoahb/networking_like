@@ -127,126 +127,6 @@
     <ClCompile Include="files\Networking\Server\Protocols\SDisconnect.cpp">
       <Filter>Networking\Server\Protocols</Filter>
     </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Bounds.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Button.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\CheckBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ColorBarAlpha.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ColorBarHue.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ColorPanel.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ColorPanelHSV.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ColorPicker.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ColorPickerHSV.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ComboBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\DropdownBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\DummyRec.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\extras\ImageButton.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Globals.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Grid.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\GroupBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Label.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\LabelButton.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Line.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ListView.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ListViewEx.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\MessageBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Paintable.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Panel.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ProgressBar.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ScrollPanel.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Slider.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\SliderBar.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Spinner.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\StatusBar.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Style.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\TabBar.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\TextBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\TextInputBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\Toggle.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ToggleGroup.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ToggleSlider.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\ValueBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="include\raygui-cpp\WindowBox.cpp">
-      <Filter>Include</Filter>
-    </ClCompile>
-    <ClCompile Include="files\Utils\Imports\raygui_impl.cpp">
-      <Filter>Utils\Imports</Filter>
-    </ClCompile>
     <ClCompile Include="files\UI\UIMenu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -283,8 +163,11 @@
     <ClCompile Include="files\Game\States\Lobby.cpp">
       <Filter>Game\State\States</Filter>
     </ClCompile>
-    <ClCompile Include="files\Game\Events\EventSystem.cpp">
+    <ClCompile Include="files\Game\Events\EventList.h">
       <Filter>Game\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="include\rlImGui.cpp">
+      <Filter>Include</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -372,6 +255,63 @@
     <ClInclude Include="files\Networking\Server\Protocols\SProtocol.h">
       <Filter>Networking\Server\Protocols</Filter>
     </ClInclude>
+    <ClInclude Include="files\UI\UIMenu.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\GameStateManager.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\GameState.h">
+      <Filter>Game\State</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Protocols\SConnect.h">
+      <Filter>Networking\Server\Protocols</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Protocols\CProtocol.h">
+      <Filter>Networking\Client\Protocols</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\Protocol.h">
+      <Filter>Networking\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Protocols\CConnect.h">
+      <Filter>Networking\Client\Protocols</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Utils\Network\NetworkHelper.h">
+      <Filter>Utils\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\MainMenu.h">
+      <Filter>Game\State\States</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\States\Lobby.h">
+      <Filter>Game\State\States</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\Events\Event.h">
+      <Filter>Game\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\ClientDisconnectRelay.h">
+      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RaylibException.hpp">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\raymath.hpp">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rectangle.hpp">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderTexture.hpp">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rlImGui.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rlImGuiColors.h">
+      <Filter>Include</Filter>
+    </ClInclude>
     <ClInclude Include="include\Shader.hpp">
       <Filter>Include</Filter>
     </ClInclude>
@@ -411,133 +351,10 @@
     <ClInclude Include="include\Window.hpp">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Bounds.h">
+    <ClInclude Include="include\extras\FA6FreeSolidFontData.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Button.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\CheckBox.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ColorBarAlpha.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ColorBarHue.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ColorPanel.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ColorPanelHSV.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ColorPicker.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ColorPickerHSV.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ComboBox.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Component.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Directives.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\DropdownBox.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\DummyRec.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\extras\ImageButton.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Globals.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Grid.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\GroupBox.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Label.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\LabelButton.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Line.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ListView.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ListViewEx.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Margin.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\MessageBox.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Paintable.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Panel.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ProgressBar.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ScrollPanel.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Slider.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\SliderBar.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Spinner.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\StatusBar.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Style.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\TabBar.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\TextBox.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\TextInputBox.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Toggle.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ToggleGroup.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ToggleSlider.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\Utils.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\ValueBox.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp\WindowBox.h">
+    <ClInclude Include="include\extras\IconsFontAwesome6.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="include\AudioDevice.hpp">
@@ -582,6 +399,9 @@
     <ClInclude Include="include\Image.hpp">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="include\imgui_impl_raylib.h">
+      <Filter>Include</Filter>
+    </ClInclude>
     <ClInclude Include="include\Keyboard.hpp">
       <Filter>Include</Filter>
     </ClInclude>
@@ -615,12 +435,6 @@
     <ClInclude Include="include\RayCollision.hpp">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="include\raygui.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raygui-cpp.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="include\raylib.hpp">
       <Filter>Include</Filter>
     </ClInclude>
@@ -629,54 +443,6 @@
     </ClInclude>
     <ClInclude Include="include\raylib-cpp-utils.hpp">
       <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\RaylibException.hpp">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\raymath.hpp">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rectangle.hpp">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\RenderTexture.hpp">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="files\UI\UIMenu.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Game\Game.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Game\States\GameStateManager.h">
-      <Filter>Game\State</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Game\States\GameState.h">
-      <Filter>Game\State</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Server\Protocols\SConnect.h">
-      <Filter>Networking\Server\Protocols</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Client\Protocols\CProtocol.h">
-      <Filter>Networking\Client\Protocols</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Shared\Protocol.h">
-      <Filter>Networking\Shared</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Client\Protocols\CConnect.h">
-      <Filter>Networking\Client\Protocols</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Utils\Network\NetworkHelper.h">
-      <Filter>Utils\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Game\States\MainMenu.h">
-      <Filter>Game\State\States</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Game\States\Lobby.h">
-      <Filter>Game\State\States</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Game\Events\EventSystem.h">
-      <Filter>Game\Event</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

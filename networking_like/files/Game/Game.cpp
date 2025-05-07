@@ -12,6 +12,7 @@ Game::Game() {
     const int screenHeight = 480;
 
     window = raylib::Window(screenWidth, screenHeight, "raylib [core] example - 3d camera first person");
+	rlImGuiSetup(true); // Setup Raylib ImGUI connection
 
 	// Setup main menu
 	std::shared_ptr<MainMenu> mainMenu = std::make_shared<MainMenu>(*this);
@@ -36,6 +37,7 @@ Game::Game() {
 	mainMenu->onExitButtonClick = [this]() {
 		// Exit the game
 		window.Close();
+		CloseWindow();
 		};
 	stateManager.addState("MainMenu", mainMenu);
 
@@ -54,6 +56,7 @@ Game::~Game()
 	if (client) {
 		client->disconnect();
 	}
+	rlImGuiShutdown();
 }
 
 void Game::begin() {
@@ -69,11 +72,14 @@ void Game::update() {
 	Input::update();
 
 	// Draw
-	BeginDrawing();
-	window.ClearBackground(WHITE);
+	BeginDrawing(); // Tell Raylib we are going to draw
+	
+	window.ClearBackground(WHITE); // Clear previous frame by replacing with full white
+	rlImGuiBegin(); // Start Raylib-ImGUI frame
 
-	stateManager.draw();
+	stateManager.draw(); // Draw whatever current state is
 
-	EndDrawing();
+	rlImGuiEnd(); // End Raylib-ImGUI frame
+	EndDrawing(); // Tell Raylib we are done drawing
 
 }

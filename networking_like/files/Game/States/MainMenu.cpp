@@ -2,33 +2,7 @@
 #include "Game/Game.h"
 
 MainMenu::MainMenu(Game& _game) : GameState(_game, "MainMenu") {
-    titleLabel = rgc::Label(rgc::Bounds(raylib::Vector2(400, 100), raylib::Vector2(400, 80)), "Game");
 
-
-    hostButton = rgc::Button(rgc::Bounds(raylib::Vector2(400, 250), raylib::Vector2(200, 50)), "Host");
-    hostButton.OnClick([this]() {
-        onHostButtonClick("127.0.0.1", 7777);
-
-        if (!game.stateManager.setState("Lobby")) {
-			Log::asserts(false, "Failed to set state to Lobby from MainMenu");
-        }
-        });
-
-
-    joinButton = rgc::Button(rgc::Bounds(raylib::Vector2(400, 320), raylib::Vector2(200, 50)), "Join");
-    joinButton.OnClick([this]() {
-        onJoinButtonClick("127.0.0.1", 7777);
-
-        if (!game.stateManager.setState("Lobby")) {
-            Log::asserts(false, "Failed to set state to Lobby from MainMenu");
-        }
-        });
-
-
-    exitButton = rgc::Button(rgc::Bounds(raylib::Vector2(400, 390), raylib::Vector2(200, 50)), "Exit");
-    exitButton.OnClick([this]() {
-        onExitButtonClick();
-        });
 }
 
 MainMenu::~MainMenu() {
@@ -37,15 +11,42 @@ MainMenu::~MainMenu() {
 
 void MainMenu::on_draw() {
 	// Draw the main menu
-	titleLabel.Show();
-	hostButton.Show();
-	joinButton.Show();
-	exitButton.Show();
+    ImGui::SetNextWindowPos({ 0, 0 });
+    ImGui::SetNextWindowSize({ (float)GetScreenWidth(), (float)GetScreenHeight() });
 
-	if (!interactable) return;
+    ImGui::Begin("FullscreenWindow", NULL,
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoScrollWithMouse |
+        ImGuiWindowFlags_NoBringToFrontOnFocus
+    );
 
-	titleLabel.Update();
-	hostButton.Update();
-	joinButton.Update();
-	exitButton.Update();
+    ImGui::Text("Game");
+
+    if (ImGui::Button("Host", ImVec2(200, 100))) {
+        onHostButtonClick("127.0.0.1", 7777);
+
+        if (game.client->is_connected())
+        if (!game.stateManager.setState("Lobby")) {
+            Log::asserts(false, "Failed to set state to Lobby from MainMenu");
+        }
+    }
+
+    if (ImGui::Button("Join", ImVec2(200, 100))) {
+        onJoinButtonClick("127.0.0.1", 7777);
+
+        if (game.client->is_connected())
+        if (!game.stateManager.setState("Lobby")) {
+            Log::asserts(false, "Failed to set state to Lobby from MainMenu");
+        }
+    }
+
+    if (ImGui::Button("Exit", ImVec2(200, 100))) {
+        onExitButtonClick();
+    }  
+
+    ImGui::End();
 }

@@ -67,7 +67,7 @@ ConnectResult CConnect::connect(const std::string& ip, uint16_t port, const std:
 
 	// Check that connection was successful
 	if (!wait_for_connection_establishment(server_peer)) {
-		Log::error("Connection to server failed");
+		Log::error("Connection to server failed: could not establish connection");
 		enet_peer_reset(server_peer); // client->disconnect(); 
 		return ConnectResult{ ConnectResultType::FAILURE, "Connection to server failed", TimeUtils::get_current_time_millis() - start_time };
 	}
@@ -109,9 +109,9 @@ bool CConnect::wait_for_connection_establishment(ENetPeer* server_peer) {
 		return false;
 	}
 
-	// Wait up to 5000ms for CONNECT event
-	const unsigned int TIMEOUT_MS = 5000;
-	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, TIMEOUT_MS, ENET_EVENT_TYPE_CONNECT);
+	const unsigned int ESTABLISHMENT_TIMEOUT = 100;
+	Log::trace("Waiting for connection establishment for up to " + ESTABLISHMENT_TIMEOUT);
+	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, ESTABLISHMENT_TIMEOUT, ENET_EVENT_TYPE_CONNECT);
 	
 	if (event.has_value()) {
 		Log::trace("Connection establishment successful. Connected to server");

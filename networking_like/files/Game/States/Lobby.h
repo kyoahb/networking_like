@@ -17,10 +17,6 @@ private:
 	int font_size = 20;
 
 public:
-
-	rgc::Label nameLabel;
-	rgc::Label idLabel;
-
 	LobbyMember(std::string _name, int _id, int _y_offset);
 	
 	void draw();
@@ -37,6 +33,4 @@ public:
 
 private:
 	std::vector<LobbyMember> members;
-	rgc::Button backButton;
-	rgc::Panel lobbyPanel;
 };

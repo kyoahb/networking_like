@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\bresk\source\repos\kyoahb\networking_like\networking_like\include;C:\Users\bresk\source\repos\kyoahb\networking_like\networking_like\files;C:\Users\bresk\source\repos\networking_like\networking_like\files;C:\Users\bresk\source\repos\networking_like\networking_like\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\bresk\source\repos\networking_like\networking_like\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\bresk\source\repos\kyoahb\networking_like\networking_like\lib;C:\Users\bresk\source\repos\networking_like\networking_like\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -156,50 +156,11 @@
     <ClCompile Include="files\Networking\Shared\Protocol.cpp" />
     <ClCompile Include="files\UI\UIMenu.cpp" />
     <ClCompile Include="files\Utils\Imports\enet_wrapper.cpp" />
-    <ClCompile Include="files\Utils\Imports\raygui_impl.cpp" />
     <ClCompile Include="files\Utils\Input\Input.cpp" />
     <ClCompile Include="files\Utils\Logs\Log.cpp" />
     <ClCompile Include="files\Utils\Logs\LogScope.cpp" />
     <ClCompile Include="files\Utils\Network\NetworkHelper.cpp" />
-    <ClCompile Include="include\raygui-cpp\Bounds.cpp" />
-    <ClCompile Include="include\raygui-cpp\Button.cpp" />
-    <ClCompile Include="include\raygui-cpp\CheckBox.cpp" />
-    <ClCompile Include="include\raygui-cpp\ColorBarAlpha.cpp" />
-    <ClCompile Include="include\raygui-cpp\ColorBarHue.cpp" />
-    <ClCompile Include="include\raygui-cpp\ColorPanel.cpp" />
-    <ClCompile Include="include\raygui-cpp\ColorPanelHSV.cpp" />
-    <ClCompile Include="include\raygui-cpp\ColorPicker.cpp" />
-    <ClCompile Include="include\raygui-cpp\ColorPickerHSV.cpp" />
-    <ClCompile Include="include\raygui-cpp\ComboBox.cpp" />
-    <ClCompile Include="include\raygui-cpp\DropdownBox.cpp" />
-    <ClCompile Include="include\raygui-cpp\DummyRec.cpp" />
-    <ClCompile Include="include\raygui-cpp\extras\ImageButton.cpp" />
-    <ClCompile Include="include\raygui-cpp\Globals.cpp" />
-    <ClCompile Include="include\raygui-cpp\Grid.cpp" />
-    <ClCompile Include="include\raygui-cpp\GroupBox.cpp" />
-    <ClCompile Include="include\raygui-cpp\Label.cpp" />
-    <ClCompile Include="include\raygui-cpp\LabelButton.cpp" />
-    <ClCompile Include="include\raygui-cpp\Line.cpp" />
-    <ClCompile Include="include\raygui-cpp\ListView.cpp" />
-    <ClCompile Include="include\raygui-cpp\ListViewEx.cpp" />
-    <ClCompile Include="include\raygui-cpp\MessageBox.cpp" />
-    <ClCompile Include="include\raygui-cpp\Paintable.cpp" />
-    <ClCompile Include="include\raygui-cpp\Panel.cpp" />
-    <ClCompile Include="include\raygui-cpp\ProgressBar.cpp" />
-    <ClCompile Include="include\raygui-cpp\ScrollPanel.cpp" />
-    <ClCompile Include="include\raygui-cpp\Slider.cpp" />
-    <ClCompile Include="include\raygui-cpp\SliderBar.cpp" />
-    <ClCompile Include="include\raygui-cpp\Spinner.cpp" />
-    <ClCompile Include="include\raygui-cpp\StatusBar.cpp" />
-    <ClCompile Include="include\raygui-cpp\Style.cpp" />
-    <ClCompile Include="include\raygui-cpp\TabBar.cpp" />
-    <ClCompile Include="include\raygui-cpp\TextBox.cpp" />
-    <ClCompile Include="include\raygui-cpp\TextInputBox.cpp" />
-    <ClCompile Include="include\raygui-cpp\Toggle.cpp" />
-    <ClCompile Include="include\raygui-cpp\ToggleGroup.cpp" />
-    <ClCompile Include="include\raygui-cpp\ToggleSlider.cpp" />
-    <ClCompile Include="include\raygui-cpp\ValueBox.cpp" />
-    <ClCompile Include="include\raygui-cpp\WindowBox.cpp" />
+    <ClCompile Include="include\rlImGui.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -252,12 +213,15 @@
     <ClInclude Include="include\Camera3D.hpp" />
     <ClInclude Include="include\Color.hpp" />
     <ClInclude Include="include\enet.h" />
+    <ClInclude Include="include\extras\FA6FreeSolidFontData.h" />
+    <ClInclude Include="include\extras\IconsFontAwesome6.h" />
     <ClInclude Include="include\FileData.hpp" />
     <ClInclude Include="include\FileText.hpp" />
     <ClInclude Include="include\Font.hpp" />
     <ClInclude Include="include\Functions.hpp" />
     <ClInclude Include="include\Gamepad.hpp" />
     <ClInclude Include="include\Image.hpp" />
+    <ClInclude Include="include\imgui_impl_raylib.h" />
     <ClInclude Include="include\Keyboard.hpp" />
     <ClInclude Include="include\Material.hpp" />
     <ClInclude Include="include\Matrix.hpp" />
@@ -269,51 +233,6 @@
     <ClInclude Include="include\Music.hpp" />
     <ClInclude Include="include\Ray.hpp" />
     <ClInclude Include="include\RayCollision.hpp" />
-    <ClInclude Include="include\raygui-cpp.h" />
-    <ClInclude Include="include\raygui-cpp\Bounds.h" />
-    <ClInclude Include="include\raygui-cpp\Button.h" />
-    <ClInclude Include="include\raygui-cpp\CheckBox.h" />
-    <ClInclude Include="include\raygui-cpp\ColorBarAlpha.h" />
-    <ClInclude Include="include\raygui-cpp\ColorBarHue.h" />
-    <ClInclude Include="include\raygui-cpp\ColorPanel.h" />
-    <ClInclude Include="include\raygui-cpp\ColorPanelHSV.h" />
-    <ClInclude Include="include\raygui-cpp\ColorPicker.h" />
-    <ClInclude Include="include\raygui-cpp\ColorPickerHSV.h" />
-    <ClInclude Include="include\raygui-cpp\ComboBox.h" />
-    <ClInclude Include="include\raygui-cpp\Component.h" />
-    <ClInclude Include="include\raygui-cpp\Directives.h" />
-    <ClInclude Include="include\raygui-cpp\DropdownBox.h" />
-    <ClInclude Include="include\raygui-cpp\DummyRec.h" />
-    <ClInclude Include="include\raygui-cpp\extras\ImageButton.h" />
-    <ClInclude Include="include\raygui-cpp\Globals.h" />
-    <ClInclude Include="include\raygui-cpp\Grid.h" />
-    <ClInclude Include="include\raygui-cpp\GroupBox.h" />
-    <ClInclude Include="include\raygui-cpp\Label.h" />
-    <ClInclude Include="include\raygui-cpp\LabelButton.h" />
-    <ClInclude Include="include\raygui-cpp\Line.h" />
-    <ClInclude Include="include\raygui-cpp\ListView.h" />
-    <ClInclude Include="include\raygui-cpp\ListViewEx.h" />
-    <ClInclude Include="include\raygui-cpp\Margin.h" />
-    <ClInclude Include="include\raygui-cpp\MessageBox.h" />
-    <ClInclude Include="include\raygui-cpp\Paintable.h" />
-    <ClInclude Include="include\raygui-cpp\Panel.h" />
-    <ClInclude Include="include\raygui-cpp\ProgressBar.h" />
-    <ClInclude Include="include\raygui-cpp\ScrollPanel.h" />
-    <ClInclude Include="include\raygui-cpp\Slider.h" />
-    <ClInclude Include="include\raygui-cpp\SliderBar.h" />
-    <ClInclude Include="include\raygui-cpp\Spinner.h" />
-    <ClInclude Include="include\raygui-cpp\StatusBar.h" />
-    <ClInclude Include="include\raygui-cpp\Style.h" />
-    <ClInclude Include="include\raygui-cpp\TabBar.h" />
-    <ClInclude Include="include\raygui-cpp\TextBox.h" />
-    <ClInclude Include="include\raygui-cpp\TextInputBox.h" />
-    <ClInclude Include="include\raygui-cpp\Toggle.h" />
-    <ClInclude Include="include\raygui-cpp\ToggleGroup.h" />
-    <ClInclude Include="include\raygui-cpp\ToggleSlider.h" />
-    <ClInclude Include="include\raygui-cpp\Utils.h" />
-    <ClInclude Include="include\raygui-cpp\ValueBox.h" />
-    <ClInclude Include="include\raygui-cpp\WindowBox.h" />
-    <ClInclude Include="include\raygui.h" />
     <ClInclude Include="include\raylib-cpp-utils.hpp" />
     <ClInclude Include="include\raylib-cpp.hpp" />
     <ClInclude Include="include\raylib.hpp" />
@@ -321,6 +240,8 @@
     <ClInclude Include="include\raymath.hpp" />
     <ClInclude Include="include\Rectangle.hpp" />
     <ClInclude Include="include\RenderTexture.hpp" />
+    <ClInclude Include="include\rlImGui.h" />
+    <ClInclude Include="include\rlImGuiColors.h" />
     <ClInclude Include="include\Shader.hpp" />
     <ClInclude Include="include\ShaderUnmanaged.hpp" />
     <ClInclude Include="include\Sound.hpp" />
