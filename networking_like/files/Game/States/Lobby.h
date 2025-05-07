@@ -3,18 +3,25 @@
 #include "GameState.h"
 
 class LobbyMember {
-public:
+private:
 	std::string name;
-	const char* cName;
-	int id;
 	std::string idStr;
-	const char* cId;
-	int y_offset = 0; // Offset for drawing the member in the lobby
+
+	int y_offset = 0;
+	int start_x = 100;
+	int start_y = 100;
+	int size_x = 300;
+	int size_y = 300;
+
+	int id_offset_x = 100;
+	int font_size = 20;
+
+public:
 
 	rgc::Label nameLabel;
 	rgc::Label idLabel;
 
-	LobbyMember(const std::string& _name, int _id, int y_offset);
+	LobbyMember(std::string _name, int _id, int _y_offset);
 	
 	void draw();
 };

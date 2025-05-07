@@ -1,17 +1,10 @@
 #include "Lobby.h"
 #include "Game/Game.h"
 
-LobbyMember::LobbyMember(const std::string& _name, int _id, int y_offset) : name(_name), id(_id), y_offset(y_offset) {
-    
-	// Convert name and id to const char*
-	cName = name.c_str();
-	idStr = std::to_string(id);
-	cId = idStr.c_str();
+LobbyMember::LobbyMember(std::string _name, int _id, int _y_offset) : name(_name), idStr(std::to_string(_id)), y_offset(_y_offset) {
 
-
-	nameLabel = rgc::Label(rgc::Bounds(raylib::Vector2(0, y_offset), raylib::Vector2(200, 300+ y_offset)), cName);
-    idLabel = rgc::Label(rgc::Bounds(raylib::Vector2(300, y_offset), raylib::Vector2(500, 300 + y_offset)), cId);
-
+	nameLabel = rgc::Label(rgc::Bounds(raylib::Vector2(start_x, y_offset), raylib::Vector2(start_x+size_x, size_y+y_offset)), name.c_str());
+	idLabel = rgc::Label(rgc::Bounds(raylib::Vector2(start_x+id_offset_x, y_offset), raylib::Vector2(start_x+id_offset_x+size_x, size_y + y_offset)), idStr.c_str());
 }
 
 void LobbyMember::draw() {
@@ -46,14 +39,12 @@ void Lobby::on_activate() {
 	}
 
 	// Self member
-	LobbyMember selfMember(game.client->peers.get_self().handle, game.client->peers.get_self().id, 0);
-	members.push_back(selfMember);
+	members.emplace_back(game.client->peers.get_self().handle, game.client->peers.get_self().id, 0);
 
 	int y_offset = 50;
 	int offset_change = 200;
 	for (auto peer : game.client->peers.get_peers()) {
-		LobbyMember member(peer.handle, peer.id, y_offset);
-		members.push_back(member);
+		members.emplace_back(peer.handle, peer.id, y_offset);
 		y_offset += offset_change;
 	}
 }
