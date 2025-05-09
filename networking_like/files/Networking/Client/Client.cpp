@@ -180,7 +180,6 @@ void Client::stop() {
 
 	NetworkUser::stop();
 	stop_protocols();
-	disconnect().wait();
 
 	Events::Client::Stop::trigger(Events::Client::StopData());
 }

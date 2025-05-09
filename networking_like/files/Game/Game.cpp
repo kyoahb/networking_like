@@ -18,22 +18,29 @@ Game::Game() {
 	std::shared_ptr<MainMenu> mainMenu = std::make_shared<MainMenu>(*this);
 	mainMenu->onHostButtonClick = [this](const std::string& address, int port) {
 		// Make server
-		server = std::make_shared<Server>(address, port);
+		if (server == nullptr) {
+			server = std::make_shared<Server>(address, port);
+		}
 		server->start();
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 		// Also make client
-		client = std::make_shared<Client>();
+		if (client == nullptr) {
+			// Destroy old server
+			client = std::make_shared<Client>();
+		} 
 		client->connect(address, port, "Client").wait();
 		};
 
 	mainMenu->onJoinButtonClick = [this](const std::string& address, int port) {
 		// Make client
-		client = std::make_shared<Client>();
-		client->connect(address, port, "Client");
+		if (client == nullptr) {
+			// Destroy old server
+			client = std::make_shared<Client>();
+		}
+		client->connect(address, port, "Client").wait();
 		};
-
+	
 	mainMenu->onExitButtonClick = [this]() {
 		// Exit the game
 		window.Close();

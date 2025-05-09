@@ -72,7 +72,7 @@ void Server::destroy_protocols() {
 void Server::broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding) {
 	LOG_SCOPE_SERVER;
 	Log::trace("Broadcasting packet " + PacketHelper::types_to_string(packet) + " to all peers");
-	for (auto& peer : peers.peers) {
+	for (auto& peer : peers.get_peers()) {
 		if (peer.peer != nullptr && peer.peer->state != ENET_PEER_STATE_DISCONNECTED) {
 			if (std::find(excluding.begin(), excluding.end(), peer) == excluding.end()) {
 				send_packet(packet, peer);
@@ -84,7 +84,7 @@ void Server::broadcast_packet(const Packet& packet, std::vector<NetPeer> excludi
 void Server::broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding) {
 	LOG_SCOPE_SERVER;
 	Log::trace("Broadcasting packet " + PacketHelper::types_to_string(packet) + " to all peers");
-	for (auto& peer : peers.peers) {
+	for (auto& peer : peers.get_peers()) {
 		if (peer.peer != nullptr && peer.peer->state != ENET_PEER_STATE_DISCONNECTED) {
 			if (std::find(excluding.begin(), excluding.end(), peer.peer) == excluding.end()) {
 				send_packet(packet, peer);
@@ -176,10 +176,10 @@ ShutdownResult Server::stop_thread() {
 	std::vector<std::future<DisconnectResult>> disconnect_futures;
 
 	// Send disconnect packets to all peers
-	for (auto& peer : peers.peers) {
+	for (auto& peer : peers.get_peers()) {
 		if (peer.peer != nullptr && peer.peer->state != ENET_PEER_STATE_DISCONNECTED) {
 			// Add future to track disconnect result
-			disconnect_futures.push_back(disconnect_peer(peer, DisconnectResultReason::SERVER_STOPPING));
+			disconnect_futures.push_back(disconnect_peer(peer.peer, DisconnectResultReason::SERVER_STOPPING));
 		}
 	}
 
@@ -215,9 +215,9 @@ ShutdownResult Server::stop_thread() {
 	return result;
 }
 
-std::future<DisconnectResult> Server::disconnect_peer(NetPeer& peer, DisconnectResultReason reason) {
+std::future<DisconnectResult> Server::disconnect_peer(ENetPeer* peer, DisconnectResultReason reason) {
 	LOG_SCOPE_SERVER;
-	Log::trace("Disconnecting peer: " + peer.handle);
+	Log::trace("Disconnecting peer: " + peers.get_polite_handle(peer));
 
 	// Verify we have the disconnect protocol
 	if (!disconnect_protocol) {

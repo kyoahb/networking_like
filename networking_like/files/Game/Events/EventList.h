@@ -3,6 +3,7 @@
 
 #include "Networking/Packets/Data/ClientConnectBegin.h"
 #include "Networking/Shared/NetPeer.h"
+#include "Networking/Shared/FutureResults/DisconnectResult.h"
 
 namespace Events {
 	namespace Server {
@@ -38,9 +39,8 @@ namespace Events {
 		// (like there is with connect) to provide a reason with, if the client decides to disconnect themselves.
 		struct ClientDisconnectData : public BaseEventData {
 			ENetPeer* peer;
-			std::optional<NetPeer> net_peer; // No value if client disconnected before being registered to a netpeer
-			const std::string& message;
-			explicit ClientDisconnectData(ENetPeer* peer, std::optional<NetPeer> net_peer, const std::string& message) : peer(peer), net_peer(net_peer), message(message) {}
+			DisconnectResult result;
+			explicit ClientDisconnectData(ENetPeer* peer, const DisconnectResult& result) : peer(peer), result(result) {}
 		};
 		using ClientDisconnect = Event<ClientDisconnectData>;
 	}

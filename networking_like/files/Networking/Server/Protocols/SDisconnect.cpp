@@ -21,32 +21,46 @@ void SDisconnect::packet_event(const ENetEvent& event, std::optional<NetPeer> pe
 		return;
 	}
 
-	Log::trace("Disconnect event received for peer: " + event.peer->incomingPeerID);
+	Log::trace("Disconnect event received for peer: " + std::to_string(event.peer->incomingPeerID) + ". Broadcasting to all peers");
 
 	// Send disconnect relay to all other peers
 	ClientDisconnectRelay relay;
 	relay.client_id = event.peer->incomingPeerID; // same as peer.value().id but skips optional check
 	std::string serialized = SerializationUtils::serialize<ClientDisconnectRelay>(relay);
-	Packet relay_packet(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_RELAY, serialized.data(), serialized.size(), true);
+	Packet relay_packet(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_DISCONNECT_RELAY, serialized.data(), serialized.size(), true);
 	server->broadcast_packet(relay_packet, { event.peer }); // Send to all peers except the one that disconnected
 
 	// Remove pending disconnect if exists
 	// TODO: Check if equality check is possible using NetPeer like this
 	if (peer.has_value()) {
-		auto it = pending_disconnects.find(peer.value());
+		auto it = pending_disconnects.find(event.peer);
 		if (it != pending_disconnects.end()) {
 			Log::trace("Removing Peer with pending disconnect that has sent a disconnect event: " + peer.value().handle);
 			pending_disconnects.erase(it);
 		}
-		server->peers.remove_peer(peer.value().peer); // Remove peer from the server's peer list
+		server->peers.remove_peer(event.peer); // Remove peer from the server's peer list
 	}
-	Events::Server::ClientDisconnect::trigger(Events::Server::ClientDisconnectData(event.peer, peer, "Client sent disconnect event")); // Fire disconnect event
+	else { 
+		// Peer does not have a value yet. This means either the server received a disconnect event
+		// Before the client sent the CLIENT_CONNECT_BEGIN packet, or something else has gone wrong
+		if (!server->peers.get_peer(event.peer).has_value()) {
+			// Not much to do, server has no record of it so it is pointless removing it, and peer likely does not have 
+		}
+	}
+
+	// Construct result
+	DisconnectResult result;
+	result.type = DisconnectResultType::FORCED;
+	result.reason = DisconnectResultReason::USER_REQUESTED;
+	result.message = "Client disconnected";
+	result.time_taken = 0; // We have no idea
+
+	Events::Server::ClientDisconnect::trigger(Events::Server::ClientDisconnectData(event.peer, result)); // Fire disconnect event
 
 }
 
-void SDisconnect::add_pending_disconnect(NetPeer peer, DisconnectResultReason reason) {
+void SDisconnect::add_pending_disconnect(ENetPeer* peer, DisconnectResultReason reason) {
 	LOG_SCOPE_SERVER_PROTOCOL;
-	Log::trace("Adding pending disconnect for peer: " + peer.handle);
 	pending_disconnects[peer] = { reason, DisconnectResultType::UNKNOWN, TimeUtils::get_current_time_millis() };
 }
 
@@ -68,9 +82,18 @@ void SDisconnect::work_pending_disconnects() {
 			// To manage forceful disconnects. Rather, the disconnect_peer_thread() should do this.
 			// However, if there is an issue, then after double the timeout limit (plenty of time)
 			// We remove the pending disconnect here.
-			Log::warn("Pending disconnect timed out & unmanaged for peer: " + it->first.handle);
-			enet_peer_reset(it->first.peer);
-			Events::Server::ClientDisconnect::trigger(Events::Server::ClientDisconnectData(it->first.peer, it->first, "Forced: Pending disconnect timed out")); // Fire disconnect event
+			ENetPeer* peer = it->first;
+			Log::warn("Pending disconnect timed out & unmanaged for peer: " + server->peers.get_polite_handle(peer));
+			server->peers.remove_peer(peer);
+
+			// Construct result
+			DisconnectResult result;
+			result.type = DisconnectResultType::FORCED;
+			result.reason = it->second.reason;
+			result.message = "Pending disconnect timed out, but unmanaged.";
+			result.time_taken = TimeUtils::get_time_since(it->second.request_time);
+
+			Events::Server::ClientDisconnect::trigger(Events::Server::ClientDisconnectData(peer, result)); // Fire disconnect event
 
 			it = pending_disconnects.erase(it);
 		}
@@ -80,23 +103,29 @@ void SDisconnect::work_pending_disconnects() {
 	}
 }
 
-DisconnectResult SDisconnect::disconnect_peer(const NetPeer& peer, DisconnectResultReason reason) {
+DisconnectResult SDisconnect::disconnect_peer(ENetPeer* peer, DisconnectResultReason reason) {
 	LOG_SCOPE_SERVER_PROTOCOL;
-	Log::trace("Disconnecting peer thread for client: " + peer.handle);
 
 	// Check if the peer is valid
-	if (peer.peer == nullptr) {
+	if (peer == nullptr) {
 		Log::warn("Cannot disconnect peer, peer is nullptr");
 		return DisconnectResult(DisconnectResultType::FAILED, reason, "Peer is nullptr", 0);
 	}
-	if (peer.peer->state == ENET_PEER_STATE_DISCONNECTED) {
-		Log::warn("Cannot disconnect peer, peer is already disconnected");
+
+	std::string peer_handle = server->peers.get_polite_handle(peer);
+
+	// Check if the peer is already disconnected
+	if (peer->state == ENET_PEER_STATE_DISCONNECTED) {
+		Log::warn("Cannot disconnect peer, peer " + peer_handle + " is already disconnected");
 		return DisconnectResult(DisconnectResultType::FAILED, reason, "Peer is already disconnected", 0);
 	}
 
+	Log::trace("Beginning disconnect_peer() for peer: " + peer_handle);
+
+
 	// Send disconnect packet to the peer
-	enet_peer_disconnect(peer.peer, static_cast<uint8_t>(reason));
-	Log::trace("Sent disconnect packet to peer: " + peer.handle);
+	enet_peer_disconnect(peer, static_cast<uint8_t>(reason));
+	Log::trace("Sent disconnect packet to peer: " + peer_handle + ". Now waiting for a response (pending disconnect)");
 	// Add pending disconnect
 	add_pending_disconnect(peer, reason);
 
@@ -111,7 +140,7 @@ DisconnectResult SDisconnect::disconnect_peer(const NetPeer& peer, DisconnectRes
 			break;
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(CHECK_INTERVAL));
-		Log::trace("Waiting for disconnect confirmation from peer: " + peer.handle + " " + std::to_string(TimeUtils::get_time_since(start_time)) + "ms");
+		Log::trace("Waiting for disconnect confirmation from peer: " + peer_handle + " " + std::to_string(TimeUtils::get_time_since(start_time)) + "ms");
 	}
 
 	DisconnectResult result;
@@ -119,19 +148,21 @@ DisconnectResult SDisconnect::disconnect_peer(const NetPeer& peer, DisconnectRes
 	result.time_taken = TimeUtils::get_time_since(start_time);
 	if (acknowledged) {
 		// Successful
+		pending_disconnects.erase(peer);
 		result.type = DisconnectResultType::SUCCESS;
 		result.message = "Peer disconnected successfully";
-		Log::trace("Peer disconnected successfully: " + peer.handle);
+		Log::trace("Peer disconnected successfully: " + peer_handle);
 	}
 	else {
 		// Failed, forceful disconnect required
-		enet_peer_reset(peer.peer);
+		enet_peer_reset(peer);
 		pending_disconnects.erase(peer);
 		result.type = DisconnectResultType::FORCED;
 		result.message = "Peer disconnected forcefully : Time limit exceeded";
-		Log::trace("Peer disconnected forcefully: " + peer.handle);
+		Log::trace("Peer disconnected forcefully, time limit exceeded: " + peer_handle);
 	}
-
+	server->peers.remove_peer(peer);
+	Events::Server::ClientDisconnect::trigger(Events::Server::ClientDisconnectData(peer, result)); // Fire disconnect event
 	return result;
 }
 

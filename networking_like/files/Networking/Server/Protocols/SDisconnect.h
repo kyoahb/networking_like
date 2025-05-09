@@ -33,15 +33,15 @@ public:
 	void packet_event(const ENetEvent& event, std::optional<NetPeer> peer) override;
 
 	// Called from server. Usually this wont happen, but this is a built-in protocol
-	DisconnectResult disconnect_peer(const NetPeer& peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);
+	DisconnectResult disconnect_peer(ENetPeer* peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);
 
 private:
-	std::unordered_map<NetPeer, PendingDisconnect> pending_disconnects; // List of pending disconnects
+	std::unordered_map<ENetPeer*, PendingDisconnect> pending_disconnects; // List of pending disconnects
 
 	const int DISCONNECT_TIMEOUT = 5000; // Timeout limit in milliseconds
 	const int CHECK_INTERVAL = 1000; // Check interval in milliseconds
 	uint64_t last_check_time = 0; // Last time work_pending_disconnects() was called
 
-	void add_pending_disconnect(NetPeer peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED); // Add a pending disconnect
+	void add_pending_disconnect(ENetPeer* peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED); // Add a pending disconnect
 	void work_pending_disconnects();
 };

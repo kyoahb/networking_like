@@ -17,8 +17,7 @@ void SConnect::update() {
 			Log::warn("CLIENT_CONNECT_BEGIN packet timed out for peer: " + std::to_string(it->first->incomingPeerID));
 			
 			// Disconnect peer
-			NetPeer peer(it->first, 0, "Unknown");
-			server->disconnect_peer(peer, DisconnectResultReason::TIMEOUT);
+			server->disconnect_peer(it->first, DisconnectResultReason::TIMEOUT);
 			it = pending_begins.erase(it);
 		}
 		else {
@@ -32,7 +31,7 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 
 	if (event.type == ENET_EVENT_TYPE_CONNECT) {
 		Log::trace("Connect event received for peer: " + std::to_string(event.peer->incomingPeerID) + " , waiting for CLIENT_CONNECT_BEGIN packet");
-		if (peer.has_value()) {
+		if (server->peers.get_peer(event.peer).has_value()) {
 			Log::warn("Connect event received for known peer: " + peer.value().handle);
 			return;
 		}
@@ -48,10 +47,9 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 	else if (event.type == ENET_EVENT_TYPE_RECEIVE) {
 		Packet packet(event.packet);
 
-		if (packet.header.type != PacketType::CLIENT_CONNECT) return;
-		if (packet.header.subtype != ClientConnectType::CLIENT_CONNECT_BEGIN) {
-			Log::asserts(false, "Invalid packet type for subtype CLIENT_CONNECT_BEGIN");
-		}
+		if (!(
+			packet.header.type == PacketType::CLIENT_CONNECT && 
+			packet.header.subtype == ClientConnectType::CLIENT_CONNECT_BEGIN)) return;
 
 		// Received a CLIENT_CONNECT_BEGIN packet
 
@@ -83,7 +81,7 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 		client_connect_confirm.server_preferred_handle = server->peers.self.handle;
 		client_connect_confirm.client_decided_handle = client_decided_handle;
 		client_connect_confirm.client_id = new_peer.id;
-		client_connect_confirm.other_clients = netpeer_list_to_relay_list(server->peers.peers);
+		client_connect_confirm.other_clients = netpeer_list_to_relay_list(server->peers.get_peers());
 
 		std::string serialised_data = SerializationUtils::serialize<ClientConnectConfirm>(client_connect_confirm);
 		Packet packet_confirm(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_CONFIRM, serialised_data.data(), serialised_data.size(), true);

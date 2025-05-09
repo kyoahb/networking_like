@@ -16,7 +16,7 @@ public:
 	void start();
 	std::future<ShutdownResult> stop();
 
-	std::future<DisconnectResult> disconnect_peer(NetPeer& peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);
+	std::future<DisconnectResult> disconnect_peer(ENetPeer* peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);
 	bool send_packet(const Packet& packet, const NetPeer& peer);
 	void broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
 	void broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
