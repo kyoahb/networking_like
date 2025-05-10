@@ -9,7 +9,7 @@ SConnect::~SConnect() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 }
 
-void SConnect::update() {
+void SConnect::on_update() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 	// Check for pending begins
 	for (auto it = pending_begins.begin(); it != pending_begins.end();) {
@@ -81,7 +81,7 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 		client_connect_confirm.server_preferred_handle = server->peers.self.handle;
 		client_connect_confirm.client_decided_handle = client_decided_handle;
 		client_connect_confirm.client_id = new_peer.id;
-		client_connect_confirm.other_clients = netpeer_list_to_relay_list(server->peers.get_peers());
+		client_connect_confirm.other_clients = netpeer_list_to_relay_list(server->peers.get_peers(), event.peer);
 
 		std::string serialised_data = SerializationUtils::serialize<ClientConnectConfirm>(client_connect_confirm);
 		Packet packet_confirm(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_CONFIRM, serialised_data.data(), serialised_data.size(), true);
@@ -107,10 +107,11 @@ ClientConnectRelay SConnect::netpeer_to_relay(const NetPeer& peer) {
 	return relay;
 }
 
-std::vector<ClientConnectRelay> SConnect::netpeer_list_to_relay_list(const std::vector<NetPeer>& peers) {
+std::vector<ClientConnectRelay> SConnect::netpeer_list_to_relay_list(const std::vector<NetPeer>& peers, ENetPeer* exclude) {
 	LOG_SCOPE_SERVER_PROTOCOL;
 	std::vector<ClientConnectRelay> relays;
 	for (const auto& peer : peers) {
+		if (peer.peer != exclude)
 		relays.push_back(netpeer_to_relay(peer));
 	}
 	return relays;
@@ -121,14 +122,14 @@ std::vector<ClientConnectRelay> SConnect::netpeer_list_to_relay_list(const std::
 
 // unused overrides
 
-void SConnect::start() {
+void SConnect::on_start() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 }
 
-void SConnect::stop() {
+void SConnect::on_stop() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 }
 
-void SConnect::destroy() {
+void SConnect::on_destroy() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 }

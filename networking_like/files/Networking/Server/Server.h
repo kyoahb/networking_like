@@ -12,7 +12,7 @@ public:
 
 	Server(const std::string& _address, int _port);
 	~Server();
-
+	void prepare_destroy(); // Prepare to destroy the server, stop the update loop and disconnect from all clients
 	void start();
 	std::future<ShutdownResult> stop();
 

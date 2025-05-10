@@ -11,10 +11,10 @@ public:
 	explicit CConnect(std::shared_ptr<Client> _client);
 	~CConnect() = default;
 
-	void start() override;
-	void stop() override;
-	void update() override;
-	void destroy() override;
+	void on_start() override;
+	void on_stop() override;
+	void on_update() override;
+	void on_destroy() override;
 
 	void packet_event(const ENetEvent& event) override;
 

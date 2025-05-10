@@ -27,6 +27,7 @@ public:
 	std::future<DisconnectResult> disconnect();
 
 	bool send_packet(const Packet& packet); // Send packet to server
+	void prepare_destroy(); // Prepare to destroy the client, stop the update loop and disconnect from server
 
 private:
 	void start(); // Begin packet update loop

@@ -64,7 +64,7 @@ void SDisconnect::add_pending_disconnect(ENetPeer* peer, DisconnectResultReason 
 	pending_disconnects[peer] = { reason, DisconnectResultType::UNKNOWN, TimeUtils::get_current_time_millis() };
 }
 
-void SDisconnect::update() {
+void SDisconnect::on_update() {
 	// Work pending disconnects
 	LOG_SCOPE_SERVER_PROTOCOL;
 
@@ -166,16 +166,16 @@ DisconnectResult SDisconnect::disconnect_peer(ENetPeer* peer, DisconnectResultRe
 	return result;
 }
 
-void SDisconnect::start() {
+void SDisconnect::on_start() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 }
 
-void SDisconnect::stop() {
+void SDisconnect::on_stop() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 	pending_disconnects.clear();
 }
 
-void SDisconnect::destroy() {
+void SDisconnect::on_destroy() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 	pending_disconnects.clear();
 }

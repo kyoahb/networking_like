@@ -42,8 +42,10 @@ void ClientPeerlist::setup_by_confirmation(const ClientConnectConfirm& connectio
 	self.id = connection_confirmation.client_id;
 	self.handle = connection_confirmation.client_decided_handle;
 
-
+	// Unused
 	server.handle = connection_confirmation.server_preferred_handle;
+	
+	// Setup other clients
 	for (const auto& client : connection_confirmation.other_clients) {
 		add_peer(client.client_id, client.client_handle);
 	}

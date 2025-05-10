@@ -6,10 +6,10 @@ CConnect::CConnect(std::shared_ptr<Client> _client) : CProtocol(_client, "CConne
 
 }
 
-void CConnect::start() {};
-void CConnect::stop() {};
-void CConnect::update() {};
-void CConnect::destroy() {};
+void CConnect::on_start() {};
+void CConnect::on_stop() {};
+void CConnect::on_update() {};
+void CConnect::on_destroy() {};
 void CConnect::packet_event(const ENetEvent& event) {
 	LOG_SCOPE_CLIENT_PROTOCOL;
 	

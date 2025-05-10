@@ -19,6 +19,10 @@ Lobby::~Lobby() {
 }
 
 void Lobby::add_all_members() {
+	// Add self
+	members.emplace_back(game.client->peers.get_self().handle, game.client->peers.get_self().id, 0);
+
+	// Add peers
 	int y_offset = initial_y_offset;
 	for (auto peer : game.client->peers.get_peers()) {
 		members.emplace_back(peer.handle, peer.id, y_offset);
@@ -39,10 +43,7 @@ void Lobby::on_activate() {
 		this->on_peer_removed(data);
 		});
 
-	// Self member
-	members.emplace_back(game.client->peers.get_self().handle, game.client->peers.get_self().id, 0);
-
-	// Add members from peers list
+	// Add members from peers list & self
 	add_all_members();
 }
 
@@ -52,6 +53,8 @@ void Lobby::on_deactivate() {
 	Events::Client::PeerRemoved::unregister_callback(on_peer_removed_callbackid);
 
 	members.clear(); // Clear the members list when deactivating the lobby
+
+	
 }
 
 void Lobby::on_draw() {
@@ -60,11 +63,15 @@ void Lobby::on_draw() {
 	if (ImGui::Button("Back")) {
 		// If we are a client, disconnect
 		if (game.client) {
-			game.client->disconnect().wait();
+			game.client->prepare_destroy();
+			game.client.reset(); // Should be the final reference to client removed, client will now be destroyed by shared_ptr
+			game.client = nullptr;
 		}
 		// If we are a server, stop the server
 		if (game.server) {
-			game.server->stop().wait();
+			game.server->prepare_destroy();
+			game.server.reset(); // Should be the final reference to server removed, server will now be destroyed by shared_ptr
+			game.server = nullptr;
 		}
 
 		// Set state to MainMenu

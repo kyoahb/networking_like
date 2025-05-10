@@ -18,6 +18,18 @@ Server::Server(const std::string& _address, int _port) : NetworkUser(), address_
 	Log::trace("Server initialized!");
 }
 
+void Server::prepare_destroy() {
+	LOG_SCOPE_SERVER;
+	Log::trace("Preparing server for destruction");
+	if (active) {
+		stop().wait();
+	}
+	destroy_protocols();
+	enet_host_destroy(host);
+	host = nullptr;
+	protocols.clear();
+}
+
 void Server::add_protocol(std::shared_ptr<SProtocol> protocol) {
 	LOG_SCOPE_SERVER;
 

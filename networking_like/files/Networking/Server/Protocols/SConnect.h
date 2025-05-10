@@ -18,19 +18,19 @@ public:
 	~SConnect();
 
 	// unused overrides
-	void start() override;
-	void stop() override;
-	void destroy() override;
+	void on_start() override;
+	void on_stop() override;
+	void on_destroy() override;
 
 
 
-	void update() override;
+	void on_update() override;
 	void packet_event(const ENetEvent& event, std::optional<NetPeer> peer) override;
 private:
 	std::unordered_map<ENetPeer*, uint64_t> pending_begins; // Set of peers that are pending a CLIENT_CONNECT_BEGIN packet
 	const unsigned int TIMEOUT_MS = 5000; // Timeout for client connection
 
 	ClientConnectRelay netpeer_to_relay(const NetPeer& peer);
-	std::vector<ClientConnectRelay> netpeer_list_to_relay_list(const std::vector<NetPeer>& peers);
+	std::vector<ClientConnectRelay> netpeer_list_to_relay_list(const std::vector<NetPeer>& peers, ENetPeer* exclude);
 
 };

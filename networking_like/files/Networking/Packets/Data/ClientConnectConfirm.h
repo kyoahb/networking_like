@@ -15,7 +15,7 @@ public:
 
 	template <typename Archive>
 	void serialize(Archive& archive) {
-		archive(server_preferred_handle, client_decided_handle, client_id);
+		archive(server_preferred_handle, client_decided_handle, client_id, other_clients);
 	}
 
 };

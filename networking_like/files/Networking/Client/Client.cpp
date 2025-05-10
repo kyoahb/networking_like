@@ -22,6 +22,21 @@ Client::~Client() {
 	}
 }
 
+void Client::prepare_destroy() {
+	LOG_SCOPE_CLIENT;
+	if (is_connected()) {
+		Log::warn("Client is still connected, disconnecting...");
+		disconnect().wait();
+	}
+	if (active) {
+		stop();
+	}
+	destroy_protocols();
+	enet_host_destroy(host);
+	host = nullptr;
+	protocols.clear();
+}
+
 bool Client::is_connected() {
 	LOG_SCOPE_CLIENT;
 	return peers.is_connected();

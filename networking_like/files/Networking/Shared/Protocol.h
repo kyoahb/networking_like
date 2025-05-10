@@ -5,10 +5,17 @@ class Protocol {
 public:
 	explicit Protocol(const std::string& _name);
 
-	virtual void start() = 0; // Called on start()
-	virtual void stop() = 0; // Called on stop()
-	virtual void update() = 0; // Called on update()
-	virtual void destroy() = 0; // Called on destructor
+	// Should not be modified in derived protocol
+	virtual void start(); // Called on start()
+	virtual void stop(); // Called on stop()
+	virtual void update(); // Called on update()
+	virtual void destroy(); // Called on destructor
+
+	// Should be modified in derived protocol.
+	virtual void on_stop() = 0;
+	virtual void on_start() = 0;
+	virtual void on_update() = 0;
+	virtual void on_destroy() = 0;
 
 	const std::string& get_name() const;
 

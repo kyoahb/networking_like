@@ -26,10 +26,10 @@ public:
 	SDisconnect(std::shared_ptr<Server> _server);
 	~SDisconnect();
 
-	void start() override;
-	void stop() override;
-	void update() override;
-	void destroy() override;
+	void on_start() override;
+	void on_stop() override;
+	void on_update() override;
+	void on_destroy() override;
 	void packet_event(const ENetEvent& event, std::optional<NetPeer> peer) override;
 
 	// Called from server. Usually this wont happen, but this is a built-in protocol
