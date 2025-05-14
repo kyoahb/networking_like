@@ -12,6 +12,9 @@ SProtocol::~SProtocol() {
 };
 
 
+void SProtocol::packet_event(const ENetEvent& event) {
+};
+
 void SProtocol::on_destroy() {};
 void SProtocol::on_start() {};
 void SProtocol::on_stop() {};

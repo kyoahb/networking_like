@@ -6,6 +6,7 @@ enum PacketType : uint8_t {
 	UNKNOWN_TYPE = 0,
 	CHAT = 1,
 	CLIENT_CONNECT = 2,
+	HEARTBEAT = 3,
 	ANY_TYPE = 255,
 };
 

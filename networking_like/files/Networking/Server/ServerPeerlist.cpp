@@ -18,23 +18,27 @@ void ServerPeerlist::add_peer(ENetPeer* peer, uint8_t id, std::string handle) {
 
 void ServerPeerlist::add_peer(NetPeer peer) {
 	LOG_SCOPE_SERVER;
-	peers[peer.id] = peer;
+	peers.push_back(peer);
 }
 
 void ServerPeerlist::remove_peer(NetPeer& peer) {
 	LOG_SCOPE_SERVER;
-	if (peers.contains(peer.id)) {
-		peers.erase(peer.id);
-		return;
-	}
-	Log::warn("Peer with ID " + std::to_string(peer.id) + " not found, cannot remove");
+    for (auto it = peers.begin(); it != peers.end(); ++it) {  
+        if (it->id == peer.id) {  
+            peers.erase(it);  
+            return;  
+        }  
+    }  
+    Log::warn("Peer with ID " + std::to_string(peer.id) + " not found, cannot remove");  
 }
 
 void ServerPeerlist::remove_peer(uint8_t id) {
 	LOG_SCOPE_SERVER;
-	if (peers.contains(id)) {
-		peers.erase(id);
-		return;
+	for (auto it = peers.begin(); it != peers.end(); ++it) {
+		if (it->id == id) {
+			peers.erase(it);
+			return;
+		}
 	}
 	Log::warn("Peer with ID " + std::to_string(id) + " not found, cannot remove");
 }
@@ -42,7 +46,7 @@ void ServerPeerlist::remove_peer(uint8_t id) {
 void ServerPeerlist::remove_peer(std::string handle) {
 	LOG_SCOPE_SERVER;
 	for (auto it = peers.begin(); it != peers.end(); ++it) {
-		if (it->second.handle == handle) {
+		if (it->handle == handle) {
 			peers.erase(it);
 			return;
 		}
@@ -53,7 +57,7 @@ void ServerPeerlist::remove_peer(std::string handle) {
 void ServerPeerlist::remove_peer(ENetPeer* peer) {
 	LOG_SCOPE_SERVER;
 	for (auto it = peers.begin(); it != peers.end(); ++it) {
-		if (it->second.peer == peer) {
+		if (it->id == peer->incomingPeerID) {
 			peers.erase(it);
 			return;
 		}
@@ -64,8 +68,10 @@ void ServerPeerlist::remove_peer(ENetPeer* peer) {
 
 const std::optional<NetPeer> ServerPeerlist::get_peer(uint8_t id) const {
 	LOG_SCOPE_SERVER;
-	if (peers.contains(id)) {
-		return peers.at(id);
+	for (auto p : peers) {
+		if (p.id == id) {
+			return p;
+		}
 	}
 	// Not found
 	return std::nullopt;
@@ -73,9 +79,9 @@ const std::optional<NetPeer> ServerPeerlist::get_peer(uint8_t id) const {
 
 const std::optional<NetPeer> ServerPeerlist::get_peer(std::string handle) const {
 	LOG_SCOPE_SERVER;
-	for (const auto& p : peers) {
-		if (p.second.handle == handle) {
-			return p.second;
+	for (auto p : peers) {
+		if (p.handle == handle) {
+			return p;
 		}
 	}
 	// Not found
@@ -84,9 +90,9 @@ const std::optional<NetPeer> ServerPeerlist::get_peer(std::string handle) const 
 
 const std::optional<NetPeer> ServerPeerlist::get_peer(ENetPeer* peer) const {
 	LOG_SCOPE_SERVER;
-	for (const auto& p : peers) {
-		if (p.second.peer == peer) {
-			return p.second;
+	for (auto p : peers) {
+		if (p.id == peer->incomingPeerID) {
+			return p;
 		}
 	}
 	// Not found
@@ -109,9 +115,6 @@ const std::string& ServerPeerlist::get_polite_handle(ENetPeer* peer) const {
 
 std::vector<NetPeer> ServerPeerlist::get_peers() const {
 	LOG_SCOPE_SERVER;
-	std::vector<NetPeer> peer_list;
-	for (const auto& p : peers) {
-		peer_list.push_back(p.second);
-	}
-	return peer_list;
+
+	return peers;
 }

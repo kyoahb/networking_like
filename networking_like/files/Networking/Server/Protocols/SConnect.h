@@ -25,7 +25,7 @@ public:
 
 
 	void on_update() override;
-	void packet_event(const ENetEvent& event, std::optional<NetPeer> peer) override;
+	void packet_event(const ENetEvent& event) override;
 private:
 	std::unordered_map<ENetPeer*, uint64_t> pending_begins; // Set of peers that are pending a CLIENT_CONNECT_BEGIN packet
 	const unsigned int TIMEOUT_MS = 5000; // Timeout for client connection

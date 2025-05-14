@@ -81,25 +81,13 @@ void Server::destroy_protocols() {
 	protocols.clear();
 }
 
-void Server::broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding) {
-	LOG_SCOPE_SERVER;
-	Log::trace("Broadcasting packet " + PacketHelper::types_to_string(packet) + " to all peers");
-	for (auto& peer : peers.get_peers()) {
-		if (peer.peer != nullptr && peer.peer->state != ENET_PEER_STATE_DISCONNECTED) {
-			if (std::find(excluding.begin(), excluding.end(), peer) == excluding.end()) {
-				send_packet(packet, peer);
-			}
-		}
-	}
-}
-
 void Server::broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding) {
 	LOG_SCOPE_SERVER;
 	Log::trace("Broadcasting packet " + PacketHelper::types_to_string(packet) + " to all peers");
 	for (auto& peer : peers.get_peers()) {
 		if (peer.peer != nullptr && peer.peer->state != ENET_PEER_STATE_DISCONNECTED) {
 			if (std::find(excluding.begin(), excluding.end(), peer.peer) == excluding.end()) {
-				send_packet(packet, peer);
+				send_packet(packet, peer.peer);
 			}
 		}
 	}
@@ -107,13 +95,14 @@ void Server::broadcast_packet(const Packet& packet, std::vector<ENetPeer*> exclu
 
 void Server::dispatch_event_to_protocols(const ENetEvent& event) {
 	std::optional<NetPeer> peer = std::nullopt;
+	Events::Server::EventReceive::trigger(Events::Server::EventReceiveData(event)); // Fire event
 
 	if (event.peer != nullptr) {
 		peer = peers.get_peer(event.peer); // Nullptr if peer not in list
 	}
 
 	for (auto& protocol : protocols) {
-		protocol->packet_event(event, peer);
+		protocol->packet_event(event);
 	}
 }
 
@@ -287,31 +276,20 @@ void Server::disconnect_event(const ENetEvent& event) {
 
 void Server::receive_event(const ENetEvent& event) {
 	LOG_SCOPE_SERVER;
-	/*
-	Packet p(event.packet);
-	std::string peer_handle = "No_Handle";
-
-	std::optional<NetPeer> peer = peers.get_peer(event.peer);
-	if (peer.has_value()) {
-		peer_handle = peer.value().handle;
-	}
-
-	Log::trace("Received packet: " + PacketHelper::types_to_string(p) + " from " + peer_handle);
-	*/
 }
 
 void Server::connect_event(const ENetEvent& event) {
 	LOG_SCOPE_SERVER;
 }
 
-bool Server::send_packet(const Packet& packet, const NetPeer& peer) {
+bool Server::send_packet(const Packet& packet, ENetPeer* peer) {
 	LOG_SCOPE_SERVER;
 
 	if (packet.header.direction != PacketDirection::SERVER_TO_CLIENT) {
 		Log::error("Invalid packet header direction, must be S->C");
 	}
 
-	Log::trace("Sending packet " + PacketHelper::types_to_string(packet) + " to peer " + peer.handle);
+	Log::trace("Sending packet " + PacketHelper::types_to_string(packet) + " to peer " + peers.get_polite_handle(peer));
 
 	return NetworkUser::send_packet(packet, peer);
 }

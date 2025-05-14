@@ -26,13 +26,15 @@ void SConnect::on_update() {
 	}
 }
 
-void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer) {
+void SConnect::packet_event(const ENetEvent& event) {
 	LOG_SCOPE_SERVER_PROTOCOL;
 
+	std::string peer_handle = server->peers.get_polite_handle(event.peer);
+
 	if (event.type == ENET_EVENT_TYPE_CONNECT) {
-		Log::trace("Connect event received for peer: " + std::to_string(event.peer->incomingPeerID) + " , waiting for CLIENT_CONNECT_BEGIN packet");
+		Log::trace("Connect event received for peer: " + peer_handle + " , waiting for CLIENT_CONNECT_BEGIN packet");
 		if (server->peers.get_peer(event.peer).has_value()) {
-			Log::warn("Connect event received for known peer: " + peer.value().handle);
+			Log::warn("Connect event received for known peer: " + peer_handle);
 			return;
 		}
 
@@ -54,11 +56,10 @@ void SConnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer)
 		// Received a CLIENT_CONNECT_BEGIN packet
 
 		if (!pending_begins.contains(event.peer)) {
-			Log::warn("Received CLIENT_CONNECT_BEGIN packet from unregistered begins peer: " + std::to_string(event.peer->incomingPeerID));
-			return;
+			Log::warn("Received CLIENT_CONNECT_BEGIN packet from unregistered begins peer: " + peer_handle);
 		}
 		else {
-			Log::trace("Received CLIENT_CONNECT_BEGIN packet from peer: " + std::to_string(event.peer->incomingPeerID));
+			Log::trace("Received CLIENT_CONNECT_BEGIN packet from peer: " + peer_handle);
 			pending_begins.erase(event.peer);
 		}
 

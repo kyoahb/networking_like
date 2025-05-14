@@ -10,7 +10,7 @@ SDisconnect::~SDisconnect() {
 	LOG_SCOPE_SERVER_PROTOCOL;
 }
 
-void SDisconnect::packet_event(const ENetEvent& event, std::optional<NetPeer> peer) {
+void SDisconnect::packet_event(const ENetEvent& event) {
 	LOG_SCOPE_SERVER_PROTOCOL;
 
 	if (event.type != ENET_EVENT_TYPE_DISCONNECT) return;
@@ -32,21 +32,13 @@ void SDisconnect::packet_event(const ENetEvent& event, std::optional<NetPeer> pe
 
 	// Remove pending disconnect if exists
 	// TODO: Check if equality check is possible using NetPeer like this
-	if (peer.has_value()) {
-		auto it = pending_disconnects.find(event.peer);
-		if (it != pending_disconnects.end()) {
-			Log::trace("Removing Peer with pending disconnect that has sent a disconnect event: " + peer.value().handle);
-			pending_disconnects.erase(it);
-		}
-		server->peers.remove_peer(event.peer); // Remove peer from the server's peer list
+	auto it = pending_disconnects.find(event.peer);
+	if (it != pending_disconnects.end()) {
+		Log::trace("Removing Peer with pending disconnect that has sent a disconnect event: " + peer.value().handle);
+		pending_disconnects.erase(it);
 	}
-	else { 
-		// Peer does not have a value yet. This means either the server received a disconnect event
-		// Before the client sent the CLIENT_CONNECT_BEGIN packet, or something else has gone wrong
-		if (!server->peers.get_peer(event.peer).has_value()) {
-			// Not much to do, server has no record of it so it is pointless removing it, and peer likely does not have 
-		}
-	}
+	server->peers.remove_peer(event.peer); // Remove peer from the server's peer list
+
 
 	// Construct result
 	DisconnectResult result;

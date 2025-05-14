@@ -80,6 +80,9 @@
     <Filter Include="Game\Event\Events">
       <UniqueIdentifier>{8d20a80d-8ccb-4ba4-b13b-358fd84a1ed2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Networking\Packets\Data\HEARTBEAT">
+      <UniqueIdentifier>{3467381a-b964-4282-b5b2-39b18c561d68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -168,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="include\rlImGui.cpp">
       <Filter>Include</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Server\Protocols\STimeout.cpp">
+      <Filter>Networking\Server\Protocols</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,6 +449,18 @@
     </ClInclude>
     <ClInclude Include="include\raylib-cpp-utils.hpp">
       <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Protocols\STimeout.h">
+      <Filter>Networking\Server\Protocols</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\Heartbeat.h">
+      <Filter>Networking\Packets\Data\HEARTBEAT</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\HeartbeatRequest.h">
+      <Filter>Networking\Packets\Data\HEARTBEAT</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\HeartbeatResponse.h">
+      <Filter>Networking\Packets\Data\HEARTBEAT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

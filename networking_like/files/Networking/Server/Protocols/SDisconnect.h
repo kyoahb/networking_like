@@ -30,7 +30,7 @@ public:
 	void on_stop() override;
 	void on_update() override;
 	void on_destroy() override;
-	void packet_event(const ENetEvent& event, std::optional<NetPeer> peer) override;
+	void packet_event(const ENetEvent& event) override;
 
 	// Called from server. Usually this wont happen, but this is a built-in protocol
 	DisconnectResult disconnect_peer(ENetPeer* peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);

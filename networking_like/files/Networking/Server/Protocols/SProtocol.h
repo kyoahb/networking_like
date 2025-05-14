@@ -13,7 +13,7 @@ public:
 	explicit SProtocol(std::shared_ptr<Server> _server, std::string _name);
 	virtual ~SProtocol();
 
-	virtual void packet_event(const ENetEvent& event, std::optional<NetPeer> peer) = 0; // Called on receive event
+	virtual void packet_event(const ENetEvent& event); // Called on receive event
 
 	virtual void on_start() override; // Called on start
 	virtual void on_stop() override; // Called on stop

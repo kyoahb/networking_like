@@ -5,6 +5,7 @@
 #include "Networking/Shared/FutureResults/DisconnectResult.h"
 #include "Networking/Server/Protocols/SDisconnect.h"
 #include "Networking/Server/Protocols/SConnect.h"
+#include "Game/Events/EventList.h"
 class Server : public NetworkUser, public std::enable_shared_from_this<Server> {
 public:
 	
@@ -17,8 +18,7 @@ public:
 	std::future<ShutdownResult> stop();
 
 	std::future<DisconnectResult> disconnect_peer(ENetPeer* peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED);
-	bool send_packet(const Packet& packet, const NetPeer& peer);
-	void broadcast_packet(const Packet& packet, std::vector<NetPeer> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
+	bool send_packet(const Packet& packet, ENetPeer* peer);
 	void broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
 
 private:

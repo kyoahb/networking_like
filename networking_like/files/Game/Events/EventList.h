@@ -19,6 +19,13 @@ namespace Events {
 		};
 		using Stop = Event<StopData>;
 
+		// Event received
+		struct EventReceiveData : public BaseEventData {
+			ENetEvent event;
+			explicit EventReceiveData(ENetEvent event) : event(event) {}
+		};
+		using EventReceive = Event<EventReceiveData>;
+
 		// Initial client connection (Received event with type CONNECT)
 		struct ClientConnectData : public BaseEventData {
 			ENetPeer* peer;

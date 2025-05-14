@@ -6,7 +6,7 @@
 class ServerPeerlist {
 public:
 	LocalNetPeer self; // Server self
-	std::unordered_map<uint8_t, NetPeer> peers; // List of connected clients
+	std::vector<NetPeer> peers; // List of connected clients
 
 	ServerPeerlist();
 
