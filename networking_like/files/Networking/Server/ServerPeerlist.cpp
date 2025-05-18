@@ -104,7 +104,7 @@ const LocalNetPeer& ServerPeerlist::get_self() {
 	return self;
 }
 
-const std::string& ServerPeerlist::get_polite_handle(ENetPeer* peer) const {
+std::string ServerPeerlist::get_polite_handle(ENetPeer* peer) const {
 	LOG_SCOPE_SERVER;
 	std::optional<NetPeer> found_peer = get_peer(peer);
 	if (found_peer.has_value()) {

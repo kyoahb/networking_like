@@ -18,7 +18,6 @@ public:
 	void start(); // Start network user (involves starting future for update loop)
 	void stop(); // Stop network user (involves stopping future for update loop)
 
-	bool send_packet(const Packet& packet, const NetPeer& peer); // Send a packet to a peer
 	bool send_packet(const Packet& packet, ENetPeer* peer); // Send a packet to a peer. Note ENetPeer is not const only as this function converts it to a NetPeer beforehand
 
 

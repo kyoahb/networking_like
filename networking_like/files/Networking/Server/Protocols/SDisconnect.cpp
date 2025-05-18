@@ -34,7 +34,7 @@ void SDisconnect::packet_event(const ENetEvent& event) {
 	// TODO: Check if equality check is possible using NetPeer like this
 	auto it = pending_disconnects.find(event.peer);
 	if (it != pending_disconnects.end()) {
-		Log::trace("Removing Peer with pending disconnect that has sent a disconnect event: " + peer.value().handle);
+		Log::trace("Removing Peer with pending disconnect that has sent a disconnect event: " + server->peers.get_polite_handle(event.peer));
 		pending_disconnects.erase(it);
 	}
 	server->peers.remove_peer(event.peer); // Remove peer from the server's peer list

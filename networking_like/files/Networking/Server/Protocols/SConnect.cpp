@@ -86,13 +86,13 @@ void SConnect::packet_event(const ENetEvent& event) {
 
 		std::string serialised_data = SerializationUtils::serialize<ClientConnectConfirm>(client_connect_confirm);
 		Packet packet_confirm(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_CONFIRM, serialised_data.data(), serialised_data.size(), true);
-		server->send_packet(packet_confirm, new_peer);
+		server->send_packet(packet_confirm, event.peer);
 
 		// Send a CLIENT_CONNECT_RELAY packet to all other clients
 		ClientConnectRelay client_connect_relay = netpeer_to_relay(new_peer);
 		std::string serialised_relay_data = SerializationUtils::serialize<ClientConnectRelay>(client_connect_relay);
 		Packet packet_relay(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_RELAY, serialised_relay_data.data(), serialised_relay_data.size(), true);
-		server->broadcast_packet(packet_relay, { new_peer });
+		server->broadcast_packet(packet_relay, { event.peer });
 		
 		
 		// Fire event

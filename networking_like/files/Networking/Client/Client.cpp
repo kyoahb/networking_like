@@ -155,7 +155,7 @@ bool Client::send_packet(const Packet& packet) {
 	}
 	
 
-	return NetworkUser::send_packet(packet, peers.get_server());
+	return NetworkUser::send_packet(packet, peers.get_server().peer);
 }
 
 

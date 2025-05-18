@@ -42,6 +42,9 @@ void Lobby::on_activate() {
 	on_peer_removed_callbackid = Events::Client::PeerRemoved::register_callback([this](const Events::Client::PeerRemovedData& data) {
 		this->on_peer_removed(data);
 		});
+	on_client_disconnected_callbackid = Events::Client::Disconnect::register_callback([this](const Events::Client::DisconnectData& data) {
+		this->on_client_disconnected(data);
+		});
 
 	// Add members from peers list & self
 	add_all_members();
@@ -51,6 +54,7 @@ void Lobby::on_deactivate() {
 	// Unsubscribe from events
 	Events::Client::PeerAdded::unregister_callback(on_peer_added_callbackid);
 	Events::Client::PeerRemoved::unregister_callback(on_peer_removed_callbackid);
+	Events::Client::Disconnect::unregister_callback(on_client_disconnected_callbackid);
 
 	members.clear(); // Clear the members list when deactivating the lobby
 
@@ -92,4 +96,11 @@ void Lobby::on_peer_removed(const Events::Client::PeerRemovedData& data) {
 	// Just clear list and remake it
 	members.clear();
 	add_all_members();
+}
+
+void Lobby::on_client_disconnected(const Events::Client::DisconnectData& data) {
+	// Return to main menu
+	if (!game.stateManager.setState("MainMenu")) {
+		Log::asserts(false, "Failed to set state to MainMenu from Lobby");
+	}
 }

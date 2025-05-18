@@ -35,6 +35,7 @@ public:
 	void add_all_members();
 	void on_peer_added(const Events::Client::PeerAddedData &data);
 	void on_peer_removed(const Events::Client::PeerRemovedData& data);
+	void on_client_disconnected(const Events::Client::DisconnectData& data);
 
 private:
 	std::vector<LobbyMember> members;
@@ -44,4 +45,5 @@ private:
 
 	int on_peer_added_callbackid = 0; // Need to save this in order to later unregister it
 	int on_peer_removed_callbackid = 0; // Need to save this in order to later unregister it
+	int on_client_disconnected_callbackid = 0; // Need to save this in order to later unregister it
 };

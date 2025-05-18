@@ -24,7 +24,7 @@ public:
 	const std::optional<NetPeer> get_peer(std::string handle) const; // Get a peer by handle
 	const std::optional<NetPeer> get_peer(ENetPeer* peer) const; // Get a peer by ENetPeer*
 
-	const std::string& get_polite_handle(ENetPeer* peer) const; // If handle exists, return [handle] ID_[id]. Else, return Unregistered_Peer ID_[id]
+	std::string get_polite_handle(ENetPeer* peer) const; // If handle exists, return [handle] ID_[id]. Else, return Unregistered_Peer ID_[id]
 
 	const LocalNetPeer& get_self(); // Get the server self
 

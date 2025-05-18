@@ -46,15 +46,6 @@ bool NetworkUser::send_packet(const Packet& packet, ENetPeer* peer) {
 		return false;
 	}
 
-	std::string handle = static_cast<char*>(peer->data);
-	NetPeer net_peer(peer, 0, handle);
-
-	return send_packet(packet, net_peer);
-}
-
-bool NetworkUser::send_packet(const Packet& packet, const NetPeer& peer) {
-	LOG_SCOPE_NET;
-
 	// Check packet validity
 	if (!packet.is_valid) {
 		Log::error("Cannot send packet, invalid packet");
@@ -69,11 +60,10 @@ bool NetworkUser::send_packet(const Packet& packet, const NetPeer& peer) {
 	}
 
 	// Check result of sending packet
-	int result = enet_peer_send(peer.peer, 0, enet_packet);
+	int result = enet_peer_send(peer, 0, enet_packet);
 	if (result < 0) {
-		Log::error("Failed to send packet to peer: " + peer.handle);
+		Log::error("Failed to send packet to peer w/ID: " + std::to_string(peer->incomingPeerID));
 		return false;
 	}
-
 	return true;
 }
