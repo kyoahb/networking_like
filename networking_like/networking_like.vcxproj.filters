@@ -44,9 +44,6 @@
     <Filter Include="Networking\Shared\FutureResults">
       <UniqueIdentifier>{324580a1-0a1d-46c1-8fcb-99d0e0b48b19}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Networking\Server\Protocols">
-      <UniqueIdentifier>{b64b6942-1f7a-41dd-ab55-ffa2e130f2d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{ffec48ce-c320-4685-bb6b-6f81de4da749}</UniqueIdentifier>
     </Filter>
@@ -82,6 +79,9 @@
     </Filter>
     <Filter Include="Networking\Packets\Data\HEARTBEAT">
       <UniqueIdentifier>{3467381a-b964-4282-b5b2-39b18c561d68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\Server\Groups">
+      <UniqueIdentifier>{b64b6942-1f7a-41dd-ab55-ffa2e130f2d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -124,12 +124,6 @@
     <ClCompile Include="files\Networking\Server\Server.cpp">
       <Filter>Networking\Server</Filter>
     </ClCompile>
-    <ClCompile Include="files\Networking\Server\Protocols\SProtocol.cpp">
-      <Filter>Networking\Server\Protocols</Filter>
-    </ClCompile>
-    <ClCompile Include="files\Networking\Server\Protocols\SDisconnect.cpp">
-      <Filter>Networking\Server\Protocols</Filter>
-    </ClCompile>
     <ClCompile Include="files\UI\UIMenu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -141,9 +135,6 @@
     </ClCompile>
     <ClCompile Include="files\Game\States\GameStateManager.cpp">
       <Filter>Game\State</Filter>
-    </ClCompile>
-    <ClCompile Include="files\Networking\Server\Protocols\SConnect.cpp">
-      <Filter>Networking\Server\Protocols</Filter>
     </ClCompile>
     <ClCompile Include="files\Networking\Packets\PacketHelper.cpp">
       <Filter>Networking\Packets</Filter>
@@ -172,8 +163,14 @@
     <ClCompile Include="include\rlImGui.cpp">
       <Filter>Include</Filter>
     </ClCompile>
-    <ClCompile Include="files\Networking\Server\Protocols\STimeout.cpp">
-      <Filter>Networking\Server\Protocols</Filter>
+    <ClCompile Include="files\Networking\Server\Events\SGroup.cpp">
+      <Filter>Networking\Server\Groups</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Server\Events\SConnectGroup.cpp">
+      <Filter>Networking\Server\Groups</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Server\Events\SDisconnectGroup.cpp">
+      <Filter>Networking\Server\Groups</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -246,20 +243,11 @@
     <ClInclude Include="files\Networking\Shared\FutureResults\ConnectResult.h">
       <Filter>Networking\Shared\FutureResults</Filter>
     </ClInclude>
-    <ClInclude Include="files\Networking\Shared\FutureResults\DisconnectResult.h">
-      <Filter>Networking\Shared\FutureResults</Filter>
-    </ClInclude>
     <ClInclude Include="files\Networking\Server\Server.h">
       <Filter>Networking\Server</Filter>
     </ClInclude>
     <ClInclude Include="files\Networking\Shared\FutureResults\ShutdownResult.h">
       <Filter>Networking\Shared\FutureResults</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Server\Protocols\SDisconnect.h">
-      <Filter>Networking\Server\Protocols</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Server\Protocols\SProtocol.h">
-      <Filter>Networking\Server\Protocols</Filter>
     </ClInclude>
     <ClInclude Include="files\UI\UIMenu.h">
       <Filter>UI</Filter>
@@ -272,9 +260,6 @@
     </ClInclude>
     <ClInclude Include="files\Game\States\GameState.h">
       <Filter>Game\State</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Server\Protocols\SConnect.h">
-      <Filter>Networking\Server\Protocols</Filter>
     </ClInclude>
     <ClInclude Include="files\Networking\Client\Protocols\CProtocol.h">
       <Filter>Networking\Client\Protocols</Filter>
@@ -450,9 +435,6 @@
     <ClInclude Include="include\raylib-cpp-utils.hpp">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="files\Networking\Server\Protocols\STimeout.h">
-      <Filter>Networking\Server\Protocols</Filter>
-    </ClInclude>
     <ClInclude Include="files\Networking\Packets\Data\Heartbeat.h">
       <Filter>Networking\Packets\Data\HEARTBEAT</Filter>
     </ClInclude>
@@ -461,6 +443,18 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Packets\Data\HeartbeatResponse.h">
       <Filter>Networking\Packets\Data\HEARTBEAT</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Events\SGroup.h">
+      <Filter>Networking\Server\Groups</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Events\SConnectGroup.h">
+      <Filter>Networking\Server\Groups</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Events\SDisconnectGroup.h">
+      <Filter>Networking\Server\Groups</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\FutureResults\DisconnectResult.h">
+      <Filter>Networking\Shared\FutureResults</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

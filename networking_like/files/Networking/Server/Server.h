@@ -2,9 +2,8 @@
 #include "Networking/Shared/NetworkUser.h"
 #include "Networking/Shared/FutureResults/ShutdownResult.h"
 #include "ServerPeerlist.h"
-#include "Networking/Shared/FutureResults/DisconnectResult.h"
-#include "Networking/Server/Protocols/SDisconnect.h"
-#include "Networking/Server/Protocols/SConnect.h"
+#include "Networking/Server/Events/SDisconnectGroup.h"
+#include "Networking/Server/Events/SConnectGroup.h"
 #include "Game/Events/EventList.h"
 class Server : public NetworkUser, public std::enable_shared_from_this<Server> {
 public:
@@ -32,18 +31,12 @@ private:
 	int port;
 
 	// Protocols
-	std::vector<std::shared_ptr<SProtocol>> protocols = {};
-	std::shared_ptr<SDisconnect> disconnect_protocol = nullptr;
+	std::vector<std::shared_ptr<SGroup>> groups = {};
+	std::shared_ptr<SDisconnectGroup> disconnect_group = nullptr;
 	// Protocol management methods
-	void add_protocol(std::shared_ptr<SProtocol> protocol);
-	void initialize_protocols();
-	void start_protocols();
-	void stop_protocols();
-	void update_protocols();
-	void destroy_protocols();
-
-	// Protocol event handling
-	void dispatch_event_to_protocols(const ENetEvent& event);
+	void add_group(std::shared_ptr<SGroup> group);
+	void initialize_groups();
+	void destroy_groups();
 
 
 	// Other functions

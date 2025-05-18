@@ -1,6 +1,6 @@
 #pragma once
 #include "Utils/Imports/common.h"
-
+#include <future>
 class BaseEventData {
 public:
 	virtual ~BaseEventData() = default;

@@ -24,61 +24,38 @@ void Server::prepare_destroy() {
 	if (active) {
 		stop().wait();
 	}
-	destroy_protocols();
+	destroy_groups();
 	enet_host_destroy(host);
 	host = nullptr;
-	protocols.clear();
 }
 
-void Server::add_protocol(std::shared_ptr<SProtocol> protocol) {
+void Server::add_group(std::shared_ptr<SGroup> group) {
 	LOG_SCOPE_SERVER;
 
-	protocols.push_back(protocol);
+	groups.push_back(group);
 }
 
-void Server::initialize_protocols() {
+void Server::initialize_groups() {
 	LOG_SCOPE_SERVER;
 	Log::trace("Initializing protocols");
 	
 	// Built in protocols
-	std::shared_ptr<SDisconnect> disconnect = std::make_shared<SDisconnect>(shared_from_this());
-	disconnect_protocol = disconnect;
-	add_protocol(disconnect);
+	std::shared_ptr<SDisconnectGroup> disconnect = std::make_shared<SDisconnectGroup>(shared_from_this());
+	disconnect_group = disconnect;
+	add_group(disconnect);
 
-	std::shared_ptr<SConnect> connect = std::make_shared<SConnect>(shared_from_this());
-	add_protocol(connect);
+	std::shared_ptr<SConnectGroup> connect = std::make_shared<SConnectGroup>(shared_from_this());
+	add_group(connect);
 }
 
-void Server::start_protocols() {
+void Server::destroy_groups() {
 	LOG_SCOPE_SERVER;
-	Log::trace("Starting protocols");
-	for (auto& protocol : protocols) {
-		protocol->start();
+	Log::trace("Destroying groups");
+	for (auto& g : groups) {
+		g->deactivate();
 	}
-}
-
-void Server::stop_protocols() {
-	LOG_SCOPE_SERVER;
-	Log::trace("Stopping protocols");
-	for (auto& protocol : protocols) {
-		protocol->stop();
-	}
-}
-
-void Server::update_protocols() {
-	LOG_SCOPE_SERVER;
-	for (auto& protocol : protocols) {
-		protocol->update();
-	}
-}
-
-void Server::destroy_protocols() {
-	LOG_SCOPE_SERVER;
-	Log::trace("Destroying protocols");
-	for (auto& protocol : protocols) {
-		protocol->destroy();
-	}
-	protocols.clear();
+	groups.clear();
+	disconnect_group = nullptr;
 }
 
 void Server::broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding) {
@@ -93,24 +70,11 @@ void Server::broadcast_packet(const Packet& packet, std::vector<ENetPeer*> exclu
 	}
 }
 
-void Server::dispatch_event_to_protocols(const ENetEvent& event) {
-	std::optional<NetPeer> peer = std::nullopt;
-	Events::Server::EventReceive::trigger(Events::Server::EventReceiveData(event)); // Fire event
-
-	if (event.peer != nullptr) {
-		peer = peers.get_peer(event.peer); // Nullptr if peer not in list
-	}
-
-	for (auto& protocol : protocols) {
-		protocol->packet_event(event);
-	}
-}
-
 Server::~Server() {
 	LOG_SCOPE_SERVER;
 	Log::trace("Server destructor called");
 
-	destroy_protocols();
+	prepare_destroy();
 	if (active) {
 		stop().wait();
 	}
@@ -126,7 +90,7 @@ Server::~Server() {
 void Server::start() {
 	LOG_SCOPE_SERVER;
 	
-	initialize_protocols();
+	initialize_groups();
 
 	if (active) {
 		Log::warn("Server is already active, cannot start");
@@ -134,7 +98,6 @@ void Server::start() {
 	}
 
 	active = true;
-	start_protocols();
 	update_future = std::async(std::launch::async, &Server::update_loop, this);
 	Log::trace("Server started update loop.");
 
@@ -152,7 +115,6 @@ std::future<ShutdownResult> Server::stop() {
 	}
 
 	active = false;
-	stop_protocols();
 	if (update_future.valid() && std::this_thread::get_id() != update_thread_id) {
 		update_future.get(); // Wait for the update loop to finish
 	}
@@ -221,21 +183,16 @@ std::future<DisconnectResult> Server::disconnect_peer(ENetPeer* peer, Disconnect
 	Log::trace("Disconnecting peer: " + peers.get_polite_handle(peer));
 
 	// Verify we have the disconnect protocol
-	if (!disconnect_protocol) {
-		Log::error("Disconnect protocol not initialized!");
+	if (!disconnect_group) {
+		Log::error("Disconnect group not initialized!");
 		return std::async(std::launch::async, [reason]() {
-			return DisconnectResult(DisconnectResultType::FAILED, reason, "Disconnect protocol not initialized", 0);
+			return DisconnectResult(DisconnectResultType::FAILED, reason, "Disconnect group not initialized", 0);
 			});
 	}
 
 	// Use the protocol to disconnect the peer
 	return std::async(std::launch::async, [this, &peer, reason]() {
-		DisconnectResult result = disconnect_protocol->disconnect_peer(peer, reason);
-
-		// We still need to remove the peer from the server's list after disconnection
-		if (result.type == DisconnectResultType::SUCCESS || result.type == DisconnectResultType::FORCED) {
-			peers.remove_peer(peer);
-		}
+		DisconnectResult result = disconnect_group->disconnect_peer(peer, reason);
 
 		return result;
 		});
@@ -245,7 +202,7 @@ void Server::update() {
 	LOG_SCOPE_SERVER;
 	ENetEvent event;
 	while (enet_host_service(host, &event, 0) > 0) {
-		dispatch_event_to_protocols(event);
+		Events::Server::EventReceive::trigger(Events::Server::EventReceiveData(event)); // Fire event
 		switch (event.type) {
 		case ENET_EVENT_TYPE_CONNECT:
 			connect_event(event);
@@ -266,7 +223,6 @@ void Server::update() {
 	// Check timeouts
 	enet_host_flush(host);
 
-	update_protocols();
 	Events::Server::Update::trigger(Events::Server::UpdateData());
 }
 // Events

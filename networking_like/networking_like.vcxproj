@@ -191,6 +191,7 @@
     <ClInclude Include="files\Networking\Server\Server.h" />
     <ClInclude Include="files\Networking\Server\ServerPeerlist.h" />
     <ClInclude Include="files\Networking\Shared\FutureResults\ConnectResult.h" />
+    <ClInclude Include="files\Networking\Shared\FutureResults\DisconnectResult.h" />
     <ClInclude Include="files\Networking\Shared\FutureResults\ShutdownResult.h" />
     <ClInclude Include="files\Networking\Shared\NetPeer.h" />
     <ClInclude Include="files\Networking\Shared\NetworkUser.h" />

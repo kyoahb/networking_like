@@ -17,15 +17,17 @@ enum class DisconnectResultReason : uint8_t {
 	SERVER_STOPPING = 5
 };
 
-/*
- * @brief DisconnectResult class
- *
- * Represents the result of a disconnect request operation sent by the local NetworkUser.
- */
 class DisconnectResult {
 public:
 	DisconnectResultType type = DisconnectResultType::UNKNOWN; // Type of disconnect result
 	DisconnectResultReason reason = DisconnectResultReason::UNKNOWN; // Reason for the disconnect result
 	std::string message = ""; // Message associated with the disconnect result
 	uint32_t time_taken = 0; // Time taken for the disconnect attempt (ms)
+};
+
+class PendingDisconnect {
+public:
+	DisconnectResultReason reason = DisconnectResultReason::UNKNOWN; // Reason for the disconnect result
+	DisconnectResultType type = DisconnectResultType::UNKNOWN; // Type of disconnect result
+	uint64_t request_time = 0; // Time when the disconnect request was made
 };
