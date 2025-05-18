@@ -83,6 +83,12 @@ std::string LogScope::add_context_prefix(const std::string& message, LogContext 
 	case LogContext::TEST:
 		context_str = "\033[1;37mTEST\033[0m | " + thread_id;
 		break;
+	case LogContext::SERVER_GROUP:
+		context_str = "\033[1;33mSERVER_G\033[0m | " + thread_id;
+		break;
+	case LogContext::CLIENT_GROUP:
+		context_str = "\033[1;35mCLIENT_G\033[0m | " + thread_id;
+		break;
 
     default:
         context_str = thread_id;

@@ -26,6 +26,12 @@ namespace Events {
 		};
 		using EventReceive = Event<EventReceiveData>;
 
+		// Server update()
+		struct UpdateData : public BaseEventData {
+			explicit UpdateData() {};
+		};
+		using Update = Event<UpdateData>;
+
 		// Initial client connection (Received event with type CONNECT)
 		struct ClientConnectData : public BaseEventData {
 			ENetPeer* peer;

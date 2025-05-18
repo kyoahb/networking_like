@@ -28,7 +28,7 @@ public:
 
 	static void trigger(const EventData& data) {
 		for (const auto& [id, callback] : callbacks) {
-			callback(data);
+			std::async(std::launch::async, callback, std::cref(data));
 		}
 	}
 

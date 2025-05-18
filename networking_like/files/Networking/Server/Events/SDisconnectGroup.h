@@ -1,0 +1,60 @@
+#pragma once
+
+#include "Utils/Imports/common.h"
+#include "SGroup.h"
+#include "Utils/General/TimeUtils.h"
+
+#include "Networking/Packets/Data/ClientDisconnectRelay.h"
+
+enum class DisconnectResultType : uint8_t {
+	UNKNOWN = 0,
+	SUCCESS = 1,
+	FORCED = 2,
+	FAILED = 3
+};
+
+enum class DisconnectResultReason : uint8_t {
+	UNKNOWN = 0,
+	USER_REQUESTED = 1,
+	SERVER_REQUESTED = 2,
+	TIMEOUT = 3,
+	ERROR = 4,
+	SERVER_STOPPING = 5
+};
+
+class DisconnectResult {
+public:
+	DisconnectResultType type = DisconnectResultType::UNKNOWN; // Type of disconnect result
+	DisconnectResultReason reason = DisconnectResultReason::UNKNOWN; // Reason for the disconnect result
+	std::string message = ""; // Message associated with the disconnect result
+	uint32_t time_taken = 0; // Time taken for the disconnect attempt (ms)
+};
+
+class PendingDisconnect {
+public:
+	DisconnectResultReason reason = DisconnectResultReason::UNKNOWN; // Reason for the disconnect result
+	DisconnectResultType type = DisconnectResultType::UNKNOWN; // Type of disconnect result
+	uint64_t request_time = 0; // Time when the disconnect request was made
+};
+
+class SDisconnectGroup : public SGroup {
+public:
+	SDisconnectGroup(std::shared_ptr<Server> _server);
+	~SDisconnectGroup();
+
+	DisconnectResult disconnect_peer(ENetPeer* peer, DisconnectResultReason reason = DisconnectResultReason::SERVER_REQUESTED); // Disconnect a peer
+
+	void activate() override; // Group activated. In here, add event callbacks
+	void deactivate() override; // Group deactivated. In here, remove event callbacks
+
+	void update(const Events::Server::UpdateData& data); // Connected to Events::Server::Update
+	void event_receive(const Events::Server::EventReceiveData& data); // Connected to Events::Server::EventReceive
+private:
+	int update_callback;
+	int event_receive_callback;
+	std::unordered_map<ENetPeer*, PendingDisconnect> pending_disconnects; // Set of peers that are pending a CLIENT_CONNECT_BEGIN packet
+	const unsigned int DISCONNECT_TIMEOUT = 5000; // Timeout for client connection
+	const unsigned int CHECK_INTERVAL = 1000; // Check interval in milliseconds
+
+	void add_pending_disconnect(ENetPeer* peer, DisconnectResultReason reason); // Add a pending disconnect
+};

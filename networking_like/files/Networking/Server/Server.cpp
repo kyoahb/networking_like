@@ -267,6 +267,7 @@ void Server::update() {
 	enet_host_flush(host);
 
 	update_protocols();
+	Events::Server::Update::trigger(Events::Server::UpdateData());
 }
 // Events
 

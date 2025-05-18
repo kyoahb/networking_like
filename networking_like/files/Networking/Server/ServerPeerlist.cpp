@@ -118,3 +118,33 @@ std::vector<NetPeer> ServerPeerlist::get_peers() const {
 
 	return peers;
 }
+
+bool ServerPeerlist::is_peer_connected(ENetPeer* peer) const {
+	LOG_SCOPE_SERVER;
+	for (auto p : peers) {
+		if (p.id == peer->incomingPeerID) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ServerPeerlist::is_peer_connected(uint8_t id) const {
+	LOG_SCOPE_SERVER;
+	for (auto p : peers) {
+		if (p.id == id) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ServerPeerlist::is_peer_connected(std::string handle) const {
+	LOG_SCOPE_SERVER;
+	for (auto p : peers) {
+		if (p.handle == handle) {
+			return true;
+		}
+	}
+	return false;
+}
