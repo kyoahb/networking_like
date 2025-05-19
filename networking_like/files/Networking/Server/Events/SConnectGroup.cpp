@@ -2,12 +2,14 @@
 #include "Networking/Server/Server.h"
 
 SConnectGroup::SConnectGroup(std::shared_ptr<Server> _server) : SGroup(_server) {
+    activate();
 };
 
 SConnectGroup::~SConnectGroup() {
+    deactivate();
 };
 
-void SConnectGroup::activate() {	
+void SConnectGroup::activate() {
 	update_callback = Events::Server::Update::register_callback([this](const Events::Server::UpdateData& data) { update(data); });
 	event_receive_callback = Events::Server::EventReceive::register_callback([this](const Events::Server::EventReceiveData& data) { event_receive(data); });
 };

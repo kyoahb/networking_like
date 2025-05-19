@@ -8,8 +8,6 @@
 #include "Networking/Shared/FutureResults/DisconnectResult.h"
 
 #include "Networking/Packets/Data/ClientConnect.h"
-#include "Networking/Packets/Data/ClientConnectBegin.h"
-#include "Networking/Packets/Data/ClientConnectConfirm.h"
 
 #include "Protocols/CConnect.h"
 

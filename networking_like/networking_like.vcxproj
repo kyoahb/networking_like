@@ -175,13 +175,7 @@
     <ClInclude Include="files\Networking\Client\Protocols\CConnect.h" />
     <ClInclude Include="files\Networking\Client\Protocols\CProtocol.h" />
     <ClInclude Include="files\Networking\Packets\Data\ClientConnect.h" />
-    <ClInclude Include="files\Networking\Packets\Data\ClientConnectBegin.h" />
-    <ClInclude Include="files\Networking\Packets\Data\ClientConnectConfirm.h" />
-    <ClInclude Include="files\Networking\Packets\Data\ClientConnectRelay.h" />
-    <ClInclude Include="files\Networking\Packets\Data\ClientDisconnectRelay.h" />
     <ClInclude Include="files\Networking\Packets\Data\Heartbeat.h" />
-    <ClInclude Include="files\Networking\Packets\Data\HeartbeatRequest.h" />
-    <ClInclude Include="files\Networking\Packets\Data\HeartbeatResponse.h" />
     <ClInclude Include="files\Networking\Packets\Packet.h" />
     <ClInclude Include="files\Networking\Packets\PacketData.h" />
     <ClInclude Include="files\Networking\Packets\PacketHelper.h" />

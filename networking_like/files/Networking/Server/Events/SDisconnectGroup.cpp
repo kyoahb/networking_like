@@ -3,10 +3,12 @@
 
 SDisconnectGroup::SDisconnectGroup(std::shared_ptr<Server> _server) : SGroup(_server) {
 	LOG_SCOPE_SERVER_GROUP;
+	activate();
 };
 
 SDisconnectGroup::~SDisconnectGroup() {
 	LOG_SCOPE_SERVER_GROUP;
+	deactivate();
 };
 
 void SDisconnectGroup::activate() {

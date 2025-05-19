@@ -1,5 +1,6 @@
 #pragma once
 #include "Utils/Imports/common.h"
+#include "Networking/Packets/PacketData.h"
 
 enum ClientConnectType : uint8_t {
 	CLIENT_CONNECT_ANY = 255,
@@ -7,4 +8,61 @@ enum ClientConnectType : uint8_t {
 	CLIENT_CONNECT_RELAY = 2,
 	CLIENT_CONNECT_CONFIRM = 3,
 	CLIENT_DISCONNECT_RELAY = 4,
+};
+
+// Client -> Server
+// Subtype 1 (CLIENT_CONNECT_BEGIN)
+class ClientConnectBegin : public PacketData {
+public:
+	std::string client_preferred_handle = "";
+
+	template <typename Archive>
+	void serialize(Archive& archive) {
+		archive(client_preferred_handle);
+	}
+};
+
+
+// Server -> Client
+// Subtype 2 (CLIENT_CONNECT_RELAY)
+class ClientConnectRelay : public PacketData {
+public:
+	uint8_t client_id = 0; // ID of the client that connected
+	std::string client_handle = ""; // Handle of the client that connected
+
+
+	template <class Archive>
+	void serialize(Archive& archive) {
+		archive(client_id, client_handle);
+	}
+};
+
+// Server -> Client
+// Subtype 3 (CLIENT_CONNECT_CONFIRM)
+class ClientConnectConfirm : public PacketData {
+public:
+	std::string server_preferred_handle = ""; // The server's preferred handle
+
+	std::string client_decided_handle = ""; // The client's decided handle (may be different if server decides)
+	uint8_t client_id = 0; // The client's ID (assigned by the server)
+
+	std::vector<ClientConnectRelay> other_clients; // Other clients that are connected to the server
+
+	template <typename Archive>
+	void serialize(Archive& archive) {
+		archive(server_preferred_handle, client_decided_handle, client_id, other_clients);
+	}
+
+};
+
+// Server -> Client
+// Subtype 4 (CLIENT_DISCONNECT_RELAY)
+class ClientDisconnectRelay : public PacketData {
+public:
+	uint8_t client_id = 0; // ID of the client that connected
+
+	template <class Archive>
+	void serialize(Archive& archive) {
+		archive(client_id);
+	}
 };

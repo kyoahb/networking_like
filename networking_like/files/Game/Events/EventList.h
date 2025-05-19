@@ -1,7 +1,7 @@
 #pragma once
 #include "Event.h"
 
-#include "Networking/Packets/Data/ClientConnectBegin.h"
+#include "Networking/Packets/Data/ClientConnect.h"
 #include "Networking/Shared/NetPeer.h"
 #include "Networking/Shared/FutureResults/DisconnectResult.h"
 
@@ -100,5 +100,18 @@ namespace Events {
 			explicit PeerRemovedData(LocalNetPeer peer) : peer(peer) {};
 		};
 		using PeerRemoved = Event<PeerRemovedData>;
+
+		// Event received
+		struct EventReceiveData : public BaseEventData {
+			ENetEvent event;
+			explicit EventReceiveData(ENetEvent event) : event(event) {}
+		};
+		using EventReceive = Event<EventReceiveData>;
+
+		// Client update()
+		struct UpdateData : public BaseEventData {
+			explicit UpdateData() {};
+		};
+		using Update = Event<UpdateData>;
 	}
 } // namespace Events

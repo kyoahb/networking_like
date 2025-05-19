@@ -2,7 +2,7 @@
 #include "Utils/Imports/common.h"
 #include "Networking/Shared/NetPeer.h"
 
-#include "Networking/Packets/Data/ClientConnectConfirm.h"
+#include "Networking/Packets/Data/ClientConnect.h"
 
 class ClientPeerlist {
 public:

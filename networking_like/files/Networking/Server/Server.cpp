@@ -37,7 +37,7 @@ void Server::add_group(std::shared_ptr<SGroup> group) {
 
 void Server::initialize_groups() {
 	LOG_SCOPE_SERVER;
-	Log::trace("Initializing protocols");
+	Log::trace("Initializing groups!");
 	
 	// Built in protocols
 	std::shared_ptr<SDisconnectGroup> disconnect = std::make_shared<SDisconnectGroup>(shared_from_this());

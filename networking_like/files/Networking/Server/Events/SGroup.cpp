@@ -2,12 +2,10 @@
 
 
 SGroup::SGroup(std::shared_ptr<Server> _server) : server(_server) {
-	activate();
 }
 
 SGroup::~SGroup() {
 	// Destructor implementation
-	deactivate();
 }
 
 void SGroup::activate() {

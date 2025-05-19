@@ -4,7 +4,7 @@
 #include "SGroup.h"
 #include "Utils/General/TimeUtils.h"
 #include "Game/Events/EventList.h"
-#include "Networking/Packets/Data/ClientDisconnectRelay.h"
+#include "Networking/Packets/Data/ClientConnect.h"
 #include "Networking/Shared/FutureResults/DisconnectResult.h"
 
 class SDisconnectGroup : public SGroup {

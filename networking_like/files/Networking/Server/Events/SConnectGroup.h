@@ -4,9 +4,6 @@
 #include "SGroup.h"
 #include "Utils/General/TimeUtils.h"
 #include "Networking/Packets/Data/ClientConnect.h"
-#include "Networking/Packets/Data/ClientConnectBegin.h"
-#include "Networking/Packets/Data/ClientConnectConfirm.h"
-#include "Networking/Packets/Data/ClientConnectRelay.h"
 
 class SConnectGroup : public SGroup {
 public:
