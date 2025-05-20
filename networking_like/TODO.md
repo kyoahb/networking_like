@@ -1,8 +1,6 @@
 # TODO
 - Add ability to disable logs / log assertations
-- Move Client Disconnect function to a CDisconnect protocol just for symmetry between server
+- Move Client Disconnect function to a CDisconnect group
 - Fix disconnecting client on ServerShutdown
-- Make Event System, replace some things with event system
-- CLEAN A LOT OF CODE UP
-- FIX STUPID LOBBY
-- Replace raygui with imgui
+- fix events
+- Remove Update() event on server / client, rather add a way to set a fixed constant update() time
