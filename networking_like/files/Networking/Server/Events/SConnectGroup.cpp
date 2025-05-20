@@ -17,6 +17,8 @@ void SConnectGroup::activate() {
 void SConnectGroup::deactivate() {
 	Events::Server::Update::unregister_callback(update_callback);
 	Events::Server::EventReceive::unregister_callback(event_receive_callback);
+
+    server = nullptr;
 };
 
 void SConnectGroup::update(const Events::Server::UpdateData& data) {

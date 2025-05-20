@@ -62,9 +62,6 @@
     <Filter Include="Test">
       <UniqueIdentifier>{2ff4e73c-9085-4e85-aa49-ce11d4826a28}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Networking\Client\Protocols">
-      <UniqueIdentifier>{26c74f9f-c6e6-4f97-aca3-9e01d3da4243}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils\Network">
       <UniqueIdentifier>{ba593b23-82ce-40e7-a31e-a75df026ddc5}</UniqueIdentifier>
     </Filter>
@@ -82,6 +79,9 @@
     </Filter>
     <Filter Include="Networking\Server\Groups">
       <UniqueIdentifier>{b64b6942-1f7a-41dd-ab55-ffa2e130f2d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Networking\Client\Groups">
+      <UniqueIdentifier>{a7c00330-3636-4296-aba6-78510d38d95d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -142,12 +142,6 @@
     <ClCompile Include="files\Networking\Shared\Protocol.cpp">
       <Filter>Networking\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="files\Networking\Client\Protocols\CProtocol.cpp">
-      <Filter>Networking\Client\Protocols</Filter>
-    </ClCompile>
-    <ClCompile Include="files\Networking\Client\Protocols\CConnect.cpp">
-      <Filter>Networking\Client\Protocols</Filter>
-    </ClCompile>
     <ClCompile Include="files\Utils\Network\NetworkHelper.cpp">
       <Filter>Utils\Network</Filter>
     </ClCompile>
@@ -171,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="files\Networking\Server\Events\SDisconnectGroup.cpp">
       <Filter>Networking\Server\Groups</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Client\Groups\CGroup.cpp">
+      <Filter>Networking\Client\Groups</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Client\Groups\CConnectGroup.cpp">
+      <Filter>Networking\Client\Groups</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,16 +225,7 @@
     <ClInclude Include="files\Networking\Packets\PacketData.h">
       <Filter>Networking\Packets</Filter>
     </ClInclude>
-    <ClInclude Include="files\Networking\Packets\Data\ClientConnectRelay.h">
-      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Packets\Data\ClientConnectBegin.h">
-      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
-    </ClInclude>
     <ClInclude Include="files\Networking\Packets\Data\ClientConnect.h">
-      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Packets\Data\ClientConnectConfirm.h">
       <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
     </ClInclude>
     <ClInclude Include="files\Networking\Client\Client.h">
@@ -261,14 +252,8 @@
     <ClInclude Include="files\Game\States\GameState.h">
       <Filter>Game\State</Filter>
     </ClInclude>
-    <ClInclude Include="files\Networking\Client\Protocols\CProtocol.h">
-      <Filter>Networking\Client\Protocols</Filter>
-    </ClInclude>
     <ClInclude Include="files\Networking\Shared\Protocol.h">
       <Filter>Networking\Shared</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Client\Protocols\CConnect.h">
-      <Filter>Networking\Client\Protocols</Filter>
     </ClInclude>
     <ClInclude Include="files\Utils\Network\NetworkHelper.h">
       <Filter>Utils\Network</Filter>
@@ -281,9 +266,6 @@
     </ClInclude>
     <ClInclude Include="files\Game\Events\Event.h">
       <Filter>Game\Event</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Packets\Data\ClientDisconnectRelay.h">
-      <Filter>Networking\Packets\Data\CLIENT_CONNECT</Filter>
     </ClInclude>
     <ClInclude Include="include\RaylibException.hpp">
       <Filter>Include</Filter>
@@ -438,12 +420,6 @@
     <ClInclude Include="files\Networking\Packets\Data\Heartbeat.h">
       <Filter>Networking\Packets\Data\HEARTBEAT</Filter>
     </ClInclude>
-    <ClInclude Include="files\Networking\Packets\Data\HeartbeatRequest.h">
-      <Filter>Networking\Packets\Data\HEARTBEAT</Filter>
-    </ClInclude>
-    <ClInclude Include="files\Networking\Packets\Data\HeartbeatResponse.h">
-      <Filter>Networking\Packets\Data\HEARTBEAT</Filter>
-    </ClInclude>
     <ClInclude Include="files\Networking\Server\Events\SGroup.h">
       <Filter>Networking\Server\Groups</Filter>
     </ClInclude>
@@ -455,6 +431,12 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Shared\FutureResults\DisconnectResult.h">
       <Filter>Networking\Shared\FutureResults</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Groups\CConnectGroup.h">
+      <Filter>Networking\Client\Groups</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Groups\CGroup.h">
+      <Filter>Networking\Client\Groups</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

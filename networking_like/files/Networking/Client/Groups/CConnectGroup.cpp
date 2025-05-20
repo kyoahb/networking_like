@@ -1,22 +1,40 @@
-#include "CConnect.h"
+#include "CConnectGroup.h"
 #include "Networking/Client/Client.h"
+CConnectGroup::CConnectGroup(std::shared_ptr<Client> _client) : CGroup(_client) {
+	activate();
+}
 
-CConnect::CConnect(std::shared_ptr<Client> _client) : CProtocol(_client, "CConnect") {
-	LOG_SCOPE_CLIENT_PROTOCOL;
+CConnectGroup::~CConnectGroup() {
+	deactivate();
+	// Destructor implementation
+}
+
+void CConnectGroup::activate() {
+	// Add event callbacks
+	event_receive_callback = Events::Client::EventReceive::register_callback([this](const Events::Client::EventReceiveData& data) { on_event_receive(data); });
+}
+
+void CConnectGroup::deactivate() {
+	// Remove event callbacks
+	
+	Events::Client::EventReceive::unregister_callback(event_receive_callback);
+	client = nullptr;
+
 
 }
 
-void CConnect::on_start() {};
-void CConnect::on_stop() {};
-void CConnect::on_update() {};
-void CConnect::on_destroy() {};
-void CConnect::packet_event(const ENetEvent& event) {
-	LOG_SCOPE_CLIENT_PROTOCOL;
-	
-	if (event.type != ENET_EVENT_TYPE_RECEIVE) return;
+void CConnectGroup::on_event_receive(const Events::Client::EventReceiveData& data) {
+	// Event callback for receiving events
+	// Handle the event here
+	LOG_SCOPE_CLIENT_GROUP;
 
+	ENetEvent event = data.event;
+
+	if (event.type != ENET_EVENT_TYPE_RECEIVE) return;
 	Packet packet(event.packet);
 	if (packet.header.type != PacketType::CLIENT_CONNECT) return;
+
+
 
 	if (packet.header.subtype == CLIENT_CONNECT_RELAY) {
 		// Received a CLIENT_CONNECT_RELAY packet
@@ -28,26 +46,31 @@ void CConnect::packet_event(const ENetEvent& event) {
 		if (!peer.has_value()) {
 			Log::error("CLIENT_CONNECT:RELAY received, but peer not found in peerlist.");
 		}
-		Events::Client::PeerAdded::trigger(Events::Client::PeerAddedData(peer.value()));
+		else {
+			Events::Client::PeerAdded::trigger(Events::Client::PeerAddedData(peer.value()));
+		}
 	}
 	else if (packet.header.subtype == CLIENT_DISCONNECT_RELAY) {
 		// Received a CLIENT_DISCONNECT_RELAY packet
 		ClientDisconnectRelay client_disconnect_relay = SerializationUtils::deserialize<ClientDisconnectRelay>(packet.data, packet.header.size);
-		
+
 		std::optional<LocalNetPeer> peer = client->peers.get_peer(client_disconnect_relay.client_id);
 		if (!peer.has_value()) {
 			Log::error("CLIENT_DISCONNECT:RELAY received, but peer not found in peerlist.");
 		}
+		else {
+			Events::Client::PeerRemoved::trigger(Events::Client::PeerRemovedData(peer.value()));
+		}
 
 		client->peers.remove_peer(client_disconnect_relay.client_id); // Remove peer from the peerlist
 		Log::trace("CLIENT_DISCONNECT:RELAY received. Removed peer: " + client_disconnect_relay.client_id);
-		Events::Client::PeerRemoved::trigger(Events::Client::PeerRemovedData(peer.value()));
 	}
+
+
 }
 
-
-ConnectResult CConnect::connect(const std::string& ip, uint16_t port, const std::string& preferred_handle) {
-	LOG_SCOPE_CLIENT_PROTOCOL;
+ConnectResult CConnectGroup::connect(const std::string& ip, uint16_t port, const std::string& preferred_handle) {
+	LOG_SCOPE_CLIENT_GROUP;
 
 	uint64_t start_time = TimeUtils::get_current_time_millis();
 
@@ -92,8 +115,8 @@ ConnectResult CConnect::connect(const std::string& ip, uint16_t port, const std:
 	return ConnectResult{ ConnectResultType::SUCCESS, "Connected to server", TimeUtils::get_current_time_millis() - start_time };
 }
 
-ENetPeer* CConnect::begin_connection(const std::string& ip, uint16_t port, const std::string& preferred_handle) {
-	LOG_SCOPE_CLIENT_PROTOCOL;
+ENetPeer* CConnectGroup::begin_connection(const std::string& ip, uint16_t port, const std::string& preferred_handle) {
+	LOG_SCOPE_CLIENT_GROUP;
 
 	enet_address_set_host(&client->address, ip.c_str());
 	client->address.port = port;
@@ -104,7 +127,7 @@ ENetPeer* CConnect::begin_connection(const std::string& ip, uint16_t port, const
 	return server_peer; // Check if valid will be done in connect()
 }
 
-bool CConnect::wait_for_connection_establishment(ENetPeer* server_peer) {
+bool CConnectGroup::wait_for_connection_establishment(ENetPeer* server_peer) {
 	LOG_SCOPE_CLIENT;
 	if (server_peer == nullptr) {
 		Log::error("Server peer is nullptr, cannot wait for connection establishment");
@@ -114,7 +137,7 @@ bool CConnect::wait_for_connection_establishment(ENetPeer* server_peer) {
 	const unsigned int ESTABLISHMENT_TIMEOUT = 100;
 	Log::trace("Waiting for connection establishment for up to " + ESTABLISHMENT_TIMEOUT);
 	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, ESTABLISHMENT_TIMEOUT, ENET_EVENT_TYPE_CONNECT);
-	
+
 	if (event.has_value()) {
 		Log::trace("Connection establishment successful. Connected to server");
 		return true;
@@ -124,7 +147,7 @@ bool CConnect::wait_for_connection_establishment(ENetPeer* server_peer) {
 	return false;
 }
 
-void CConnect::send_connection_begin_packet(const std::string& preferred_handle) {
+void CConnectGroup::send_connection_begin_packet(const std::string& preferred_handle) {
 	LOG_SCOPE_CLIENT;
 
 	ClientConnectBegin connect_begin;
@@ -136,14 +159,14 @@ void CConnect::send_connection_begin_packet(const std::string& preferred_handle)
 	client->send_packet(packet);
 }
 
-bool CConnect::wait_for_connection_confirmation() {
+bool CConnectGroup::wait_for_connection_confirmation() {
 	LOG_SCOPE_CLIENT;
 
 	const unsigned int TIMEOUT_MS = 5000;
 
 	Log::trace("Waiting up to " + std::to_string(TIMEOUT_MS) + "ms for connection confirmation...");
 	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, TIMEOUT_MS, PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, static_cast<uint8_t>(ClientConnectType::CLIENT_CONNECT_CONFIRM));
-	
+
 	if (event.has_value()) {
 		Packet received_packet(event.value().packet);
 		ClientConnectConfirm connection_confirmation = SerializationUtils::deserialize<ClientConnectConfirm>(received_packet.data, received_packet.header.size);

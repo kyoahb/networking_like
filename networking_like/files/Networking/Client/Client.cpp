@@ -31,10 +31,9 @@ void Client::prepare_destroy() {
 	if (active) {
 		stop();
 	}
-	destroy_protocols();
+	destroy_groups();
 	enet_host_destroy(host);
 	host = nullptr;
-	protocols.clear();
 }
 
 bool Client::is_connected() {
@@ -48,12 +47,12 @@ std::future<ConnectResult> Client::connect(const std::string& ip, uint16_t port,
 	LOG_SCOPE_CLIENT;
 	Log::trace("Connecting to server at " + ip + ":" + std::to_string(port) + " with preferred handle: " + preferred_handle);
 
-	if (protocols.empty()) {
-		initialize_protocols();
+	if (groups.empty()) {
+		initialize_groups();
 	}
 
 	return std::async(std::launch::async, [this, ip, port, preferred_handle]() {
-		ConnectResult cr = connect_protocol->connect(ip, port, preferred_handle);
+		ConnectResult cr = connect_group->connect(ip, port, preferred_handle);
 		if (cr.type == ConnectResultType::SUCCESS) start();
 		return cr;
 	});
@@ -180,7 +179,6 @@ void Client::start() {
 	}
 
 	NetworkUser::start();
-	start_protocols();
 
 	Events::Client::Start::trigger(Events::Client::StartData());
 }
@@ -194,7 +192,6 @@ void Client::stop() {
 	}
 
 	NetworkUser::stop();
-	stop_protocols();
 
 	Events::Client::Stop::trigger(Events::Client::StopData());
 }
@@ -203,7 +200,7 @@ void Client::update() {
 	LOG_SCOPE_CLIENT;
 	ENetEvent event;
 	while (enet_host_service(host, &event, 0) > 0) {
-		dispatch_event_to_protocols(event); // Dispatch event to protocols
+		Events::Client::EventReceive::trigger(Events::Client::EventReceiveData(event));
 		switch (event.type) {
 		case ENET_EVENT_TYPE_RECEIVE:
 			receive_event(event);
@@ -216,7 +213,7 @@ void Client::update() {
 			break;
 		}
 	}
-	update_protocols();
+	Events::Client::Update::trigger(Events::Client::UpdateData());
 }
 
 // EVENTS
@@ -244,55 +241,25 @@ void Client::receive_event(const ENetEvent& event) {
 
 // Protocols
 
-void Client::add_protocol(std::shared_ptr<CProtocol> protocol) {
+void Client::add_group(std::shared_ptr<CGroup> group) {
 	LOG_SCOPE_CLIENT;
-	protocols.push_back(protocol);
+	groups.push_back(group);
 }
 
 
-void Client::initialize_protocols() {
+void Client::initialize_groups() {
 	LOG_SCOPE_CLIENT;
-	// Add built-in protocols here
+	// Add built-in groups here
 
-	std::shared_ptr<CConnect> connect_p = std::make_shared<CConnect>(shared_from_this());
-	connect_protocol = connect_p;
-	add_protocol(connect_p);
+	connect_group = std::make_shared<CConnectGroup>(shared_from_this());
+	add_group(connect_group);
 }
 
-void Client::start_protocols() {
+
+void Client::destroy_groups() {
 	LOG_SCOPE_CLIENT;
-	for (auto& protocol : protocols) {
-		protocol->start();
+	for (auto& g : groups) {
+		g->deactivate();
 	}
+	groups.clear();
 }
-
-void Client::stop_protocols() {
-	LOG_SCOPE_CLIENT;
-	for (auto& protocol : protocols) {
-		protocol->stop();
-	}
-}
-
-void Client::update_protocols() {
-	LOG_SCOPE_CLIENT;
-	for (auto& protocol : protocols) {
-		protocol->update();
-	}
-}
-
-void Client::destroy_protocols() {
-	LOG_SCOPE_CLIENT;
-	for (auto& protocol : protocols) {
-		protocol->destroy();
-	}
-	protocols.clear();
-}
-
-void Client::dispatch_event_to_protocols(const ENetEvent& event) {
-	LOG_SCOPE_CLIENT;
-	for (auto& protocol : protocols) {
-		protocol->packet_event(event);
-	}
-}
-
-

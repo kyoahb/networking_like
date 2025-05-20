@@ -9,9 +9,7 @@
 
 #include "Networking/Packets/Data/ClientConnect.h"
 
-#include "Protocols/CConnect.h"
-
-#include "Protocols/CProtocol.h"
+#include "Groups/CConnectGroup.h"
 
 class Client : public NetworkUser, public std::enable_shared_from_this<Client> {
 public:
@@ -33,16 +31,12 @@ private:
 	void update() override; // Update loop for the client
 
 
-	std::vector<std::shared_ptr<CProtocol>> protocols = {}; // List of protocols
-	std::shared_ptr<CConnect> connect_protocol = nullptr; // Pointer to the connection protocol
+	std::vector<std::shared_ptr<CGroup>> groups = {}; // List of protocols
+	std::shared_ptr<CConnectGroup> connect_group = nullptr; // Pointer to the connection protocol
 
-	void add_protocol(std::shared_ptr<CProtocol> protocol);
-	void initialize_protocols();
-	void start_protocols();
-	void stop_protocols();
-	void update_protocols();
-	void destroy_protocols();
-	void dispatch_event_to_protocols(const ENetEvent& event);
+	void add_group(std::shared_ptr<CGroup> group);
+	void initialize_groups();
+	void destroy_groups();
 	
 	DisconnectResult disconnect_thread(DisconnectResultReason reason);
 

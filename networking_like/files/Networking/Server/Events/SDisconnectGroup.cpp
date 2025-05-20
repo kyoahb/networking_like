@@ -21,6 +21,8 @@ void SDisconnectGroup::deactivate() {
 	LOG_SCOPE_SERVER_GROUP;
 	Events::Server::Update::unregister_callback(update_callback);
 	Events::Server::EventReceive::unregister_callback(event_receive_callback);
+
+	server = nullptr;
 };
 
 void SDisconnectGroup::update(const Events::Server::UpdateData& data) {
@@ -103,7 +105,7 @@ void SDisconnectGroup::add_pending_disconnect(ENetPeer* peer, DisconnectResultRe
 }
 
 DisconnectResult SDisconnectGroup::disconnect_peer(ENetPeer* peer, DisconnectResultReason reason) {
-	LOG_SCOPE_SERVER_PROTOCOL;
+	LOG_SCOPE_SERVER_GROUP;
 
 	// Check if the peer is valid
 	if (peer == nullptr) {

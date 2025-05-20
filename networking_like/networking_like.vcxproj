@@ -141,8 +141,8 @@
     <ClCompile Include="files\Game\States\MainMenu.cpp" />
     <ClCompile Include="files\Networking\Client\Client.cpp" />
     <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
-    <ClCompile Include="files\Networking\Client\Protocols\CConnect.cpp" />
-    <ClCompile Include="files\Networking\Client\Protocols\CProtocol.cpp" />
+    <ClCompile Include="files\Networking\Client\Groups\CConnectGroup.cpp" />
+    <ClCompile Include="files\Networking\Client\Groups\CGroup.cpp" />
     <ClCompile Include="files\Networking\Packets\Packet.cpp" />
     <ClCompile Include="files\Networking\Packets\PacketData.cpp" />
     <ClCompile Include="files\Networking\Packets\PacketHelper.cpp" />
@@ -172,8 +172,8 @@
     <ClInclude Include="files\Game\States\MainMenu.h" />
     <ClInclude Include="files\Networking\Client\Client.h" />
     <ClInclude Include="files\Networking\Client\ClientPeerlist.h" />
-    <ClInclude Include="files\Networking\Client\Protocols\CConnect.h" />
-    <ClInclude Include="files\Networking\Client\Protocols\CProtocol.h" />
+    <ClInclude Include="files\Networking\Client\Groups\CConnectGroup.h" />
+    <ClInclude Include="files\Networking\Client\Groups\CGroup.h" />
     <ClInclude Include="files\Networking\Packets\Data\ClientConnect.h" />
     <ClInclude Include="files\Networking\Packets\Data\Heartbeat.h" />
     <ClInclude Include="files\Networking\Packets\Packet.h" />

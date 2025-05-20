@@ -68,12 +68,6 @@ std::string LogScope::add_context_prefix(const std::string& message, LogContext 
     case LogContext::CLIENT:
         context_str = "\033[1;36mCLIENT\033[0m | " + thread_id;
         break;
-	case LogContext::SERVER_PROTOCOL:
-		context_str = "\033[1;33mS_PROTOC\033[0m | " + thread_id;
-		break;
-	case LogContext::CLIENT_PROTOCOL:
-		context_str = "\033[1;35mC_PROTOC\033[0m | " + thread_id;
-		break;
 	case LogContext::SHARED_NETWORKING:
 		context_str = "\033[1;34mSHARED\033[0m | " + thread_id;
 		break;

@@ -14,5 +14,4 @@ void SGroup::activate() {
 
 void SGroup::deactivate() {
 	// Remove event callbacks
-	server = nullptr;
 }
