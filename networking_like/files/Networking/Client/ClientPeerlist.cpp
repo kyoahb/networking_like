@@ -165,3 +165,15 @@ std::vector<LocalNetPeer> ClientPeerlist::get_peers() const {
 	}
 	return peers;
 }
+
+std::string ClientPeerlist::get_polite_handle(uint8_t id) const {
+	LOG_SCOPE_CLIENT;
+	if (!connected) {
+		Log::error("ClientPeerlist is not connected, cannot get polite handle");
+	}
+	std::optional<LocalNetPeer> found_peer = get_peer(id);
+	if (found_peer.has_value()) {
+		return found_peer.value().handle + " ID_" + std::to_string(id);
+	}
+	return "?_LocalPeer ID_" + std::to_string(id);
+}

@@ -10,8 +10,6 @@ public:
 
 	void on_draw() override;
 
-	std::function<void(const std::string& address, int port)> onHostButtonClick;
-	std::function<void(const std::string& address, int port)> onJoinButtonClick;
 	std::function<void()> onExitButtonClick;
 
 };

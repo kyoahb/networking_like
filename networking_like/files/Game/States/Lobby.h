@@ -16,9 +16,18 @@ private:
 
 public:
 	LobbyMember(std::string _name, int _id, int _y_offset);
+	LobbyMember() = default;
 	
 	std::string name;
-	std::string idStr;
+	int id;
+
+	void draw();
+};
+
+class LocalMember : public LobbyMember {
+public:
+	LocalMember(LocalNetPeer self);
+	LocalMember() = default;
 
 	void draw();
 };
@@ -38,6 +47,7 @@ public:
 	void on_client_disconnected(const Events::Client::DisconnectData& data);
 
 private:
+	LocalMember self;
 	std::vector<LobbyMember> members;
 
 	int initial_y_offset = 50;
@@ -46,4 +56,7 @@ private:
 	int on_peer_added_callbackid = 0; // Need to save this in order to later unregister it
 	int on_peer_removed_callbackid = 0; // Need to save this in order to later unregister it
 	int on_client_disconnected_callbackid = 0; // Need to save this in order to later unregister it
+
+	void draw_kick_button(LobbyMember member);
+	bool is_host = false; // Is the client the host of the lobby? Accessed by checking if game.server exists
 };

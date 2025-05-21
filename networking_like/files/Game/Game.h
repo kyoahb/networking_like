@@ -13,6 +13,9 @@ public:
 	Game();
 	~Game();
 	void begin();
+
+	void create_server(const std::string& address, int port);
+	void create_client(const std::string& address, int port);
 	
 	// Left public to be accessible to GameStates.
 	raylib::Window window;

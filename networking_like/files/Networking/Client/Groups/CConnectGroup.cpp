@@ -35,7 +35,6 @@ void CConnectGroup::on_event_receive(const Events::Client::EventReceiveData& dat
 	if (packet.header.type != PacketType::CLIENT_CONNECT) return;
 
 
-
 	if (packet.header.subtype == CLIENT_CONNECT_RELAY) {
 		// Received a CLIENT_CONNECT_RELAY packet
 		ClientConnectRelay client_connect_relay = SerializationUtils::deserialize<ClientConnectRelay>(packet.data, packet.header.size);
@@ -59,11 +58,10 @@ void CConnectGroup::on_event_receive(const Events::Client::EventReceiveData& dat
 			Log::error("CLIENT_DISCONNECT:RELAY received, but peer not found in peerlist.");
 		}
 		else {
+			Log::trace("CLIENT_DISCONNECT:RELAY received. Removed peer: " + client->peers.get_polite_handle(client_disconnect_relay.client_id));
+			client->peers.remove_peer(client_disconnect_relay.client_id); // Remove peer from the peerlist
 			Events::Client::PeerRemoved::trigger(Events::Client::PeerRemovedData(peer.value()));
 		}
-
-		client->peers.remove_peer(client_disconnect_relay.client_id); // Remove peer from the peerlist
-		Log::trace("CLIENT_DISCONNECT:RELAY received. Removed peer: " + client_disconnect_relay.client_id);
 	}
 
 

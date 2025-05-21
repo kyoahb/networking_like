@@ -226,7 +226,9 @@ void Client::disconnect_event(const ENetEvent& event) {
 	peers.clear();
 	enet_peer_reset(event.peer);
 
+	Events::Client::Disconnect::trigger(Events::Client::DisconnectData("Server disconnected"));
 	stop();
+	
 }
 
 void Client::receive_event(const ENetEvent& event) {

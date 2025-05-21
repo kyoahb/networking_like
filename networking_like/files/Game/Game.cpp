@@ -16,30 +16,6 @@ Game::Game() {
 
 	// Setup main menu
 	std::shared_ptr<MainMenu> mainMenu = std::make_shared<MainMenu>(*this);
-	mainMenu->onHostButtonClick = [this](const std::string& address, int port) {
-		// Make server
-		if (server == nullptr) {
-			server = std::make_shared<Server>(address, port);
-		}
-		server->start();
-
-
-		// Also make client
-		if (client == nullptr) {
-			// Destroy old server
-			client = std::make_shared<Client>();
-		} 
-		client->connect(address, port, "Client").wait();
-		};
-
-	mainMenu->onJoinButtonClick = [this](const std::string& address, int port) {
-		// Make client
-		if (client == nullptr) {
-			// Destroy old server
-			client = std::make_shared<Client>();
-		}
-		client->connect(address, port, "Client").wait();
-		};
 	
 	mainMenu->onExitButtonClick = [this]() {
 		// Exit the game
@@ -89,4 +65,20 @@ void Game::update() {
 	rlImGuiEnd(); // End Raylib-ImGUI frame
 	EndDrawing(); // Tell Raylib we are done drawing
 
+}
+
+void Game::create_server(const std::string& address, int port) {
+	// Create server
+	if (server == nullptr) {
+		server = std::make_shared<Server>(address, port);
+	}
+	server->start();
+}
+
+void Game::create_client(const std::string& address, int port) {
+	// Create client
+	if (client == nullptr) {
+		client = std::make_shared<Client>();
+	}
+	client->connect(address, port, "Client").wait();
 }

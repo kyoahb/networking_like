@@ -24,6 +24,8 @@ public:
 	const std::optional<LocalNetPeer> get_peer(uint8_t id) const;
 	const std::optional<LocalNetPeer> get_peer(std::string handle) const;
 
+	std::string get_polite_handle(uint8_t id) const;
+
 	const LocalNetPeer& get_self();
 	NetPeer& get_server();
 

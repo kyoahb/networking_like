@@ -1,13 +1,35 @@
 #include "Lobby.h"
 #include "Game/Game.h"
 
-LobbyMember::LobbyMember(std::string _name, int _id, int _y_offset) : name(_name), idStr(std::to_string(_id)), y_offset(_y_offset) {
+LobbyMember::LobbyMember(std::string _name, int _id, int _y_offset) : name(_name), id(_id), y_offset(_y_offset) {
 }
 
 void LobbyMember::draw() {
 	ImGui::Text("%s", name.c_str());
 	ImGui::SameLine();
-	ImGui::Text("%s", idStr.c_str());
+	ImGui::Text("%s", std::to_string(id).c_str());
+
+	if (id == 0) {
+		ImGui::SameLine();
+		ImGui::Text("HOST");
+	}
+}
+
+LocalMember::LocalMember(LocalNetPeer self) : LobbyMember(self.handle, self.id, 0) {
+	// Constructor implementation
+}
+
+void LocalMember::draw() {
+	ImGui::Text("%s", name.c_str());
+	ImGui::SameLine();
+	ImGui::Text("%s", std::to_string(id).c_str());
+	ImGui::SameLine();
+	ImGui::Text("You");
+
+	if (id == 0) {
+		ImGui::SameLine();
+		ImGui::Text("HOST");
+	}
 }
 
 Lobby::Lobby(Game& _game) : GameState(_game, "Lobby") {
@@ -20,7 +42,7 @@ Lobby::~Lobby() {
 
 void Lobby::add_all_members() {
 	// Add self
-	members.emplace_back(game.client->peers.get_self().handle, game.client->peers.get_self().id, 0);
+	self = LocalMember(game.client->peers.get_self());
 
 	// Add peers
 	int y_offset = initial_y_offset;
@@ -35,6 +57,14 @@ void Lobby::on_activate() {
 		Log::error("Client is not initialized");
 		return;
 	}
+
+	if (game.server != nullptr) { // Check if user is host
+		is_host = true;
+	}
+	else {
+		is_host = false;
+	}
+
 	// Subscribe to events
 	on_peer_added_callbackid = Events::Client::PeerAdded::register_callback([this](const Events::Client::PeerAddedData& data) {
 		this->on_peer_added(data);
@@ -47,6 +77,7 @@ void Lobby::on_activate() {
 		});
 
 	// Add members from peers list & self
+	members.clear();
 	add_all_members();
 }
 
@@ -83,8 +114,13 @@ void Lobby::on_draw() {
 			Log::asserts(false, "Failed to set state to MainMenu from Lobby");
 		}
 	}
+	self.draw();
 	for (auto& member : members) {
 		member.draw();
+		if (is_host) { // Only draw kick button if we are the host
+			ImGui::SameLine();
+			draw_kick_button(member);
+		}
 	}
 }
 
@@ -102,5 +138,21 @@ void Lobby::on_client_disconnected(const Events::Client::DisconnectData& data) {
 	// Return to main menu
 	if (!game.stateManager.setState("MainMenu")) {
 		Log::asserts(false, "Failed to set state to MainMenu from Lobby");
+	}
+}
+
+void Lobby::draw_kick_button(LobbyMember member) {
+	Log::asserts(game.server != nullptr, "Server must exist to draw kick button");
+
+	// Get ENetPeer* from member's handle
+	auto peer = game.server->peers.get_peer(member.name);
+	
+	Log::asserts(peer.has_value(), "Peer not found in server's peer list, cannot draw kick button");
+
+	ENetPeer* enet_peer = peer->peer;
+
+	if (ImGui::Button("Kick", ImVec2(50, 20))) {
+
+		game.server->disconnect_peer(enet_peer);
 	}
 }

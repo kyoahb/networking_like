@@ -26,19 +26,23 @@ void MainMenu::on_draw() {
 
     ImGui::Text("Game");
 
-    if (ImGui::Button("Host", ImVec2(200, 100))) {
-        onHostButtonClick("127.0.0.1", 7777);
+    std::string address = "127.0.0.1";
+    int port = 7777;
 
-        if (game.client->is_connected())
+    if (ImGui::Button("Host", ImVec2(200, 100))) {
+        game.create_server(address, port);
+		game.create_client(address, port);
+
+        Log::asserts(game.client->is_connected(), "Failed to connect to server from MainMenu");
         if (!game.stateManager.setState("Lobby")) {
             Log::asserts(false, "Failed to set state to Lobby from MainMenu");
         }
     }
 
     if (ImGui::Button("Join", ImVec2(200, 100))) {
-        onJoinButtonClick("127.0.0.1", 7777);
+        game.create_client(address, port);
 
-        if (game.client->is_connected())
+		Log::asserts(game.client->is_connected(), "Failed to connect to server from MainMenu");
         if (!game.stateManager.setState("Lobby")) {
             Log::asserts(false, "Failed to set state to Lobby from MainMenu");
         }
