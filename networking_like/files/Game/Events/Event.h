@@ -31,26 +31,20 @@ public:
 	}
 
 	static void trigger(const EventData& data) {
-		LOG_SCOPE_TEST
-		std::vector<std::future<void>> futures;
+		LOG_SCOPE_TEST;
 
-		for (auto it = callbacks.begin(); it != callbacks.end(); ) {
-			if (it->second) { // Check if the callback is valid
-				// Launch the callback asynchronously
-				futures.push_back(std::async(std::launch::async, it->second, std::cref(data)));
-				++it;
+		auto callbacks_copy = callbacks; // or just: auto callbacks_copy = callbacks;
+
+		for (const auto& [id, callback] : callbacks_copy) {
+			if (callback) {
+				std::async(std::launch::async, callback, data);
 			}
 			else {
-				// Remove invalid callbacks
-				Log::trace("Invalid callback for event type " + std::string(typeid(EventData).name()) + " removed. Callback ID: " + std::to_string(it->first));
-				it = callbacks.erase(it);
+				Log::error("Invalid callback with id " + std::to_string(id) + " found.");
+				callbacks.erase(id); // Remove invalid callback if it is null
 			}
 		}
 
-		// Optionally, wait for all asynchronous tasks to complete
-		/*for (auto& future : futures) {
-			future.wait();
-		}*/
 	}
 
 	static CallbackID next_callback_id;
