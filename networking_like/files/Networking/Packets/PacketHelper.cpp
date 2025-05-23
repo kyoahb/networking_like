@@ -10,20 +10,20 @@ std::unordered_map<PacketDirection, std::string> PacketHelper::packet_direction_
 // Define the hierarchical structure of packet types and subtypes
 std::unordered_map<PacketType, PacketHelper::TypeInfo> PacketHelper::packet_types = {
     {PacketType::UNKNOWN_TYPE, {"UNKNOWN", {}}},
-	{PacketType::ANY_TYPE, {"ANY", {}}},
-
-    {PacketType::CHAT, {"CHAT", {
-        {0, {"UNKNOWN", {}}},
-        {1, {"MESSAGE", {}}},
-        {2, {"END", {}}}
-    }}},
+    {PacketType::ANY_TYPE, {"ANY", {}}},
 
     {PacketType::CLIENT_CONNECT, {"CLIENT_CONNECT", {
         {255, {"ANY", {}}},
         {1, {"BEGIN", {}}},
         {2, {"RELAY", {}}},
-		{3, {"CONFIRM", {}}},
-		{4, {"DISCONNECT_RELAY", {}}}
+        {3, {"CONFIRM", {}}},
+    }}},
+
+    {PacketType::CLIENT_DISCONNECT, {"CLIENT_DISCONNECT", {
+        {255, {"ANY", {}}},
+        {1, {"BEGIN", {}}},
+        {2, {"RELAY", {}}},
+        {3, {"CONFIRM", {}}},
     }}}
 };
 

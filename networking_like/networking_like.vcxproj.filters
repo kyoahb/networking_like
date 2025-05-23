@@ -83,6 +83,9 @@
     <Filter Include="Networking\Client\Groups">
       <UniqueIdentifier>{a7c00330-3636-4296-aba6-78510d38d95d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Networking\Packets\Data\CLIENT_DISCONNECT">
+      <UniqueIdentifier>{18d0e4c0-06e8-4896-bd09-516fc216d061}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -170,6 +173,9 @@
       <Filter>Networking\Client\Groups</Filter>
     </ClCompile>
     <ClCompile Include="files\Networking\Client\Groups\CConnectGroup.cpp">
+      <Filter>Networking\Client\Groups</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Client\Groups\CDisconnectGroup.cpp">
       <Filter>Networking\Client\Groups</Filter>
     </ClCompile>
   </ItemGroup>
@@ -436,6 +442,12 @@
       <Filter>Networking\Client\Groups</Filter>
     </ClInclude>
     <ClInclude Include="files\Networking\Client\Groups\CGroup.h">
+      <Filter>Networking\Client\Groups</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Packets\Data\ClientDisconnect.h">
+      <Filter>Networking\Packets\Data\CLIENT_DISCONNECT</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Groups\CDisconnectGroup.h">
       <Filter>Networking\Client\Groups</Filter>
     </ClInclude>
   </ItemGroup>

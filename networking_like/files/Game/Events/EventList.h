@@ -82,8 +82,8 @@ namespace Events {
 
 		// Client disconnected
 		struct DisconnectData : public BaseEventData {
-			const std::string& message;
-			explicit DisconnectData(const std::string& message) : message(message) {};
+			DisconnectResult result;
+			explicit DisconnectData(DisconnectResult result) : result(result) {};
 		};
 		using Disconnect = Event<DisconnectData>;
 

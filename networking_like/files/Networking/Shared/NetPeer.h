@@ -10,7 +10,8 @@ class LocalNetPeer {
 public:
 	uint8_t id = 0;
 	std::string handle = "LocalNetPeer";
-	
+	bool is_host = false;
+
 	LocalNetPeer(uint8_t _id, std::string _handle);
 	LocalNetPeer() = default;
 };

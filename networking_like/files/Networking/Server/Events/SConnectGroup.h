@@ -21,6 +21,10 @@ private:
 	int update_callback;
 	int event_receive_callback;
 
+	uint8_t next_id = 0; // Next ID to assign to a new client
+	uint8_t get_next_id(); // Get the next ID to assign to a new client
+
+	std::string get_handle(const std::string& preferred_handle, uint8_t id); // Get a handle for the client, based on the preferred handle
 
 	std::unordered_map<ENetPeer*, uint64_t> pending_begins; // Set of peers that are pending a CLIENT_CONNECT_BEGIN packet
 	const unsigned int CONNECTBEGIN_TIMEOUT = 5000; // Timeout for client connection

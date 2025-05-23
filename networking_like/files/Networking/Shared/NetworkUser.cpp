@@ -61,8 +61,9 @@ bool NetworkUser::send_packet(const Packet& packet, ENetPeer* peer) {
 
 	// Check result of sending packet
 	int result = enet_peer_send(peer, 0, enet_packet);
+	enet_host_flush(host);
 	if (result < 0) {
-		Log::error("Failed to send packet to peer w/ID: " + std::to_string(peer->incomingPeerID));
+		Log::error("Failed to send packet to peer w/No: " + std::to_string(peer->incomingPeerID));
 		return false;
 	}
 	return true;

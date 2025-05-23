@@ -143,6 +143,7 @@
     <ClCompile Include="files\Networking\Client\Client.cpp" />
     <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
     <ClCompile Include="files\Networking\Client\Groups\CConnectGroup.cpp" />
+    <ClCompile Include="files\Networking\Client\Groups\CDisconnectGroup.cpp" />
     <ClCompile Include="files\Networking\Client\Groups\CGroup.cpp" />
     <ClCompile Include="files\Networking\Packets\Packet.cpp" />
     <ClCompile Include="files\Networking\Packets\PacketData.cpp" />
@@ -174,8 +175,10 @@
     <ClInclude Include="files\Networking\Client\Client.h" />
     <ClInclude Include="files\Networking\Client\ClientPeerlist.h" />
     <ClInclude Include="files\Networking\Client\Groups\CConnectGroup.h" />
+    <ClInclude Include="files\Networking\Client\Groups\CDisconnectGroup.h" />
     <ClInclude Include="files\Networking\Client\Groups\CGroup.h" />
     <ClInclude Include="files\Networking\Packets\Data\ClientConnect.h" />
+    <ClInclude Include="files\Networking\Packets\Data\ClientDisconnect.h" />
     <ClInclude Include="files\Networking\Packets\Data\Heartbeat.h" />
     <ClInclude Include="files\Networking\Packets\Packet.h" />
     <ClInclude Include="files\Networking\Packets\PacketData.h" />

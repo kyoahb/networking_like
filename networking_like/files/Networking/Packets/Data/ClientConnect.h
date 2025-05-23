@@ -7,7 +7,6 @@ enum ClientConnectType : uint8_t {
 	CLIENT_CONNECT_BEGIN = 1,
 	CLIENT_CONNECT_RELAY = 2,
 	CLIENT_CONNECT_CONFIRM = 3,
-	CLIENT_DISCONNECT_RELAY = 4,
 };
 
 // Client -> Server
@@ -31,7 +30,7 @@ public:
 	std::string client_handle = ""; // Handle of the client that connected
 
 
-	template <class Archive>
+	template <typename Archive>
 	void serialize(Archive& archive) {
 		archive(client_id, client_handle);
 	}
@@ -53,16 +52,4 @@ public:
 		archive(server_preferred_handle, client_decided_handle, client_id, other_clients);
 	}
 
-};
-
-// Server -> Client
-// Subtype 4 (CLIENT_DISCONNECT_RELAY)
-class ClientDisconnectRelay : public PacketData {
-public:
-	uint8_t client_id = 0; // ID of the client that connected
-
-	template <class Archive>
-	void serialize(Archive& archive) {
-		archive(client_id);
-	}
 };

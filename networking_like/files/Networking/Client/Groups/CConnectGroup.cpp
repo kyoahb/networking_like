@@ -49,20 +49,6 @@ void CConnectGroup::on_event_receive(const Events::Client::EventReceiveData& dat
 			Events::Client::PeerAdded::trigger(Events::Client::PeerAddedData(peer.value()));
 		}
 	}
-	else if (packet.header.subtype == CLIENT_DISCONNECT_RELAY) {
-		// Received a CLIENT_DISCONNECT_RELAY packet
-		ClientDisconnectRelay client_disconnect_relay = SerializationUtils::deserialize<ClientDisconnectRelay>(packet.data, packet.header.size);
-
-		std::optional<LocalNetPeer> peer = client->peers.get_peer(client_disconnect_relay.client_id);
-		if (!peer.has_value()) {
-			Log::error("CLIENT_DISCONNECT:RELAY received, but peer not found in peerlist.");
-		}
-		else {
-			Log::trace("CLIENT_DISCONNECT:RELAY received. Removed peer: " + client->peers.get_polite_handle(client_disconnect_relay.client_id));
-			client->peers.remove_peer(client_disconnect_relay.client_id); // Remove peer from the peerlist
-			Events::Client::PeerRemoved::trigger(Events::Client::PeerRemovedData(peer.value()));
-		}
-	}
 
 
 }

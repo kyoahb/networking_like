@@ -145,14 +145,14 @@ void Lobby::draw_kick_button(LobbyMember member) {
 	Log::asserts(game.server != nullptr, "Server must exist to draw kick button");
 
 	// Get ENetPeer* from member's handle
-	auto peer = game.server->peers.get_peer(member.name);
+	auto peer = game.server->peers.get_peer(member.id);
 	
-	Log::asserts(peer.has_value(), "Peer not found in server's peer list, cannot draw kick button");
+	if (peer.has_value()) {
 
-	ENetPeer* enet_peer = peer->peer;
+		ENetPeer* enet_peer = peer->peer;
 
-	if (ImGui::Button("Kick", ImVec2(50, 20))) {
-
-		game.server->disconnect_peer(enet_peer);
+		if (ImGui::Button("Kick", ImVec2(50, 20))) { // Kick Button
+			game.server->disconnect_peer(enet_peer);
+		}
 	}
 }

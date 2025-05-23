@@ -7,17 +7,35 @@ ServerPeerlist::ServerPeerlist() {
 void ServerPeerlist::clear() {
 	LOG_SCOPE_SERVER;
 	peers.clear();
-	self = LocalNetPeer();
+	reset_host_availability();
 }
 
 void ServerPeerlist::add_peer(ENetPeer* peer, uint8_t id, std::string handle) {
 	LOG_SCOPE_SERVER;
 	NetPeer net_peer(peer, id, handle);
+
+	if (is_next_peer_host) {
+		net_peer.is_host = true;
+		is_next_peer_host = false;
+	}
+	else {
+		net_peer.is_host = false;
+	}
+
 	add_peer(net_peer);
 }
 
 void ServerPeerlist::add_peer(NetPeer peer) {
 	LOG_SCOPE_SERVER;
+
+	if (is_next_peer_host) {
+		peer.is_host = true;
+		is_next_peer_host = false;
+	}
+	else {
+		peer.is_host = false;
+	}
+
 	peers.push_back(peer);
 }
 
@@ -57,7 +75,7 @@ void ServerPeerlist::remove_peer(std::string handle) {
 void ServerPeerlist::remove_peer(ENetPeer* peer) {
 	LOG_SCOPE_SERVER;
 	for (auto it = peers.begin(); it != peers.end(); ++it) {
-		if (it->id == peer->incomingPeerID) {
+		if (it->peer == peer) {
 			peers.erase(it);
 			return;
 		}
@@ -91,7 +109,7 @@ const std::optional<NetPeer> ServerPeerlist::get_peer(std::string handle) const 
 const std::optional<NetPeer> ServerPeerlist::get_peer(ENetPeer* peer) const {
 	LOG_SCOPE_SERVER;
 	for (auto p : peers) {
-		if (p.id == peer->incomingPeerID) {
+		if (p.peer == peer) {
 			return p;
 		}
 	}
@@ -99,18 +117,13 @@ const std::optional<NetPeer> ServerPeerlist::get_peer(ENetPeer* peer) const {
 	return std::nullopt;
 }
 
-const LocalNetPeer& ServerPeerlist::get_self() {
-	LOG_SCOPE_SERVER;
-	return self;
-}
-
 std::string ServerPeerlist::get_polite_handle(ENetPeer* peer) const {
 	LOG_SCOPE_SERVER;
 	std::optional<NetPeer> found_peer = get_peer(peer);
 	if (found_peer.has_value()) {
-		return found_peer.value().handle + " ID_" + std::to_string(peer->incomingPeerID);
+		return found_peer.value().handle + " ID_" + std::to_string(found_peer.value().id);
 	}
-	return "Unregistered_Peer ID_" + std::to_string(peer->incomingPeerID);
+	return "Unregistered_Peer No_" + std::to_string(peer->incomingPeerID);
 }
 
 std::vector<NetPeer> ServerPeerlist::get_peers() const {
@@ -122,7 +135,7 @@ std::vector<NetPeer> ServerPeerlist::get_peers() const {
 bool ServerPeerlist::is_peer_connected(ENetPeer* peer) const {
 	LOG_SCOPE_SERVER;
 	for (auto p : peers) {
-		if (p.id == peer->incomingPeerID) {
+		if (p.peer == peer) {
 			return true;
 		}
 	}
@@ -147,4 +160,21 @@ bool ServerPeerlist::is_peer_connected(std::string handle) const {
 		}
 	}
 	return false;
+}
+
+const std::optional<NetPeer> ServerPeerlist::get_admin_peer() const {
+	LOG_SCOPE_SERVER;
+
+	for (auto p : peers) {
+		if (p.is_host) {
+			return p;
+		}
+	}
+	return std::nullopt;
+}
+
+void ServerPeerlist::reset_host_availability() {
+	LOG_SCOPE_SERVER;
+	is_next_peer_host = true;
+	is_host_set = false;
 }

@@ -47,7 +47,7 @@ void SConnectGroup::event_receive(const Events::Server::EventReceiveData& data) 
     if (event.type == ENET_EVENT_TYPE_CONNECT) {
         Log::trace("Connect event received for peer: " + peer_handle + " , waiting for CLIENT_CONNECT_BEGIN packet");
         if (server->peers.is_peer_connected(event.peer)) {
-            Log::warn("Connect event received for known peer: " + peer_handle);
+            Log::warn("Connect event received for connected peer: " + peer_handle);
             return;
         }
 
@@ -55,6 +55,9 @@ void SConnectGroup::event_receive(const Events::Server::EventReceiveData& data) 
         pending_begins[event.peer] = TimeUtils::get_current_time_millis();
         Events::Server::ClientConnect::trigger(Events::Server::ClientConnectData(event.peer));
     }
+
+
+
     else if (event.type == ENET_EVENT_TYPE_RECEIVE) {
         Packet packet(event.packet);
         if (!(packet.header.type == PacketType::CLIENT_CONNECT && packet.header.subtype == ClientConnectType::CLIENT_CONNECT_BEGIN))
@@ -70,20 +73,17 @@ void SConnectGroup::event_receive(const Events::Server::EventReceiveData& data) 
 
         ClientConnectBegin client_connect_begin = SerializationUtils::deserialize<ClientConnectBegin>(packet.data, packet.header.size);
 
-        std::string client_decided_handle = client_connect_begin.client_preferred_handle;
-        while (server->peers.is_peer_connected(client_decided_handle)) {
-            client_decided_handle = client_connect_begin.client_preferred_handle + "_" + std::to_string(rand() % 10000);
-            // May break here
-        }
+		uint8_t client_id = get_next_id();
+		std::string client_decided_handle = get_handle(client_connect_begin.client_preferred_handle, client_id);
 
-        NetPeer new_peer(event.peer, event.peer->incomingPeerID, client_decided_handle);
+        NetPeer new_peer(event.peer, client_id, client_decided_handle);
         server->peers.add_peer(new_peer);
 
         // Send CLIENT_CONNECT_CONFIRM
         ClientConnectConfirm client_connect_confirm;
-        client_connect_confirm.server_preferred_handle = server->peers.self.handle;
+        client_connect_confirm.server_preferred_handle = "Server"; // TODO: Make this usable
         client_connect_confirm.client_decided_handle = client_decided_handle;
-        client_connect_confirm.client_id = new_peer.id;
+        client_connect_confirm.client_id = client_id;
         client_connect_confirm.other_clients = netpeer_list_to_relay_list(server->peers.get_peers(), event.peer);
 
         std::string serialised_data = SerializationUtils::serialize<ClientConnectConfirm>(client_connect_confirm);
@@ -115,4 +115,34 @@ std::vector<ClientConnectRelay> SConnectGroup::netpeer_list_to_relay_list(const 
             relays.push_back(netpeer_to_relay(peer));
     }
     return relays;
+}
+
+uint8_t SConnectGroup::get_next_id() {
+    uint8_t id = next_id;
+    if (next_id >= 254) {
+        throw std::runtime_error("ID overflow: server has had too many peers, please reset the server");
+    }
+
+	next_id++;
+
+	return id;
+}
+
+std::string SConnectGroup::get_handle(const std::string& preferred_handle, uint8_t id) {
+	std::string handle = preferred_handle;
+    
+	// Check if handle is already taken
+
+    // If handle is taken, First: try append their id to end of preferred handle
+    if (server->peers.is_peer_connected(handle)) {
+		handle = preferred_handle + "_" + std::to_string(id);
+    }
+
+	// If still taken, append a random number
+	while (server->peers.is_peer_connected(handle)) {
+		handle = preferred_handle + "_" + std::to_string(rand() % 10000);
+		// Possible (theoretically) that all of these are taken but it's unlikely
+	}
+
+	return handle;
 }

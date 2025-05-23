@@ -27,4 +27,5 @@ private:
 	const unsigned int CHECK_INTERVAL = 1000; // Check interval in milliseconds
 
 	void add_pending_disconnect(ENetPeer* peer, DisconnectResultReason reason); // Add a pending disconnect
+	void send_relay_to_others(ENetPeer* excluded);
 };

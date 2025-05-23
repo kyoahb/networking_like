@@ -68,6 +68,7 @@ void Server::broadcast_packet(const Packet& packet, std::vector<ENetPeer*> exclu
 			}
 		}
 	}
+	enet_host_flush(host);
 }
 
 Server::~Server() {

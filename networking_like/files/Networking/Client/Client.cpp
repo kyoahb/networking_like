@@ -63,78 +63,11 @@ std::future<ConnectResult> Client::connect(const std::string& ip, uint16_t port,
 
 std::future<DisconnectResult> Client::disconnect() {
 	LOG_SCOPE_CLIENT;
-	Log::trace("Disconnecting from server... calling stop()");
-	if (active) {
-		stop();
-	}
+	Log::trace("Disconnecting from server...");
 
 	return std::async(std::launch::async, [this]() {
-		return disconnect_thread(DisconnectResultReason::USER_REQUESTED);
+		return disconnect_group->disconnect(DisconnectResultReason::USER_REQUESTED);
 	});
-}
-
-DisconnectResult Client::disconnect_thread(DisconnectResultReason reason) {
-	LOG_SCOPE_CLIENT;
-
-	//TODO: Move to CDisconnect protocol
-
-	DisconnectResult result;
-	result.type = DisconnectResultType::UNKNOWN;
-	result.reason = DisconnectResultReason::UNKNOWN;
-
-	if (!is_connected()) {
-		Log::warn("Client is not connected, cannot disconnect");
-		result.type = DisconnectResultType::FAILED;
-		result.reason = DisconnectResultReason::USER_REQUESTED;
-		return result;
-	}
-
-	uint64_t start_time = TimeUtils::get_current_time_millis();
-
-	// Send disconnect packet
-	enet_peer_disconnect(peers.get_server().peer, 0);
-
-	// Wait for disconnect confirmation
-	const int TIMEOUT_MS = 5000;
-	const int UPDATE_INTERVAL_MS = 1000;
-	unsigned int elapsed_ms = 0;
-	ENetEvent event;
-
-	bool confirmed = false;
-	while ((elapsed_ms < TIMEOUT_MS) && !confirmed) {
-		if (enet_host_service(host, &event, UPDATE_INTERVAL_MS) > 0) {
-			switch (event.type) {
-			case ENET_EVENT_TYPE_DISCONNECT:
-				Log::trace("Disconnected from server");
-				confirmed = true;
-				break;
-			default:
-				enet_packet_destroy(event.packet);
-				break;
-			}
-		}
-		elapsed_ms += UPDATE_INTERVAL_MS;
-		Log::trace("Waiting for disconnect confirmation... " + std::to_string(elapsed_ms) + "ms elapsed");
-	}
-
-	if (elapsed_ms >= TIMEOUT_MS) {
-		Log::error("Disconnect confirmation timed out");
-		result.type = DisconnectResultType::FORCED;
-		enet_peer_reset(peers.get_server().peer);
-
-		Events::Client::Disconnect::trigger(Events::Client::DisconnectData("Client requested, but server did not respond, so had to force"));
-	}
-	else {
-		Log::trace("Disconnect confirmation received");
-		result.type = DisconnectResultType::SUCCESS;
-
-		Events::Client::Disconnect::trigger(Events::Client::DisconnectData("Client requested disconnect"));
-	}
-
-	peers.clear();
-	
-	result.time_taken = TimeUtils::get_current_time_millis() - start_time;
-	return result;
 }
 
 // PACKET SENDING
@@ -201,44 +134,8 @@ void Client::update() {
 	ENetEvent event;
 	while (enet_host_service(host, &event, 0) > 0) {
 		Events::Client::EventReceive::trigger(Events::Client::EventReceiveData(event));
-		switch (event.type) {
-		case ENET_EVENT_TYPE_RECEIVE:
-			receive_event(event);
-			break;
-		case ENET_EVENT_TYPE_DISCONNECT:
-			disconnect_event(event);
-		
-			return; // Stop update loop if disconnected
-		default:
-			break;
-		}
 	}
 	Events::Client::Update::trigger(Events::Client::UpdateData());
-}
-
-// EVENTS
-
-void Client::disconnect_event(const ENetEvent& event) {
-	LOG_SCOPE_CLIENT;
-	Log::trace("Forceful disconnect event received, stopping");
-	
-	enet_packet_destroy(event.packet);
-	peers.clear();
-	enet_peer_reset(event.peer);
-
-	Events::Client::Disconnect::trigger(Events::Client::DisconnectData("Server disconnected"));
-	stop();
-	
-}
-
-void Client::receive_event(const ENetEvent& event) {
-	LOG_SCOPE_CLIENT;
-	
-	/*
-	Packet p(event.packet);
-	Log::trace("Received packet: " + PacketHelper::types_to_string(p) + " from " + peers.get_server().handle);
-	*/
-	
 }
 
 // Protocols
@@ -255,6 +152,8 @@ void Client::initialize_groups() {
 
 	connect_group = std::make_shared<CConnectGroup>(shared_from_this());
 	add_group(connect_group);
+	disconnect_group = std::make_shared<CDisconnectGroup>(shared_from_this());
+	add_group(disconnect_group);
 }
 
 
