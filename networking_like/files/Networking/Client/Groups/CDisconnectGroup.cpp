@@ -73,6 +73,8 @@ void CDisconnectGroup::event_receive(const Events::Client::EventReceiveData& dat
 		std::string serialized = SerializationUtils::serialize<ClientDisconnectConfirm>(client_disconnect_confirm);
 		Packet confirm_packet(PacketType::CLIENT_DISCONNECT, PacketDirection::CLIENT_TO_SERVER, ClientDisconnectType::CLIENT_DISCONNECT_CONFIRM, serialized.data(), serialized.size(), true);
 		client->send_packet(confirm_packet); // Send confirm packet to server
+		enet_host_flush(client->host); // Flush the host to ensure the packet is sent immediately
+		Log::trace("CLIENT_DISCONNECT_CONFIRM sent to server. Now removing server_peer");
 
 		// Just in case
 		enet_peer_disconnect(client->peers.get_server().peer, 0); // Send disconnect packet to server just to let it know

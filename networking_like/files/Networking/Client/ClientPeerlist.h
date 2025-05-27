@@ -14,7 +14,7 @@ public:
 	void connect(ENetPeer* server_peer);
 	void setup_by_confirmation(const ClientConnectConfirm& connection_confirmation);
 
-	void add_peer(uint8_t id, std::string handle);
+	void add_peer(uint8_t id, std::string handle, bool is_host = false);
 	void add_peer(LocalNetPeer& peer);
 
 	void remove_peer(uint8_t id);

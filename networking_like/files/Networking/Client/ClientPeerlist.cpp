@@ -41,22 +41,23 @@ void ClientPeerlist::setup_by_confirmation(const ClientConnectConfirm& connectio
 
 	self.id = connection_confirmation.client_id;
 	self.handle = connection_confirmation.client_decided_handle;
-
+	self.is_host = connection_confirmation.is_host;
 	// Unused
 	server.handle = connection_confirmation.server_preferred_handle;
 	
 	// Setup other clients
-	for (const auto& client : connection_confirmation.other_clients) {
-		add_peer(client.client_id, client.client_handle);
+	for (const auto& cl : connection_confirmation.other_clients) {
+		add_peer(cl.client_id, cl.client_handle, cl.is_host);
 	}
 }
 
-void ClientPeerlist::add_peer(uint8_t id, std::string handle) {
+void ClientPeerlist::add_peer(uint8_t id, std::string handle, bool is_host) {
 	LOG_SCOPE_CLIENT;
 
 	LocalNetPeer peer;
 	peer.id = id;
 	peer.handle = handle;
+	peer.is_host = is_host;
 	add_peer(peer);
 }
 

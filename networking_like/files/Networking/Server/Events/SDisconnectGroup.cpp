@@ -91,7 +91,7 @@ void SDisconnectGroup::event_receive(const Events::Server::EventReceiveData& dat
 			Log::warn("CLIENT_DISCONNECT:CONFIRM received from unregistered peer: " + handle);
 			return;
 		}
-		Log::trace("CLIENT_DISCONNECT:CONFIRM received from peer: " + handle);
+		Log::trace("CLIENT_DISCONNECT:CONFIRM received from peer: " + handle + " erasing pending disconnect.");
 		pending_disconnects.erase(event.peer);
 	}
 
@@ -142,12 +142,16 @@ DisconnectResult SDisconnectGroup::disconnect_peer(ENetPeer* peer, DisconnectRes
 		Log::error("Peer is not connected, cannot disconnect");
 		return DisconnectResult(DisconnectResultType::FAILED, reason, "Peer is not connected", 0);
 	}
+	std::string handle = server->peers.get_polite_handle(peer);
 	if (pending_disconnects.find(peer) != pending_disconnects.end()) {
-		Log::error("Peer is already pending disconnect, cannot disconnect");
+		Log::error("Peer " + handle + " is already pending disconnect, cannot disconnect");
 		return DisconnectResult(DisconnectResultType::FAILED, reason, "Peer is already pending disconnect", 0);
 	}
 	
-	std::string handle = server->peers.get_polite_handle(peer);
+
+	// Add pending disconnect
+	Log::trace("Added pending disconnect for peer: " + handle);
+	add_pending_disconnect(peer, reason);
 
 	// Send a CLIENT_DISCONNECT_BEGIN packet to the client
 	ClientDisconnectBegin client_disconnect_begin;
@@ -158,9 +162,7 @@ DisconnectResult SDisconnectGroup::disconnect_peer(ENetPeer* peer, DisconnectRes
 
 	Packet disconnect_packet(PacketType::CLIENT_DISCONNECT, PacketDirection::SERVER_TO_CLIENT, ClientDisconnectType::CLIENT_DISCONNECT_BEGIN, serialized.data(), serialized.size());
 	server->send_packet(disconnect_packet, peer);
-
-	// Add pending disconnect
-	add_pending_disconnect(peer, reason);
+	Log::trace("CLIENT_DISCONNECT:BEGIN sent to peer: " + handle + ", reason: " + client_disconnect_begin.message);
 
 	// Wait for CLIENT_DISCONNECT_CONFIRM packet
 	// (BLOCKING, ensure this is ran in async)
@@ -173,6 +175,7 @@ DisconnectResult SDisconnectGroup::disconnect_peer(ENetPeer* peer, DisconnectRes
 			break;
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(CHECK_INTERVAL));
+		Log::trace("Waiting for CLIENT_DISCONNECT:CONFIRM from peer: " + handle + " (timeout in " + std::to_string(DISCONNECT_TIMEOUT - TimeUtils::get_time_since(start_time)) + "ms)");
 	}
 
 	DisconnectResult result;
@@ -183,15 +186,13 @@ DisconnectResult SDisconnectGroup::disconnect_peer(ENetPeer* peer, DisconnectRes
 		result.type = DisconnectResultType::SUCCESS;
 		result.message = "Client disconnected successfully";
 
-		Log::trace("CLIENT_DISCONNECT:CONFIRM received from peer: " + handle);
+		Log::trace("CLIENT_DISCONNECT:CONFIRM was received from peer: " + handle);
 	}
 	else {
-		Log::warn("CLIENT_DISCONNECT:CONFIRM timed out for peer: " + handle);
-		
 		result.type = DisconnectResultType::FORCED;
 		result.message = "Client disconnect confirmation timed out";
 
-		Log::trace("CLIENT_DISCONNECT:FORCED sent to peer: " + handle);
+		Log::warn("CLIENT_DISCONNECT:CONFIRM timed out for peer: " + handle + ". They will be 'force' disconnected.");
 	}
 
 	send_relay_to_others(peer);

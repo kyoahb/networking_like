@@ -38,7 +38,7 @@ void CConnectGroup::on_event_receive(const Events::Client::EventReceiveData& dat
 	if (packet.header.subtype == CLIENT_CONNECT_RELAY) {
 		// Received a CLIENT_CONNECT_RELAY packet
 		ClientConnectRelay client_connect_relay = SerializationUtils::deserialize<ClientConnectRelay>(packet.data, packet.header.size);
-		client->peers.add_peer(client_connect_relay.client_id, client_connect_relay.client_handle);
+		client->peers.add_peer(client_connect_relay.client_id, client_connect_relay.client_handle, client_connect_relay.is_host);
 		Log::trace("CLIENT_CONNECT:RELAY received. Added peer: " + client_connect_relay.client_handle);
 
 		std::optional<LocalNetPeer> peer = client->peers.get_peer(client_connect_relay.client_id);

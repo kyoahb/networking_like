@@ -115,17 +115,6 @@ std::future<ShutdownResult> Server::stop() {
 		});
 	}
 
-	active = false;
-	if (update_future.valid() && std::this_thread::get_id() != update_thread_id) {
-		update_future.get(); // Wait for the update loop to finish
-	}
-	else {
-		Log::warn("Update loop is in the same thread, cannot stop()");
-	}
-
-	// Fire event
-	Events::Server::Stop::trigger(Events::Server::StopData()); // Fire event
-
 	return std::async(std::launch::async, &Server::stop_thread, this);
 }
 
@@ -157,6 +146,18 @@ ShutdownResult Server::stop_thread() {
 			peers_forced++;
 		}
 	}
+
+	// Stop update() loop
+	active = false;
+	if (update_future.valid() && std::this_thread::get_id() != update_thread_id) {
+		update_future.get(); // Wait for the update loop to finish
+	}
+	else {
+		Log::warn("Update loop is in the same thread, cannot stop()");
+	}
+
+	// Fire event
+	Events::Server::Stop::trigger(Events::Server::StopData()); // Fire event
 
 	// Clear the peer list
 	peers.clear();
@@ -192,7 +193,7 @@ std::future<DisconnectResult> Server::disconnect_peer(ENetPeer* peer, Disconnect
 	}
 
 	// Use the protocol to disconnect the peer
-	return std::async(std::launch::async, [this, &peer, reason]() {
+	return std::async(std::launch::async, [this, peer, reason]() {
 		DisconnectResult result = disconnect_group->disconnect_peer(peer, reason);
 
 		return result;

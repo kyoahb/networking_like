@@ -1,7 +1,11 @@
 #include "Lobby.h"
 #include "Game/Game.h"
 
-LobbyMember::LobbyMember(std::string _name, int _id, int _y_offset) : name(_name), id(_id), y_offset(_y_offset) {
+LobbyMember::LobbyMember(std::string _name, int _id, int _y_offset, bool _is_host, bool _is_local_user) : name(_name), id(_id), y_offset(_y_offset), is_host(_is_host), is_local_user(_is_local_user) {
+}
+
+LobbyMember::LobbyMember(LocalNetPeer peer) : name(peer.handle), id(peer.id), y_offset(0), is_host(peer.is_host), is_local_user(true) {
+	// Constructor for LocalNetPeer
 }
 
 void LobbyMember::draw() {
@@ -9,24 +13,12 @@ void LobbyMember::draw() {
 	ImGui::SameLine();
 	ImGui::Text("%s", std::to_string(id).c_str());
 
-	if (id == 0) {
+	if (is_local_user) {
 		ImGui::SameLine();
-		ImGui::Text("HOST");
+		ImGui::Text("You");
 	}
-}
 
-LocalMember::LocalMember(LocalNetPeer self) : LobbyMember(self.handle, self.id, 0) {
-	// Constructor implementation
-}
-
-void LocalMember::draw() {
-	ImGui::Text("%s", name.c_str());
-	ImGui::SameLine();
-	ImGui::Text("%s", std::to_string(id).c_str());
-	ImGui::SameLine();
-	ImGui::Text("You");
-
-	if (id == 0) {
+	if (is_host) {
 		ImGui::SameLine();
 		ImGui::Text("HOST");
 	}
@@ -42,12 +34,12 @@ Lobby::~Lobby() {
 
 void Lobby::add_all_members() {
 	// Add self
-	self = LocalMember(game.client->peers.get_self());
+	self = LobbyMember(game.client->peers.get_self());
 
 	// Add peers
 	int y_offset = initial_y_offset;
 	for (auto peer : game.client->peers.get_peers()) {
-		members.emplace_back(peer.handle, peer.id, y_offset);
+		members.emplace_back(peer.handle, peer.id, y_offset, peer.is_host, false);
 		y_offset += offset_change;
 	}
 }
@@ -114,6 +106,7 @@ void Lobby::on_draw() {
 			Log::asserts(false, "Failed to set state to MainMenu from Lobby");
 		}
 	}
+
 	self.draw();
 	for (auto& member : members) {
 		member.draw();
@@ -125,7 +118,7 @@ void Lobby::on_draw() {
 }
 
 void Lobby::on_peer_added(const Events::Client::PeerAddedData& data) {
-	members.emplace_back(data.peer.handle, data.peer.id, initial_y_offset + members.size() * offset_change);
+	members.emplace_back(data.peer.handle, data.peer.id, initial_y_offset + members.size() * offset_change, data.peer.is_host, false);
 };
 
 void Lobby::on_peer_removed(const Events::Client::PeerRemovedData& data) {
@@ -150,8 +143,8 @@ void Lobby::draw_kick_button(LobbyMember member) {
 	if (peer.has_value()) {
 
 		ENetPeer* enet_peer = peer->peer;
-
-		if (ImGui::Button("Kick", ImVec2(50, 20))) { // Kick Button
+		std::string kick_button_name = "Kick##" + std::to_string(member.id);
+		if (ImGui::Button(kick_button_name.c_str(), ImVec2(50, 20))) { // Kick Button
 			game.server->disconnect_peer(enet_peer);
 		}
 	}

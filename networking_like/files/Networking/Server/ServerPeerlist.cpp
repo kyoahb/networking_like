@@ -10,17 +10,22 @@ void ServerPeerlist::clear() {
 	reset_host_availability();
 }
 
+bool ServerPeerlist::check_if_host() {
+	if (is_next_peer_host) {
+		is_next_peer_host = false;
+		is_host_set = true;
+		return true; // This peer is the host
+	}
+	else {
+		return false; // This peer is not the host
+	}
+}
+
 void ServerPeerlist::add_peer(ENetPeer* peer, uint8_t id, std::string handle) {
 	LOG_SCOPE_SERVER;
 	NetPeer net_peer(peer, id, handle);
 
-	if (is_next_peer_host) {
-		net_peer.is_host = true;
-		is_next_peer_host = false;
-	}
-	else {
-		net_peer.is_host = false;
-	}
+	net_peer.is_host = check_if_host();
 
 	add_peer(net_peer);
 }
@@ -28,13 +33,7 @@ void ServerPeerlist::add_peer(ENetPeer* peer, uint8_t id, std::string handle) {
 void ServerPeerlist::add_peer(NetPeer peer) {
 	LOG_SCOPE_SERVER;
 
-	if (is_next_peer_host) {
-		peer.is_host = true;
-		is_next_peer_host = false;
-	}
-	else {
-		peer.is_host = false;
-	}
+	peer.is_host = check_if_host();
 
 	peers.push_back(peer);
 }
@@ -177,4 +176,12 @@ void ServerPeerlist::reset_host_availability() {
 	LOG_SCOPE_SERVER;
 	is_next_peer_host = true;
 	is_host_set = false;
+}
+
+bool ServerPeerlist::is_peer_host(std::optional<NetPeer> peer) const {
+	LOG_SCOPE_SERVER;
+	if (!peer.has_value()) {
+		return false; // No peer, no host
+	}
+	return peer->is_host;
 }

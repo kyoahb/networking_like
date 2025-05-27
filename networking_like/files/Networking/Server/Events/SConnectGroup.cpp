@@ -79,9 +79,15 @@ void SConnectGroup::event_receive(const Events::Server::EventReceiveData& data) 
         NetPeer new_peer(event.peer, client_id, client_decided_handle);
         server->peers.add_peer(new_peer);
 
+		std::optional<NetPeer> p = server->peers.get_peer(event.peer);
+		Log::asserts(p.has_value(), "New peer should be added to server peer list, but was not found after adding");
+
+
+
         // Send CLIENT_CONNECT_CONFIRM
         ClientConnectConfirm client_connect_confirm;
         client_connect_confirm.server_preferred_handle = "Server"; // TODO: Make this usable
+        client_connect_confirm.is_host = p.value().is_host; // Is the connected client the server host?
         client_connect_confirm.client_decided_handle = client_decided_handle;
         client_connect_confirm.client_id = client_id;
         client_connect_confirm.other_clients = netpeer_list_to_relay_list(server->peers.get_peers(), event.peer);
@@ -91,7 +97,7 @@ void SConnectGroup::event_receive(const Events::Server::EventReceiveData& data) 
         server->send_packet(packet_confirm, event.peer);
 
         // Send CLIENT_CONNECT_RELAY to others
-        ClientConnectRelay client_connect_relay = netpeer_to_relay(new_peer);
+        ClientConnectRelay client_connect_relay = netpeer_to_relay(p.value());
         std::string serialised_relay_data = SerializationUtils::serialize<ClientConnectRelay>(client_connect_relay);
         Packet packet_relay(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_RELAY, serialised_relay_data.data(), serialised_relay_data.size(), true);
         server->broadcast_packet(packet_relay, { event.peer });
@@ -105,6 +111,7 @@ ClientConnectRelay SConnectGroup::netpeer_to_relay(const NetPeer& peer) {
     ClientConnectRelay relay;
     relay.client_id = peer.id;
     relay.client_handle = peer.handle;
+	relay.is_host = peer.is_host;
     return relay;
 }
 

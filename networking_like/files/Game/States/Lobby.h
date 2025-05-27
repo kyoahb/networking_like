@@ -15,19 +15,14 @@ private:
 	int font_size = 20;
 
 public:
-	LobbyMember(std::string _name, int _id, int _y_offset);
+	LobbyMember(std::string _name, int _id, int _y_offset, bool _is_host, bool _is_local_user);
+	LobbyMember(LocalNetPeer peer);
 	LobbyMember() = default;
 	
 	std::string name;
 	int id;
-
-	void draw();
-};
-
-class LocalMember : public LobbyMember {
-public:
-	LocalMember(LocalNetPeer self);
-	LocalMember() = default;
+	bool is_host = false;
+	bool is_local_user = false;
 
 	void draw();
 };
@@ -47,7 +42,7 @@ public:
 	void on_client_disconnected(const Events::Client::DisconnectData& data);
 
 private:
-	LocalMember self;
+	LobbyMember self;
 	std::vector<LobbyMember> members;
 
 	int initial_y_offset = 50;

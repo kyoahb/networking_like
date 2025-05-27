@@ -23,6 +23,8 @@ public:
 	const std::optional<NetPeer> get_peer(std::string handle) const; // Get a peer by handle
 	const std::optional<NetPeer> get_peer(ENetPeer* peer) const; // Get a peer by ENetPeer*
 
+	bool is_peer_host(std::optional<NetPeer> peer) const; // Check if a peer is the host by std::optional<NetPeer>
+
 	bool is_peer_connected(ENetPeer* peer) const; // Check if a peer is connected by ENetPeer*
 	bool is_peer_connected(uint8_t id) const; // Check if a peer is connected by ID
 	bool is_peer_connected(std::string handle) const; // Check if a peer is connected by handle
@@ -42,5 +44,7 @@ private:
 	// Note: host is ONLY the first peer that joins
 	// If the first peer joins then leaves, there is no host and cannot be a host again
 	// Unless server is reset
+
+	bool check_if_host();
 
 };

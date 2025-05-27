@@ -20,8 +20,8 @@ private:
 	int update_callback;
 	int event_receive_callback;
 	std::optional<PendingDisconnect> pending_disconnect; // Exists if client is waiting to be disconnected.
-	const unsigned int DISCONNECT_TIMEOUT = 5000; // Timeout for disconnect
-	const unsigned int CHECK_INTERVAL = 1000; // Check interval for disconnect
+	const unsigned int DISCONNECT_TIMEOUT = 500; // Timeout for disconnect
+	const unsigned int CHECK_INTERVAL = 100; // Check interval for disconnect
 
 	void add_pending_disconnect(DisconnectResultReason reason); // Add a pending disconnect
 };
