@@ -1,6 +1,6 @@
 #include "SConnectGroup.h"
 #include "Networking/Server/Server.h"
-
+#include "Utils/General/RandomUtils.h"
 SConnectGroup::SConnectGroup(std::shared_ptr<Server> _server) : SGroup(_server) {
     activate();
 };
@@ -86,7 +86,7 @@ void SConnectGroup::event_receive(const Events::Server::EventReceiveData& data) 
 
         // Send CLIENT_CONNECT_CONFIRM
         ClientConnectConfirm client_connect_confirm;
-        client_connect_confirm.server_preferred_handle = "Server"; // TODO: Make this usable
+        client_connect_confirm.server_preferred_handle = server->peers.get_self().handle;
         client_connect_confirm.is_host = p.value().is_host; // Is the connected client the server host?
         client_connect_confirm.client_decided_handle = client_decided_handle;
         client_connect_confirm.client_id = client_id;
@@ -139,15 +139,9 @@ std::string SConnectGroup::get_handle(const std::string& preferred_handle, uint8
 	std::string handle = preferred_handle;
     
 	// Check if handle is already taken
-
-    // If handle is taken, First: try append their id to end of preferred handle
-    if (server->peers.is_peer_connected(handle)) {
-		handle = preferred_handle + "_" + std::to_string(id);
-    }
-
-	// If still taken, append a random number
 	while (server->peers.is_peer_connected(handle)) {
-		handle = preferred_handle + "_" + std::to_string(rand() % 10000);
+        // If taken, append a random string
+		handle = preferred_handle + "_" + RandomUtils::random_string(4);
 		// Possible (theoretically) that all of these are taken but it's unlikely
 	}
 

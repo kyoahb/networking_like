@@ -39,6 +39,7 @@ public:
 	std::vector<NetPeer> get_peers() const; // Get all peers
 
 private:
+	LocalNetPeer self; // The server self, used to identify the server in the peer list
 	bool is_next_peer_host = true;
 	bool is_host_set = false; // Is the host set?
 	// Note: host is ONLY the first peer that joins

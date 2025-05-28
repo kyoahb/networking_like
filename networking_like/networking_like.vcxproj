@@ -195,6 +195,7 @@
     <ClInclude Include="files\Networking\Shared\NetworkUser.h" />
     <ClInclude Include="files\Networking\Shared\Protocol.h" />
     <ClInclude Include="files\UI\UIMenu.h" />
+    <ClInclude Include="files\Utils\General\RandomUtils.h" />
     <ClInclude Include="files\Utils\General\RenderUtils.h" />
     <ClInclude Include="files\Utils\General\SerializationUtils.h" />
     <ClInclude Include="files\Utils\General\MathUtils.h" />

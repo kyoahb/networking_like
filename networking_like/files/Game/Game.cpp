@@ -82,3 +82,12 @@ void Game::create_client(const std::string& address, int port) {
 	}
 	client->connect(address, port, "Client").wait();
 }
+
+bool Game::is_local_server() const {
+	// Check if local program is hosting a server, which the local client is also connected to
+	if (server != nullptr && client != nullptr) {
+		// Check if client is connected to the server
+		return client->is_connected() && client->peers.get_server().handle == server->peers.get_self().handle;
+	}
+	return false;
+}

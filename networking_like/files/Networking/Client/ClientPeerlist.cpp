@@ -42,8 +42,11 @@ void ClientPeerlist::setup_by_confirmation(const ClientConnectConfirm& connectio
 	self.id = connection_confirmation.client_id;
 	self.handle = connection_confirmation.client_decided_handle;
 	self.is_host = connection_confirmation.is_host;
-	// Unused
+	
+	// Setup server peer (id and is_host are always the same for the server)
 	server.handle = connection_confirmation.server_preferred_handle;
+	server.id = -1;
+	server.is_host = true;
 	
 	// Setup other clients
 	for (const auto& cl : connection_confirmation.other_clients) {

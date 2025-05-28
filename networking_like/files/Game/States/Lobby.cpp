@@ -50,7 +50,7 @@ void Lobby::on_activate() {
 		return;
 	}
 
-	if (game.server != nullptr) { // Check if user is host
+	if (game.is_local_server()) { // Check if user is host
 		is_host = true;
 	}
 	else {

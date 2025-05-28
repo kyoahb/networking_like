@@ -17,6 +17,8 @@ public:
 	void create_server(const std::string& address, int port);
 	void create_client(const std::string& address, int port);
 	
+	bool is_local_server() const;
+
 	// Left public to be accessible to GameStates.
 	raylib::Window window;
 	std::shared_ptr<Server> server; // Shared with protocols

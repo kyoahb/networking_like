@@ -450,6 +450,9 @@
     <ClInclude Include="files\Networking\Client\Groups\CDisconnectGroup.h">
       <Filter>Networking\Client\Groups</Filter>
     </ClInclude>
+    <ClInclude Include="files\Utils\General\RandomUtils.h">
+      <Filter>Utils\General</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="TODO.md">

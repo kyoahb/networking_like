@@ -1,7 +1,11 @@
 #include "ServerPeerlist.h"
+#include "Utils/General/RandomUtils.h"
 
 ServerPeerlist::ServerPeerlist() {
-
+	self = LocalNetPeer(); // Initialize self as an empty LocalNetPeer
+	self.handle = "Server_" + RandomUtils::random_string(4); // Set a default random handle for the server. This can be used to identify the server
+	self.id = -1;
+	self.is_host = true; // The server is always the host, along with one client
 }
 
 void ServerPeerlist::clear() {
@@ -184,4 +188,9 @@ bool ServerPeerlist::is_peer_host(std::optional<NetPeer> peer) const {
 		return false; // No peer, no host
 	}
 	return peer->is_host;
+}
+
+const LocalNetPeer& ServerPeerlist::get_self() {
+	LOG_SCOPE_SERVER;
+	return self;
 }
