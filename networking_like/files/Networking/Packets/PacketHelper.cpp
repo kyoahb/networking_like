@@ -19,6 +19,16 @@ std::unordered_map<PacketType, PacketHelper::TypeInfo> PacketHelper::packet_type
         {3, {"CONFIRM", {}}},
     }}},
 
+    {PacketType::WORLD_INFO, {"WORLD_INFO", {
+        {255, {"ANY", {}}},
+        {1, {"FULL", {}}},
+    }}},
+
+    {PacketType::CHANGE_STATE, {"CHANGE_STATE", {
+    {255, {"ANY", {}}},
+    {1, {"TO", {}}},
+    }}},
+
     {PacketType::CLIENT_DISCONNECT, {"CLIENT_DISCONNECT", {
         {255, {"ANY", {}}},
         {1, {"BEGIN", {}}},

@@ -1,23 +1,29 @@
-#pragma once
-#include "Utils/Imports/common.h"
+#include <random>
 
 class RandomUtils {
 public:
-	static int random_int(int min, int max) {
-		return min + rand() % (max - min + 1);
-	};
+    // Get a static random engine (seeded once)
+    static std::mt19937& engine() {
+        static std::random_device rd;
+        static std::mt19937 eng(rd());
+        return eng;
+    }
 
-	static float random_float(float min, float max) {
-		return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
-	};
+    static int random_int(int min, int max) {
+        std::uniform_int_distribution<int> dist(min, max);
+        return dist(engine());
+    }
+
+    static float random_float(float min, float max) {
+        std::uniform_real_distribution<float> dist(min, max);
+        return dist(engine());
+    }
 
     static std::string random_string(size_t length, bool use_lowercase = true, bool use_uppercase = true, bool use_numbers = true) {
-        // Predefined character sets
         static constexpr char lowercase[] = "abcdefghijklmnopqrstuvwxyz";
         static constexpr char uppercase[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         static constexpr char numbers[] = "0123456789";
 
-        // Cache for each combination (2^3 = 8)
         struct CharsetCache {
             std::string charset;
             bool valid = false;
@@ -39,11 +45,11 @@ public:
         if (charset.empty() || length == 0)
             return "";
 
+        std::uniform_int_distribution<size_t> dist(0, charset.size() - 1);
         std::string result(length, '\0');
         for (size_t i = 0; i < length; ++i) {
-            result[i] = charset[rand() % charset.size()];
+            result[i] = charset[dist(engine())];
         }
         return result;
     }
-
 };

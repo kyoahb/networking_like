@@ -28,6 +28,10 @@ Game::Game() {
 	// Setup lobby
 	std::shared_ptr<Lobby> lobby = std::make_shared<Lobby>(*this);
 	stateManager.addState("Lobby", lobby);
+
+	// Setup World state
+	std::shared_ptr<WorldState> worldState = std::make_shared<WorldState>(*this);
+	stateManager.addState("WorldState", worldState);
 }
 
 Game::~Game()

@@ -8,6 +8,8 @@ enum PacketType : uint8_t {
 	CLIENT_CONNECT = 2,
 	CLIENT_DISCONNECT = 3,
 	HEARTBEAT = 4,
+	WORLD_INFO = 5,
+	CHANGE_STATE = 6,
 	ANY_TYPE = 255,
 };
 
@@ -50,5 +52,7 @@ public:
 	Packet(PacketType type, PacketDirection direction, uint8_t subtype, const char* _data, size_t size, bool _is_reliable = true);
 
 	ENetPacket* to_enet_packet() const; // Converts the packet to an ENetPacket
+
+	static bool is_event_packet(const ENetEvent event);
 
 };

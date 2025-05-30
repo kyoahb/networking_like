@@ -51,7 +51,8 @@ private:
 	int on_peer_added_callbackid = 0; // Need to save this in order to later unregister it
 	int on_peer_removed_callbackid = 0; // Need to save this in order to later unregister it
 	int on_client_disconnected_callbackid = 0; // Need to save this in order to later unregister it
+	int on_event_receive_callbackid = 0;
 
-	void draw_kick_button(LobbyMember member);
+	void kick_member(LobbyMember member);
 	bool is_host = false; // Is the client the host of the lobby? Accessed by checking if game.server exists
 };

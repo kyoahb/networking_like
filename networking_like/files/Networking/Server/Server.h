@@ -4,6 +4,7 @@
 #include "ServerPeerlist.h"
 #include "Networking/Server/Events/SDisconnectGroup.h"
 #include "Networking/Server/Events/SConnectGroup.h"
+#include "Networking/Server/Events/SWorldGroup.h"
 #include "Game/Events/EventList.h"
 class Server : public NetworkUser, public std::enable_shared_from_this<Server> {
 public:
@@ -20,6 +21,7 @@ public:
 	bool send_packet(const Packet& packet, ENetPeer* peer);
 	void broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding = {}); // Broadcast a packet to all peers, excluding the specified peers
 
+	std::shared_ptr<SWorldGroup> get_world_group();
 private:
 	const int MAX_CLIENTS = 32; // Maximum number of clients
 	const int MAX_CHANNELS = 2; // Maximum number of channels
@@ -33,6 +35,7 @@ private:
 	// Protocols
 	std::vector<std::shared_ptr<SGroup>> groups = {};
 	std::shared_ptr<SDisconnectGroup> disconnect_group = nullptr;
+	std::shared_ptr<SWorldGroup> world_group = nullptr;
 	// Protocol management methods
 	void add_group(std::shared_ptr<SGroup> group);
 	void initialize_groups();

@@ -7,7 +7,7 @@
 #include "Game/States/MainMenu.h"
 #include "Utils/Input/Input.h"
 #include "Game/States/Lobby.h"
-
+#include "Game/States/WorldState.h"
 class Game {
 public:
 	Game();

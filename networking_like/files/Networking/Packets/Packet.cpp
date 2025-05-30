@@ -64,3 +64,12 @@ ENetPacket* Packet::to_enet_packet() const {
 	
 	return packet;
 }
+
+bool Packet::is_event_packet(const ENetEvent event) {
+	return event.type == ENET_EVENT_TYPE_RECEIVE &&
+		event.peer &&
+		event.packet &&
+		event.packet->data &&
+		event.packet->dataLength >= sizeof(PacketHeader);
+
+}

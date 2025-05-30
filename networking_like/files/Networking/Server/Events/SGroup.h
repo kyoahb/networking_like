@@ -3,6 +3,7 @@
 
 #include "Utils/Imports/common.h"
 #include "Game/Events/EventList.h"
+#include "Networking/Packets/Packet.h"
 class Server;
 
 class SGroup {

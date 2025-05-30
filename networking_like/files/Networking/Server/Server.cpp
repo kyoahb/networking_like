@@ -46,6 +46,10 @@ void Server::initialize_groups() {
 
 	std::shared_ptr<SConnectGroup> connect = std::make_shared<SConnectGroup>(shared_from_this());
 	add_group(connect);
+
+	std::shared_ptr<SWorldGroup> world = std::make_shared<SWorldGroup>(shared_from_this());
+	world_group = world;
+	add_group(world);
 }
 
 void Server::destroy_groups() {
@@ -56,6 +60,7 @@ void Server::destroy_groups() {
 	}
 	groups.clear();
 	disconnect_group = nullptr;
+	world_group = nullptr;
 }
 
 void Server::broadcast_packet(const Packet& packet, std::vector<ENetPeer*> excluding) {
@@ -251,4 +256,8 @@ bool Server::send_packet(const Packet& packet, ENetPeer* peer) {
 	Log::trace("Sending packet " + PacketHelper::types_to_string(packet) + " to peer " + peers.get_polite_handle(peer));
 
 	return NetworkUser::send_packet(packet, peer);
+}
+
+std::shared_ptr<SWorldGroup> Server::get_world_group() {
+	return world_group;
 }

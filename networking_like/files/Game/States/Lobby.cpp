@@ -1,6 +1,6 @@
 #include "Lobby.h"
 #include "Game/Game.h"
-
+#include "Networking/Packets/Data/ChangeState.h"
 LobbyMember::LobbyMember(std::string _name, int _id, int _y_offset, bool _is_host, bool _is_local_user) : name(_name), id(_id), y_offset(_y_offset), is_host(_is_host), is_local_user(_is_local_user) {
 }
 
@@ -67,7 +67,17 @@ void Lobby::on_activate() {
 	on_client_disconnected_callbackid = Events::Client::Disconnect::register_callback([this](const Events::Client::DisconnectData& data) {
 		this->on_client_disconnected(data);
 		});
-
+	on_event_receive_callbackid = Events::Client::EventReceive::register_callback([this](const Events::Client::EventReceiveData& data) {
+		const ENetEvent& event = data.event;
+		if (event.type != ENET_EVENT_TYPE_RECEIVE || !event.packet) return;
+		Packet p(event.packet);
+		if (p.header.type != PacketType::CHANGE_STATE) return;
+		if (p.header.subtype == CHANGE_STATE_TO) {
+			ChangeStateTo change_state = SerializationUtils::deserialize<ChangeStateTo>(p.data, p.header.size);
+			if (change_state.state_name == "WorldState")
+				game.stateManager.setState("WorldState");
+		}
+		});
 	// Add members from peers list & self
 	members.clear();
 	add_all_members();
@@ -78,6 +88,7 @@ void Lobby::on_deactivate() {
 	Events::Client::PeerAdded::unregister_callback(on_peer_added_callbackid);
 	Events::Client::PeerRemoved::unregister_callback(on_peer_removed_callbackid);
 	Events::Client::Disconnect::unregister_callback(on_client_disconnected_callbackid);
+	Events::Client::EventReceive::unregister_callback(on_event_receive_callbackid);
 
 	members.clear(); // Clear the members list when deactivating the lobby
 
@@ -105,16 +116,72 @@ void Lobby::on_draw() {
 		if (!game.stateManager.setState("MainMenu")) {
 			Log::asserts(false, "Failed to set state to MainMenu from Lobby");
 		}
+		return;
 	}
 
-	self.draw();
-	for (auto& member : members) {
-		member.draw();
-		if (is_host) { // Only draw kick button if we are the host
-			ImGui::SameLine();
-			draw_kick_button(member);
+	if (!game.client) {
+		return; // Client not initialised, likely means on_draw() was called in the middle of de-initialising client.
+	}
+
+	// Draw server name label
+	ImGui::Text(game.client->peers.get_server().handle.c_str());
+
+	// Draw members
+	if (ImGui::BeginTable("LobbyTable", is_host ? 4 : 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)) {
+		ImGui::TableSetupColumn("Name");
+		ImGui::TableSetupColumn("ID");
+		ImGui::TableSetupColumn("Status");
+		if (is_host) ImGui::TableSetupColumn("Action");
+		ImGui::TableHeadersRow();
+
+		// Draw self
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0); ImGui::Text("%s", self.name.c_str());
+		ImGui::TableSetColumnIndex(1); ImGui::Text("%d", self.id);
+		ImGui::TableSetColumnIndex(2); ImGui::Text("You%s", self.is_host ? " (HOST)" : "");
+		if (is_host) { ImGui::TableSetColumnIndex(3); ImGui::Text("N/A"); }
+
+		// Draw other members
+		for (const auto& member : members) {
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("%s", member.name.c_str());
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%d", member.id);
+			ImGui::TableSetColumnIndex(2);
+			if (member.is_host) ImGui::Text("HOST");
+			else ImGui::Text("Client");
+			if (is_host) {
+				ImGui::TableSetColumnIndex(3);
+				std::string kick_label = "Kick##" + std::to_string(member.id);
+				if (ImGui::Button(kick_label.c_str())) {
+					kick_member(member);
+				}
+			}
+		}
+		ImGui::EndTable();
+	}
+
+	// Start button (visible only for host)
+	if (is_host && ImGui::Button("Start Game")) {
+		// Tell all clients to go to World gamestate
+		ChangeStateTo change_state;
+		change_state.state_name = "WorldState";
+		std::string serialized = SerializationUtils::serialize<ChangeStateTo>(change_state);
+
+		Packet packet(
+			PacketType::CHANGE_STATE,
+			PacketDirection::SERVER_TO_CLIENT,
+			ChangeStateType::CHANGE_STATE_TO,
+			serialized.data(),
+			serialized.size(),
+			true
+		);
+
+		// Broadcast to all clients (excluding self if you want, or include self for simplicity)
+		if (game.server) {
+			game.server->broadcast_packet(packet);
 		}
 	}
+
 }
 
 void Lobby::on_peer_added(const Events::Client::PeerAddedData& data) {
@@ -134,8 +201,8 @@ void Lobby::on_client_disconnected(const Events::Client::DisconnectData& data) {
 	}
 }
 
-void Lobby::draw_kick_button(LobbyMember member) {
-	Log::asserts(game.server != nullptr, "Server must exist to draw kick button");
+void Lobby::kick_member(LobbyMember member) {
+	Log::asserts(is_host == true && game.server != nullptr, "Server must exist to kick member");
 
 	// Get ENetPeer* from member's handle
 	auto peer = game.server->peers.get_peer(member.id);
@@ -143,9 +210,6 @@ void Lobby::draw_kick_button(LobbyMember member) {
 	if (peer.has_value()) {
 
 		ENetPeer* enet_peer = peer->peer;
-		std::string kick_button_name = "Kick##" + std::to_string(member.id);
-		if (ImGui::Button(kick_button_name.c_str(), ImVec2(50, 20))) { // Kick Button
-			game.server->disconnect_peer(enet_peer);
-		}
+		game.server->disconnect_peer(enet_peer);
 	}
 }
