@@ -50,6 +50,8 @@ void Server::initialize_groups() {
 	std::shared_ptr<SWorldGroup> world = std::make_shared<SWorldGroup>(shared_from_this());
 	world_group = world;
 	add_group(world);
+
+	add_group(std::make_shared<SStateGroup>(shared_from_this()));
 }
 
 void Server::destroy_groups() {

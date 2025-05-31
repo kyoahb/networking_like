@@ -5,6 +5,7 @@
 #include "Networking/Server/Events/SDisconnectGroup.h"
 #include "Networking/Server/Events/SConnectGroup.h"
 #include "Networking/Server/Events/SWorldGroup.h"
+#include "Networking/Server/Events/SStateGroup.h"
 #include "Game/Events/EventList.h"
 class Server : public NetworkUser, public std::enable_shared_from_this<Server> {
 public:

@@ -12,7 +12,8 @@ enum class LogContext {
     SHARED_NETWORKING,
     TEST,
 	SERVER_GROUP,
-	CLIENT_GROUP
+	CLIENT_GROUP,
+	GAME
 };
 
 class LogScope {
@@ -41,3 +42,4 @@ public:
 #define LOG_SCOPE_CLIENT LogScope __log_scope__(__FUNCTION__, LogContext::CLIENT);
 #define LOG_SCOPE_CLIENT_GROUP LogScope __log_scope__(__FUNCTION__, LogContext::CLIENT_GROUP);
 #define LOG_SCOPE_TEST LogScope __log_scope__(__FUNCTION__, LogContext::GENERAL);
+#define LOG_SCOPE_GAME LogScope __log_scope__(__FUNCTION__, LogContext::GAME);

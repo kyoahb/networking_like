@@ -5,6 +5,7 @@
 enum ChangeStateType : uint8_t {
     CHANGE_STATE_ANY = 255,
     CHANGE_STATE_TO = 1,
+	CHANGE_STATE_NOTIFICATION = 2
 };
 
 // Server -> Client
@@ -13,6 +14,18 @@ class ChangeStateTo : public PacketData {
 public:
     std::string state_name;
 
+    template <typename Archive>
+    void serialize(Archive& archive) {
+        archive(state_name);
+    }
+};
+
+// Client -> Server
+// Subtype 2 (CHANGE_STATE_NOTIFICATION)
+class ChangeStateNotification : public PacketData {
+public:
+    std::string state_name;
+    
     template <typename Archive>
     void serialize(Archive& archive) {
         archive(state_name);

@@ -146,6 +146,7 @@
     <ClCompile Include="files\Networking\Client\Groups\CConnectGroup.cpp" />
     <ClCompile Include="files\Networking\Client\Groups\CDisconnectGroup.cpp" />
     <ClCompile Include="files\Networking\Client\Groups\CGroup.cpp" />
+    <ClCompile Include="files\Networking\Client\Groups\CStateGroup.cpp" />
     <ClCompile Include="files\Networking\Client\Groups\CWorldGroup.cpp" />
     <ClCompile Include="files\Networking\Packets\Packet.cpp" />
     <ClCompile Include="files\Networking\Packets\PacketData.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="files\Networking\Server\Events\SConnectGroup.cpp" />
     <ClCompile Include="files\Networking\Server\Events\SDisconnectGroup.cpp" />
     <ClCompile Include="files\Networking\Server\Events\SGroup.cpp" />
+    <ClCompile Include="files\Networking\Server\Events\SStateGroup.cpp" />
     <ClCompile Include="files\Networking\Server\Events\SWorldGroup.cpp" />
     <ClCompile Include="files\Networking\Server\Server.cpp" />
     <ClCompile Include="files\Networking\Server\ServerPeerlist.cpp" />
@@ -181,6 +183,7 @@
     <ClInclude Include="files\Networking\Client\Groups\CConnectGroup.h" />
     <ClInclude Include="files\Networking\Client\Groups\CDisconnectGroup.h" />
     <ClInclude Include="files\Networking\Client\Groups\CGroup.h" />
+    <ClInclude Include="files\Networking\Client\Groups\CStateGroup.h" />
     <ClInclude Include="files\Networking\Client\Groups\CWorldGroup.h" />
     <ClInclude Include="files\Networking\Packets\Data\ChangeState.h" />
     <ClInclude Include="files\Networking\Packets\Data\ClientConnect.h" />
@@ -193,6 +196,7 @@
     <ClInclude Include="files\Networking\Server\Events\SConnectGroup.h" />
     <ClInclude Include="files\Networking\Server\Events\SDisconnectGroup.h" />
     <ClInclude Include="files\Networking\Server\Events\SGroup.h" />
+    <ClInclude Include="files\Networking\Server\Events\SStateGroup.h" />
     <ClInclude Include="files\Networking\Server\Events\SWorldGroup.h" />
     <ClInclude Include="files\Networking\Server\Server.h" />
     <ClInclude Include="files\Networking\Server\ServerPeerlist.h" />

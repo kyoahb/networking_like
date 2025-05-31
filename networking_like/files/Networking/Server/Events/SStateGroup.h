@@ -3,15 +3,11 @@
 #include "SGroup.h"
 #include "Networking/Shared/World/WorldObject.h"
 #include "Networking/Packets/Data/WorldInfo.h"
-class SWorldGroup : public SGroup
+class SStateGroup : public SGroup
 {
 public:
-	SWorldGroup(std::shared_ptr<Server> _server);
-	~SWorldGroup();
-
-	void generate_world(); // Create the world.
-	void send_initial_world();
-	void send_delta_world();
+	SStateGroup(std::shared_ptr<Server> _server);
+	~SStateGroup();
 
 	void activate() override;
 	void deactivate() override;
@@ -20,10 +16,7 @@ public:
 	void update(const Events::Server::UpdateData& data);
 
 private:
-	WorldObject world;
 
 	int event_receive_callback = -1;
 	int update_callback = -1;
-
-	void send_world();
 };

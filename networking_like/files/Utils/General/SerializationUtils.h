@@ -48,18 +48,6 @@ namespace SerializationUtils {
     }
 
     /**
-     * Deserializes a binary string to an object of type T
-     *
-     * @tparam T Type to deserialize into
-     * @param serialized_data Binary serialized data as a string
-     * @return T The deserialized object
-     */
-    template<typename T>
-    T deserialize(const std::string& serialized_data) {
-        return deserialize<T>(serialized_data.c_str(), serialized_data.size());
-    }
-
-    /**
      * Deserializes a binary string into an existing object
      *
      * @tparam T Type to deserialize into

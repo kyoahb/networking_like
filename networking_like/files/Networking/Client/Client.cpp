@@ -154,6 +154,9 @@ void Client::initialize_groups() {
 	add_group(connect_group);
 	disconnect_group = std::make_shared<CDisconnectGroup>(shared_from_this());
 	add_group(disconnect_group);
+
+	add_group(std::make_shared<CStateGroup>(shared_from_this()));
+	add_group(std::make_shared<CWorldGroup>(shared_from_this()));
 }
 
 

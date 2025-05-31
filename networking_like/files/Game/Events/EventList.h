@@ -114,4 +114,14 @@ namespace Events {
 		};
 		using Update = Event<UpdateData>;
 	}
+
+	namespace Game {
+		// GameState changed
+		struct StateChangeData : public BaseEventData {
+			const std::string state_name;
+			explicit StateChangeData(const std::string state_name) : state_name(state_name) {};
+		};
+		using StateChange = Event<StateChangeData>;
+
+	}
 } // namespace Events

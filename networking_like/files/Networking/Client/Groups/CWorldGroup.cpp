@@ -21,15 +21,6 @@ void CWorldGroup::deactivate() {
 };
 
 void CWorldGroup::event_receive(const Events::Client::EventReceiveData& data) {
-	if (!Packet::is_event_packet(data.event)) return;
-
-	Packet p(data.event.packet);
-	if (p.header.type == PacketType::WORLD_INFO && p.header.subtype == WorldInfo::WORLD_FULL) {
-		// Deserialise
-		Log::trace("Received a valid WORLD_FULL Packet, saving it as world.");
-		WorldFull winfo = SerializationUtils::deserialize<WorldFull>(p.data, p.header.size);
-		world = winfo.world;
-	}
 
 }
 

@@ -196,6 +196,12 @@
     <ClCompile Include="files\Networking\Client\Groups\CWorldGroup.cpp">
       <Filter>Networking\Client\Groups</Filter>
     </ClCompile>
+    <ClCompile Include="files\Networking\Client\Groups\CStateGroup.cpp">
+      <Filter>Networking\Client\Groups</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Networking\Server\Events\SStateGroup.cpp">
+      <Filter>Networking\Server\Groups</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="files\Utils\Imports\common.h">
@@ -488,6 +494,12 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Packets\Data\ChangeState.h">
       <Filter>Networking\Packets\Data\CHANGE_STATE</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Client\Groups\CStateGroup.h">
+      <Filter>Networking\Client\Groups</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Server\Events\SStateGroup.h">
+      <Filter>Networking\Server\Groups</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

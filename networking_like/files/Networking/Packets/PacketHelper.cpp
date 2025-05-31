@@ -27,6 +27,7 @@ std::unordered_map<PacketType, PacketHelper::TypeInfo> PacketHelper::packet_type
     {PacketType::CHANGE_STATE, {"CHANGE_STATE", {
     {255, {"ANY", {}}},
     {1, {"TO", {}}},
+    {2, {"NOTIFICATION", {}}}
     }}},
 
     {PacketType::CLIENT_DISCONNECT, {"CLIENT_DISCONNECT", {

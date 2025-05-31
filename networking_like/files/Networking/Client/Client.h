@@ -10,6 +10,8 @@
 #include "Networking/Packets/Data/ClientConnect.h"
 #include "Groups/CDisconnectGroup.h"
 #include "Groups/CConnectGroup.h"
+#include "Groups/CStateGroup.h"
+#include "Groups/CWorldGroup.h"
 
 class Client : public NetworkUser, public std::enable_shared_from_this<Client> {
 public:

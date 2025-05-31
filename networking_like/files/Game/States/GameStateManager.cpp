@@ -1,6 +1,8 @@
 #include "GameStateManager.h"
+#include "Game/Events/EventList.h"
 
 bool GameStateManager::setState(const std::string& state) {
+	LOG_SCOPE_GAME;
 	// Find new state in states list
 	auto it = states.find(state);
 	if (it != states.end()) {
@@ -9,6 +11,11 @@ bool GameStateManager::setState(const std::string& state) {
 		}
 		current_state = it->second;
 		current_state->activate();
+
+		// Trigger event
+		Log::trace("Changing state to " + state);
+		Events::Game::StateChange::trigger(Events::Game::StateChangeData(state));
+
 		return true;
 	}
 	return false;
@@ -16,25 +23,13 @@ bool GameStateManager::setState(const std::string& state) {
 }
 
 bool GameStateManager::addState(const std::string& state_name, std::shared_ptr<GameState> state) {
+	LOG_SCOPE_GAME;
 	if (states.find(state_name) != states.end()) {
 		Log::error("State already exists: " + state_name);
 		return false; // State with the same name already exists
 	}
 	states[state_name] = state;
 	return true;
-}
-
-void GameStateManager::forceState(const std::string& state_name, std::function<std::shared_ptr<GameState>()> factory) {
-	// If the state already exists, use that one
-	if (setState(state_name)) {
-		// Successfully set existing state
-		return;
-	}
-
-	// State doesn't exist — create and add it
-	auto new_state = factory(); // Only constructed if needed
-	addState(state_name, new_state);
-	setState(state_name); // Assume no errors here. May need to add error-checking in the future.
 }
 
 void GameStateManager::draw() {
