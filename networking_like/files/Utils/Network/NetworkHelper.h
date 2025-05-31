@@ -18,4 +18,12 @@ public:
 		PacketType packet_type = PacketType::ANY_TYPE, 
 		PacketDirection packet_direction = PacketDirection::ANY_DIRECTION, 
 		uint8_t packet_subtype = 255);
+
+	static std::optional<ENetEvent> wait_for_event(
+		ENetHost* host,
+		unsigned int timeout_ms,
+		PacketType packet_type,
+		PacketDirection packet_direction,
+		const std::vector<uint8_t>& allowed_subtypes
+	);
 };

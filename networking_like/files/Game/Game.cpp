@@ -95,3 +95,19 @@ bool Game::is_local_server() const {
 	}
 	return false;
 }
+
+void Game::destroy_server() {
+	if (server) {
+		server->prepare_destroy();
+		server.reset(); // Should be the final reference to server removed, server will now be destroyed by shared_ptr
+		server = nullptr;
+	}
+}
+
+void Game::destroy_client() {
+	if (client) {
+		client->prepare_destroy();
+		client.reset();
+		client = nullptr;
+	}
+}

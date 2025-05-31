@@ -10,6 +10,8 @@ WorldState::~WorldState() {
 
 void WorldState::on_draw() {
 	// Drawing logic for the world state
+
+	ImGui::Text("Game World Placeholder Text");
 }
 
 void WorldState::on_activate() {

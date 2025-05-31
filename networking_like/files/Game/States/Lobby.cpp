@@ -98,6 +98,15 @@ void Lobby::on_deactivate() {
 void Lobby::on_draw() {
 	// Draw the lobby
 
+	ImGui::Begin("Lobby", NULL,
+		ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_AlwaysAutoResize |
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoScrollbar |
+		ImGuiWindowFlags_NoScrollWithMouse |
+		ImGuiWindowFlags_NoBringToFrontOnFocus
+	);
+
 	if (ImGui::Button("Back")) {
 		// If we are a client, disconnect
 		if (game.client) {
@@ -160,27 +169,40 @@ void Lobby::on_draw() {
 		ImGui::EndTable();
 	}
 
-	// Start button (visible only for host)
-	if (is_host && ImGui::Button("Start Game")) {
-		// Tell all clients to go to World gamestate
-		ChangeStateTo change_state;
-		change_state.state_name = "WorldState";
-		std::string serialized = SerializationUtils::serialize<ChangeStateTo>(change_state);
+	if (is_host && game.server) {
+		// Below this point is only visible for the host.
+		static bool allow_connections = game.server->are_connections_allowed();
+		if (ImGui::Checkbox("Allow New Connections", &allow_connections)) {
+			if (allow_connections) game.server->allow_connections();
+			if (!allow_connections) game.server->refuse_connections();
+		}
 
-		Packet packet(
-			PacketType::CHANGE_STATE,
-			PacketDirection::SERVER_TO_CLIENT,
-			ChangeStateType::CHANGE_STATE_TO,
-			serialized.data(),
-			serialized.size(),
-			true
-		);
+		ImGui::SameLine();
 
-		// Broadcast to all clients (excluding self if you want, or include self for simplicity)
-		if (game.server) {
+		if (ImGui::Button("Start Game")) {
+			// Tell all clients to go to World gamestate
+			ChangeStateTo change_state;
+			change_state.state_name = "WorldState";
+			std::string serialized = SerializationUtils::serialize<ChangeStateTo>(change_state);
+
+			Packet packet(
+				PacketType::CHANGE_STATE,
+				PacketDirection::SERVER_TO_CLIENT,
+				ChangeStateType::CHANGE_STATE_TO,
+				serialized.data(),
+				serialized.size(),
+				true
+			);
+
+			// Broadcast to all clients
 			game.server->broadcast_packet(packet);
 		}
 	}
+
+	ImGui::End();
+	
+
+
 
 }
 

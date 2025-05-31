@@ -19,6 +19,9 @@ public:
 	
 	bool is_local_server() const;
 
+	void destroy_client();
+	void destroy_server();
+
 	// Left public to be accessible to GameStates.
 	raylib::Window window;
 	std::shared_ptr<Server> server; // Shared with protocols

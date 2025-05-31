@@ -52,3 +52,39 @@ std::optional<ENetEvent> NetworkHelper::wait_for_event(ENetHost* host, unsigned 
 	}
 	return std::nullopt;
 }
+
+#include <vector>
+
+// ... existing code ...
+
+std::optional<ENetEvent> NetworkHelper::wait_for_event(
+	ENetHost* host,
+	unsigned int timeout_ms,
+	PacketType packet_type,
+	PacketDirection packet_direction,
+	const std::vector<uint8_t>& allowed_subtypes
+) {
+	ENetEvent event;
+	unsigned int start_time = TimeUtils::get_current_time_millis();
+	unsigned int remaining_time = timeout_ms;
+
+	while (remaining_time > 0) {
+		if (enet_host_service(host, &event, remaining_time) > 0) {
+			if (event.type == ENET_EVENT_TYPE_RECEIVE) {
+				Packet packet(event.packet);
+
+				// ANY/255 is wildcard for type/direction, allowed_subtypes is checked as a set
+				bool subtype_match = std::find(allowed_subtypes.begin(), allowed_subtypes.end(), packet.header.subtype) != allowed_subtypes.end();
+
+				if ((packet.header.type == packet_type || packet_type == PacketType::ANY_TYPE)
+					&& (packet.header.direction == packet_direction || packet_direction == PacketDirection::ANY_DIRECTION)
+					&& (subtype_match || std::find(allowed_subtypes.begin(), allowed_subtypes.end(), 255) != allowed_subtypes.end())) {
+					return event;
+				}
+			}
+		}
+		unsigned int elapsed_time = TimeUtils::get_time_since(start_time);
+		remaining_time = timeout_ms - elapsed_time;
+	}
+	return std::nullopt;
+}

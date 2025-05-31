@@ -10,6 +10,7 @@ MainMenu::~MainMenu() {
 }
 
 void MainMenu::on_draw() {
+    LOG_SCOPE_GAME;
 	// Draw the main menu
     ImGui::SetNextWindowPos({ 0, 0 });
     ImGui::SetNextWindowSize({ (float)GetScreenWidth(), (float)GetScreenHeight() });
@@ -24,6 +25,8 @@ void MainMenu::on_draw() {
         ImGuiWindowFlags_NoBringToFrontOnFocus
     );
 
+    
+
     ImGui::Text("Game");
 
     std::string address = "127.0.0.1";
@@ -33,18 +36,29 @@ void MainMenu::on_draw() {
         game.create_server(address, port);
 		game.create_client(address, port);
 
-        Log::asserts(game.client->is_connected(), "Failed to connect to server from MainMenu");
-        if (!game.stateManager.setState("Lobby")) {
-            Log::asserts(false, "Failed to set state to Lobby from MainMenu");
+        if (!game.client->is_connected()) {
+            // Client failed to connect, or server is messed up. Just destroy both and stay on main menu
+            game.destroy_client();
+            game.destroy_server();
+        }
+        else {
+            if (!game.stateManager.setState("Lobby")) {
+                Log::asserts(false, "Failed to set state to Lobby from MainMenu");
+            }
         }
     }
 
     if (ImGui::Button("Join", ImVec2(200, 100))) {
         game.create_client(address, port);
 
-		Log::asserts(game.client->is_connected(), "Failed to connect to server from MainMenu");
-        if (!game.stateManager.setState("Lobby")) {
-            Log::asserts(false, "Failed to set state to Lobby from MainMenu");
+        if (!game.client->is_connected()) {
+            // Client failed to connect. Destroy it and stay on main menu
+            game.destroy_client();
+        }
+        else {
+            if (!game.stateManager.setState("Lobby")) {
+                Log::asserts(false, "Failed to set state to Lobby from MainMenu");
+            }
         }
     }
 

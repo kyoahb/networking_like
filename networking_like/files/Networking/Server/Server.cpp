@@ -12,7 +12,7 @@ Server::Server(const std::string& _address, int _port) : NetworkUser(), address_
 	//address.host = ENET_HOST_ANY;
 	address.port = port;
 
-	host = enet_host_create(&address, MAX_CLIENTS, MAX_CHANNELS, BANDWIDTH_LIMIT, TIMEOUT_LIMIT);
+	host = enet_host_create(&address, NetworkConstants::MaxConnections, NetworkConstants::MaxChannels, NetworkConstants::BandwidthLimit, NetworkConstants::ENetTimeout);
 	Log::asserts(host != NULL, "Failed to create ENet host");
 
 	Log::trace("Server initialized!");
@@ -261,5 +261,23 @@ bool Server::send_packet(const Packet& packet, ENetPeer* peer) {
 }
 
 std::shared_ptr<SWorldGroup> Server::get_world_group() {
+	LOG_SCOPE_SERVER;
 	return world_group;
+}
+
+void Server::refuse_connections() {
+	LOG_SCOPE_SERVER;
+	Log::trace("Refusing further connections.");
+	connections_allowed = false;
+}
+
+void Server::allow_connections() {
+	LOG_SCOPE_SERVER;
+	Log::trace("Allowing further connections.");
+	connections_allowed = true;
+}
+
+bool Server::are_connections_allowed() {
+	LOG_SCOPE_SERVER;
+	return connections_allowed;
 }

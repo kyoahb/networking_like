@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CGroup.h"
-#include "Networking/Shared/World/WorldObject.h"
+#include "Game/World/WorldObject.h"
 #include "Networking/Packets/Data/WorldInfo.h"
 class CWorldGroup : public CGroup
 {

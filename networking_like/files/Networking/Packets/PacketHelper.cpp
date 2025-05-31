@@ -17,6 +17,7 @@ std::unordered_map<PacketType, PacketHelper::TypeInfo> PacketHelper::packet_type
         {1, {"BEGIN", {}}},
         {2, {"RELAY", {}}},
         {3, {"CONFIRM", {}}},
+        {4, {"REJECT", {}}},
     }}},
 
     {PacketType::WORLD_INFO, {"WORLD_INFO", {

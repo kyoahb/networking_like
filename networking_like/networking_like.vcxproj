@@ -178,6 +178,7 @@
     <ClInclude Include="files\Game\States\Lobby.h" />
     <ClInclude Include="files\Game\States\MainMenu.h" />
     <ClInclude Include="files\Game\States\WorldState.h" />
+    <ClInclude Include="files\Game\World\WorldObject.h" />
     <ClInclude Include="files\Networking\Client\Client.h" />
     <ClInclude Include="files\Networking\Client\ClientPeerlist.h" />
     <ClInclude Include="files\Networking\Client\Groups\CConnectGroup.h" />
@@ -204,9 +205,9 @@
     <ClInclude Include="files\Networking\Shared\FutureResults\DisconnectResult.h" />
     <ClInclude Include="files\Networking\Shared\FutureResults\ShutdownResult.h" />
     <ClInclude Include="files\Networking\Shared\NetPeer.h" />
+    <ClInclude Include="files\Networking\Shared\NetworkConstants.h" />
     <ClInclude Include="files\Networking\Shared\NetworkUser.h" />
     <ClInclude Include="files\Networking\Shared\Protocol.h" />
-    <ClInclude Include="files\Networking\Shared\World\WorldObject.h" />
     <ClInclude Include="files\UI\UIMenu.h" />
     <ClInclude Include="files\Utils\General\RandomUtils.h" />
     <ClInclude Include="files\Utils\General\RenderUtils.h" />

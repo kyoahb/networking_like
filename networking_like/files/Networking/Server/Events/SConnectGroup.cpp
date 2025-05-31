@@ -26,7 +26,7 @@ void SConnectGroup::update(const Events::Server::UpdateData& data) {
 	
 
 	for (auto it = pending_begins.begin(); it != pending_begins.end();) {
-		if (TimeUtils::get_time_since(it->second) >= CONNECTBEGIN_TIMEOUT) {
+		if (TimeUtils::get_time_since(it->second) >= NetworkConstants::ConnectionTimeout) {
 			Log::warn("CLIENT_CONNECT_BEGIN packet timed out for peer: " + server->peers.get_polite_handle(it->first));
 
 			// Disconnect peer
@@ -72,6 +72,17 @@ void SConnectGroup::event_receive(const Events::Server::EventReceiveData& data) 
         }
 
         ClientConnectBegin client_connect_begin = SerializationUtils::deserialize<ClientConnectBegin>(packet.data, packet.header.size);
+
+        if (!server->are_connections_allowed()) {
+            // We are going to send a CLIENT_CONNECT_REJECT packet
+            ClientConnectReject client_connect_reject;
+            client_connect_reject.reason = "Connections not allowed";
+            std::string serialised_reject = SerializationUtils::serialize<ClientConnectReject>(client_connect_reject);
+            Packet packet_reject(PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, ClientConnectType::CLIENT_CONNECT_REJECT, serialised_reject.data(), serialised_reject.size());
+            server->send_packet(packet_reject, event.peer);
+
+            return; // Do not trigger an event
+        }
 
 		uint8_t client_id = get_next_id();
 		std::string client_decided_handle = get_handle(client_connect_begin.client_preferred_handle, client_id);

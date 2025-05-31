@@ -29,8 +29,8 @@ void CDisconnectGroup::update(const Events::Client::UpdateData& data) {
 	LOG_SCOPE_CLIENT_GROUP;
 	// Check for pending disconnect
 	if (pending_disconnect.has_value()) {
-		if (TimeUtils::get_time_since(pending_disconnect->request_time) >= DISCONNECT_TIMEOUT) {
-			Log::warn("Client has timed out waiting for disconnect confirmation. Timeout was " + std::to_string(DISCONNECT_TIMEOUT) + "ms");
+		if (TimeUtils::get_time_since(pending_disconnect->request_time) >= NetworkConstants::ConnectionTimeout) {
+			Log::warn("Client has timed out waiting for disconnect confirmation.");
 			pending_disconnect.reset();
 
 			force_disconnect();
@@ -162,7 +162,7 @@ DisconnectResult CDisconnectGroup::disconnect(DisconnectResultReason reason) {
 	// BLocking
 	// Wait for disconnect confirmation
 	uint64_t start_time = TimeUtils::get_current_time_millis();
-	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, DISCONNECT_TIMEOUT, PacketType::CLIENT_DISCONNECT, PacketDirection::ANY_DIRECTION, ClientDisconnectType::CLIENT_DISCONNECT_CONFIRM);
+	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, NetworkConstants::ConnectionTimeout, PacketType::CLIENT_DISCONNECT, PacketDirection::ANY_DIRECTION, ClientDisconnectType::CLIENT_DISCONNECT_CONFIRM);
 
 	if (event.has_value()) {
 		Log::trace("Disconnect confirmation received");

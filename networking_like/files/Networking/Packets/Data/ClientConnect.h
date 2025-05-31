@@ -7,6 +7,7 @@ enum ClientConnectType : uint8_t {
 	CLIENT_CONNECT_BEGIN = 1,
 	CLIENT_CONNECT_RELAY = 2,
 	CLIENT_CONNECT_CONFIRM = 3,
+	CLIENT_CONNECT_REJECT = 4,
 };
 
 // Client -> Server
@@ -53,4 +54,16 @@ public:
 		archive(server_preferred_handle, is_host, client_decided_handle, client_id, other_clients);
 	}
 
+};
+
+// Server -> Client
+// Subtype 4 (CLIENT_CONNECT_REJECT)
+class ClientConnectReject : public PacketData {
+public:
+	std::string reason = "";
+
+	template <typename Archive>
+	void serialize(Archive& archive) {
+		archive(reason);
+	}
 };

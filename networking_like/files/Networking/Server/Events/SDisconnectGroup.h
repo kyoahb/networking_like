@@ -23,8 +23,6 @@ private:
 	int update_callback;
 	int event_receive_callback;
 	std::unordered_map<ENetPeer*, PendingDisconnect> pending_disconnects; // Set of peers that are pending a CLIENT_CONNECT_BEGIN packet
-	const int DISCONNECT_TIMEOUT = 500; // Timeout for client connection
-	const int CHECK_INTERVAL = 100; // Check interval in milliseconds
 
 	void add_pending_disconnect(ENetPeer* peer, DisconnectResultReason reason); // Add a pending disconnect
 	void send_relay_to_others(ENetPeer* excluded);

@@ -30,7 +30,7 @@ void SDisconnectGroup::update(const Events::Server::UpdateData& data) {
 	LOG_SCOPE_SERVER_GROUP;
 	// Check for pending disconnects
 	for (auto it = pending_disconnects.begin(); it != pending_disconnects.end();) {
-		if (TimeUtils::get_time_since(it->second.request_time) >= DISCONNECT_TIMEOUT) {
+		if (TimeUtils::get_time_since(it->second.request_time) >= NetworkConstants::ConnectionTimeout) {
 			Log::warn("Disconnect packet timed out for peer: " + server->peers.get_polite_handle(it->first));
 			it = pending_disconnects.erase(it);
 		}
@@ -169,13 +169,13 @@ DisconnectResult SDisconnectGroup::disconnect_peer(ENetPeer* peer, DisconnectRes
 	bool accepted = false;
 	uint64_t start_time = TimeUtils::get_current_time_millis();
 	ENetEvent event;
-	while (TimeUtils::get_time_since(start_time) < DISCONNECT_TIMEOUT) {
+	Log::trace("Waiting for CLIENT_DISCONNECT:CONFIRM from peer: " + handle);
+	while (TimeUtils::get_time_since(start_time) < NetworkConstants::ConnectionTimeout) {
 		if (pending_disconnects.find(peer) == pending_disconnects.end()) {
 			accepted = true;
 			break;
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(CHECK_INTERVAL));
-		Log::trace("Waiting for CLIENT_DISCONNECT:CONFIRM from peer: " + handle + " (timeout in " + std::to_string(DISCONNECT_TIMEOUT - TimeUtils::get_time_since(start_time)) + "ms)");
+		std::this_thread::sleep_for(std::chrono::milliseconds(NetworkConstants::UpdateSleepMs));
 	}
 
 	DisconnectResult result;

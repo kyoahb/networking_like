@@ -3,7 +3,7 @@
 #include "Utils/Imports/common.h"
 #include "Game/States/GameState.h"
 #include "Game/Events/EventList.h"
-#include "Networking/Shared/World/WorldObject.h"
+#include "Game/World/WorldObject.h"
 class WorldState : public GameState {
 public:
 	WorldState(Game& _game);

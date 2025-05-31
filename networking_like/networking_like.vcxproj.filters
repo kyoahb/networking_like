@@ -89,11 +89,11 @@
     <Filter Include="Networking\Packets\Data\WORLD">
       <UniqueIdentifier>{39ba55ab-b190-4067-8f71-198d06809a89}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Networking\Shared\World">
-      <UniqueIdentifier>{87c3137e-bd32-4a8f-9740-87bac4a78362}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Networking\Packets\Data\CHANGE_STATE">
       <UniqueIdentifier>{9536519b-67d7-4377-ad80-9975b2238c37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\World">
+      <UniqueIdentifier>{77bb08b1-e06a-4dca-b20c-cfc48e4389ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -486,9 +486,6 @@
     <ClInclude Include="files\Networking\Packets\Data\WorldInfo.h">
       <Filter>Networking\Packets\Data\WORLD</Filter>
     </ClInclude>
-    <ClInclude Include="files\Networking\Shared\World\WorldObject.h">
-      <Filter>Networking\Shared\World</Filter>
-    </ClInclude>
     <ClInclude Include="files\Networking\Client\Groups\CWorldGroup.h">
       <Filter>Networking\Client\Groups</Filter>
     </ClInclude>
@@ -500,6 +497,12 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Server\Events\SStateGroup.h">
       <Filter>Networking\Server\Groups</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Networking\Shared\NetworkConstants.h">
+      <Filter>Networking\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\World\WorldObject.h">
+      <Filter>Game\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

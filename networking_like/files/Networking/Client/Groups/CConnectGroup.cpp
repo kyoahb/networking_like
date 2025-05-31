@@ -88,9 +88,8 @@ ConnectResult CConnectGroup::connect(const std::string& ip, uint16_t port, const
 
 	// Wait for CLIENT_CONNECT_CONFIRM packet
 	if (!wait_for_connection_confirmation()) {
-		Log::error("Connection confirmation timed out");
 		client->disconnect().wait();
-		return ConnectResult{ ConnectResultType::FAILURE, "Connection confirmation timed out", TimeUtils::get_current_time_millis() - start_time };
+		return ConnectResult{ ConnectResultType::FAILURE, "Connection confirmation timed out / Connection rejection received", TimeUtils::get_current_time_millis() - start_time };
 	}
 
 	// Connection confirmation received
@@ -118,9 +117,8 @@ bool CConnectGroup::wait_for_connection_establishment(ENetPeer* server_peer) {
 		return false;
 	}
 
-	const unsigned int ESTABLISHMENT_TIMEOUT = 100;
-	Log::trace("Waiting for connection establishment for up to " + ESTABLISHMENT_TIMEOUT);
-	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, ESTABLISHMENT_TIMEOUT, ENET_EVENT_TYPE_CONNECT);
+	Log::trace("Waiting for connection establishment");
+	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, NetworkConstants::ConnectionTimeout, ENET_EVENT_TYPE_CONNECT);
 
 	if (event.has_value()) {
 		Log::trace("Connection establishment successful. Connected to server");
@@ -146,19 +144,26 @@ void CConnectGroup::send_connection_begin_packet(const std::string& preferred_ha
 bool CConnectGroup::wait_for_connection_confirmation() {
 	LOG_SCOPE_CLIENT;
 
-	const unsigned int TIMEOUT_MS = 5000;
-
-	Log::trace("Waiting up to " + std::to_string(TIMEOUT_MS) + "ms for connection confirmation...");
-	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, TIMEOUT_MS, PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, static_cast<uint8_t>(ClientConnectType::CLIENT_CONNECT_CONFIRM));
+	Log::trace("Waiting for connection confirmation...");
+	std::optional<ENetEvent> event = NetworkHelper::wait_for_event(client->host, NetworkConstants::ConnectionTimeout, PacketType::CLIENT_CONNECT, PacketDirection::SERVER_TO_CLIENT, { CLIENT_CONNECT_CONFIRM, CLIENT_CONNECT_REJECT});
 
 	if (event.has_value()) {
 		Packet received_packet(event.value().packet);
-		ClientConnectConfirm connection_confirmation = SerializationUtils::deserialize<ClientConnectConfirm>(received_packet.data, received_packet.header.size);
-		client->peers.setup_by_confirmation(connection_confirmation);
+		if (received_packet.header.subtype == CLIENT_CONNECT_CONFIRM)
+		{
+			ClientConnectConfirm connection_confirmation = SerializationUtils::deserialize<ClientConnectConfirm>(received_packet.data, received_packet.header.size);
+			client->peers.setup_by_confirmation(connection_confirmation);
 
-		Log::trace("CLIENT_CONNECT:CONFIRM received. Server-given handle for US: " + connection_confirmation.client_decided_handle);
+			Log::trace("CLIENT_CONNECT:CONFIRM received. Server-given handle for US: " + connection_confirmation.client_decided_handle);
+			return true;
+		}
 
-		return true;
+		else if (received_packet.header.subtype == CLIENT_CONNECT_REJECT) {
+			ClientConnectReject connection_rejection = SerializationUtils::deserialize<ClientConnectReject>(received_packet.data, received_packet.header.size);
+
+			Log::trace("CLIENT_CONNECT:REJECT received. Reason: " + connection_rejection.reason);
+			return false;
+		}
 	}
 	Log::error("Connection confirmation timed out");
 	return false;

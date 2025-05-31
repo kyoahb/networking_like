@@ -13,6 +13,8 @@
 #include "Groups/CStateGroup.h"
 #include "Groups/CWorldGroup.h"
 
+#include "Networking/Shared/NetworkConstants.h"
+
 class Client : public NetworkUser, public std::enable_shared_from_this<Client> {
 public:
 	ClientPeerlist peers;
