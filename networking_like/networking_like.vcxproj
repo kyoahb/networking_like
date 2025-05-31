@@ -73,6 +73,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\bresk\source\repos\kyoahb\networking_like\networking_like\include;C:\Users\bresk\source\repos\kyoahb\networking_like\networking_like\files;C:\Users\bresk\source\repos\networking_like\networking_like\files;C:\Users\bresk\source\repos\networking_like\networking_like\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\bresk\source\repos\kyoahb\networking_like\networking_like\lib;C:\Users\bresk\source\repos\networking_like\networking_like\lib;$(LibraryPath)</LibraryPath>
+    <CopyLocalDeploymentContent>true</CopyLocalDeploymentContent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <CopyLocalDeploymentContent>true</CopyLocalDeploymentContent>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -141,6 +145,8 @@
     <ClCompile Include="files\Game\States\Lobby.cpp" />
     <ClCompile Include="files\Game\States\MainMenu.cpp" />
     <ClCompile Include="files\Game\States\WorldState.cpp" />
+    <ClCompile Include="files\Game\World\Entities\Entity.cpp" />
+    <ClCompile Include="files\Game\World\Entities\LocalPlayer.cpp" />
     <ClCompile Include="files\Networking\Client\Client.cpp" />
     <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
     <ClCompile Include="files\Networking\Client\Groups\CConnectGroup.cpp" />
@@ -161,7 +167,6 @@
     <ClCompile Include="files\Networking\Shared\NetPeer.cpp" />
     <ClCompile Include="files\Networking\Shared\NetworkUser.cpp" />
     <ClCompile Include="files\Networking\Shared\Protocol.cpp" />
-    <ClCompile Include="files\UI\UIMenu.cpp" />
     <ClCompile Include="files\Utils\Imports\enet_wrapper.cpp" />
     <ClCompile Include="files\Utils\Input\Input.cpp" />
     <ClCompile Include="files\Utils\Logs\Log.cpp" />
@@ -178,6 +183,8 @@
     <ClInclude Include="files\Game\States\Lobby.h" />
     <ClInclude Include="files\Game\States\MainMenu.h" />
     <ClInclude Include="files\Game\States\WorldState.h" />
+    <ClInclude Include="files\Game\World\Entities\Entity.h" />
+    <ClInclude Include="files\Game\World\Entities\LocalPlayer.h" />
     <ClInclude Include="files\Game\World\WorldObject.h" />
     <ClInclude Include="files\Networking\Client\Client.h" />
     <ClInclude Include="files\Networking\Client\ClientPeerlist.h" />
@@ -208,7 +215,6 @@
     <ClInclude Include="files\Networking\Shared\NetworkConstants.h" />
     <ClInclude Include="files\Networking\Shared\NetworkUser.h" />
     <ClInclude Include="files\Networking\Shared\Protocol.h" />
-    <ClInclude Include="files\UI\UIMenu.h" />
     <ClInclude Include="files\Utils\General\RandomUtils.h" />
     <ClInclude Include="files\Utils\General\RenderUtils.h" />
     <ClInclude Include="files\Utils\General\SerializationUtils.h" />
@@ -277,6 +283,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="include\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="files\Assets\cube.obj">
+      <DeploymentContent>true</DeploymentContent>
+      <FileType>Document</FileType>
+    </Text>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

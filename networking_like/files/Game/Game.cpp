@@ -61,12 +61,13 @@ void Game::update() {
 	// Draw
 	BeginDrawing(); // Tell Raylib we are going to draw
 	
-	window.ClearBackground(WHITE); // Clear previous frame by replacing with full white
+	window.ClearBackground(GRAY); // Clear previous frame by replacing with full white
 	rlImGuiBegin(); // Start Raylib-ImGUI frame
 
 	stateManager.draw(); // Draw whatever current state is
 
 	rlImGuiEnd(); // End Raylib-ImGUI frame
+
 	EndDrawing(); // Tell Raylib we are done drawing
 
 }

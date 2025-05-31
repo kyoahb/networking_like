@@ -11,7 +11,19 @@ WorldState::~WorldState() {
 void WorldState::on_draw() {
 	// Drawing logic for the world state
 
-	ImGui::Text("Game World Placeholder Text");
+	//ImGui::Text("Game World Placeholder Text");
+	
+	if (player)
+	{
+		BeginMode3D(player->get_camera());
+		player->update();
+		player->draw();
+
+		raylib::Vector3 position = raylib::Vector3( 0.0f, 0.0f, 0.0f );
+		position.DrawCube(raylib::Vector3( 1.0f, 1.0f, 1.0f ), RED);
+	
+		EndMode3D();
+	}
 }
 
 void WorldState::on_activate() {
@@ -29,6 +41,10 @@ void WorldState::on_activate() {
 		world_group->generate_world();
 		world_group->send_initial_world();
 	}
+
+	// Just as a test 
+	player = std::make_shared<LocalPlayer>();
+	Log::trace("test");
 }
 
 void WorldState::on_deactivate() {

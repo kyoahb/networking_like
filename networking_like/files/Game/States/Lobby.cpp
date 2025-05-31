@@ -100,12 +100,13 @@ void Lobby::on_draw() {
 
 	ImGui::Begin("Lobby", NULL,
 		ImGuiWindowFlags_NoMove |
-		ImGuiWindowFlags_AlwaysAutoResize |
 		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoScrollbar |
 		ImGuiWindowFlags_NoScrollWithMouse |
 		ImGuiWindowFlags_NoBringToFrontOnFocus
 	);
+	ImGui::SetWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
 
 	if (ImGui::Button("Back")) {
 		// If we are a client, disconnect

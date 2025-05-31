@@ -44,23 +44,14 @@
     <Filter Include="Networking\Shared\FutureResults">
       <UniqueIdentifier>{324580a1-0a1d-46c1-8fcb-99d0e0b48b19}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI">
-      <UniqueIdentifier>{ffec48ce-c320-4685-bb6b-6f81de4da749}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include">
       <UniqueIdentifier>{046acbdf-b6af-4040-9bd3-a1a99d036df8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{fb65902f-76d0-4742-93a6-e02813256389}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI\Menus">
-      <UniqueIdentifier>{be0744af-a62a-46ff-8246-e7e15b787cc7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\State">
       <UniqueIdentifier>{965506fa-9fe3-4bb6-81a2-71b908739445}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Test">
-      <UniqueIdentifier>{2ff4e73c-9085-4e85-aa49-ce11d4826a28}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils\Network">
       <UniqueIdentifier>{ba593b23-82ce-40e7-a31e-a75df026ddc5}</UniqueIdentifier>
@@ -94,6 +85,15 @@
     </Filter>
     <Filter Include="Game\World">
       <UniqueIdentifier>{77bb08b1-e06a-4dca-b20c-cfc48e4389ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\World\Objects">
+      <UniqueIdentifier>{f1dee687-a85b-4454-a85d-0d13b2fd14d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\World\Entities">
+      <UniqueIdentifier>{0243c79c-695e-45d1-b6dc-50a433ee479c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{6ca24c84-d668-449e-9cf5-7ef806baeb56}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +135,6 @@
     </ClCompile>
     <ClCompile Include="files\Networking\Server\Server.cpp">
       <Filter>Networking\Server</Filter>
-    </ClCompile>
-    <ClCompile Include="files\UI\UIMenu.cpp">
-      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="files\Game\Game.cpp">
       <Filter>Game</Filter>
@@ -201,6 +198,12 @@
     </ClCompile>
     <ClCompile Include="files\Networking\Server\Events\SStateGroup.cpp">
       <Filter>Networking\Server\Groups</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\World\Entities\Entity.cpp">
+      <Filter>Game\World\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\World\Entities\LocalPlayer.cpp">
+      <Filter>Game\World\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -269,9 +272,6 @@
     </ClInclude>
     <ClInclude Include="files\Networking\Shared\FutureResults\ShutdownResult.h">
       <Filter>Networking\Shared\FutureResults</Filter>
-    </ClInclude>
-    <ClInclude Include="files\UI\UIMenu.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="files\Game\Game.h">
       <Filter>Game</Filter>
@@ -504,6 +504,12 @@
     <ClInclude Include="files\Game\World\WorldObject.h">
       <Filter>Game\World</Filter>
     </ClInclude>
+    <ClInclude Include="files\Game\World\Entities\LocalPlayer.h">
+      <Filter>Game\World\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\World\Entities\Entity.h">
+      <Filter>Game\World\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="TODO.md">
@@ -513,6 +519,9 @@
   <ItemGroup>
     <Text Include="include\CMakeLists.txt">
       <Filter>Include</Filter>
+    </Text>
+    <Text Include="files\Assets\cube.obj">
+      <Filter>Assets</Filter>
     </Text>
   </ItemGroup>
 </Project>

@@ -137,6 +137,27 @@ public:
 	}
 
 
+	/**
+	* Convert Euler angles (0-360) to Axis-Angle representation
+	* @param euler Euler angles in degrees (x = pitch, y = yaw, z = roll)
+	* @return raylib::Vector4 Axis-Angle representation (x, y, z = axis, w = angle in radians)
+	*/
+	static raylib::Vector4 euler_to_axis_angle(const raylib::Vector3& euler) {
+		float pitchRad = radians(euler.x);
+		float yawRad = radians(euler.y);
+		float rollRad = radians(euler.z);
+		// Calculate the axis of rotation (normalized)
+		raylib::Vector3 axis = {
+			sin(yawRad) * cos(pitchRad),
+			-sin(pitchRad),
+			-cos(yawRad) * cos(pitchRad)
+		};
+		axis = axis.Normalize();
+		// Calculate the angle of rotation
+		float angle = sqrtf(pitchRad * pitchRad + yawRad * yawRad + rollRad * rollRad);
+		return raylib::Vector4{ axis.x, axis.y, axis.z, angle };
+	};
+
 
 
 };
