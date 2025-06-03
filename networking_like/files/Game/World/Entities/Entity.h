@@ -2,6 +2,7 @@
 
 #include "Utils/Imports/common.h"
 #include "Utils/General/MathUtils.h"
+#include "Game/World/TransmittableObjects.h"
 
 // We must ensure Entities are ONLY (!) made as shared_ptrs
 // Or exist as shared_ptrs before children are added to them
@@ -18,6 +19,9 @@ public:
 		raylib::Vector3 _rotation = raylib::Vector3(0.0f, 0.0f, 0.0f),
 		raylib::Vector3 _scale = raylib::Vector3(1.0f, 1.0f, 1.0f)
 	);
+
+	Entity(const TransmittableEntity& e);
+
 	~Entity();
 
 	// Local variables
@@ -32,6 +36,7 @@ public:
 	const raylib::Vector3 get_scale() const;
 	void set_scale(raylib::Vector3 _scale);
 	void mult_scale(raylib::Vector3 multiplier);
+	void mult_scale(float multiplier);
 
 	const raylib::Model& get_model() const;
 	void set_model(raylib::Model& _model);
@@ -46,6 +51,9 @@ public:
 	// Methods
 
 	void draw() const; // ASSUME CAMERA IS BOUND!
+
+	std::vector<unsigned int> get_children_ids() const;
+	TransmittableEntity to_transmittable() const;
 
 
 protected:

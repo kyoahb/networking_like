@@ -25,6 +25,11 @@ Entity::Entity(
     ID = next_id++;
 }
 
+Entity::Entity(const TransmittableEntity& e) : position(e.position), rotation(e.rotation), scale(e.scale) {
+    ID = e.id; 
+    next_id++; // Just for consistency
+}
+
 Entity::~Entity() {
 
 }
@@ -61,6 +66,9 @@ void Entity::set_scale(raylib::Vector3 _scale) {
     scale = _scale;
 }
 void Entity::mult_scale(raylib::Vector3 multiplier) {
+    scale *= multiplier;
+}
+void Entity::mult_scale(float multiplier) {
     scale *= multiplier;
 }
 
@@ -117,4 +125,27 @@ void Entity::set_parent_id(unsigned int _parent_id) {
 void Entity::draw() const {
     raylib::Vector4 axis_angle_repr = MathUtils::euler_to_axis_angle(rotation);
     model.Draw(position, { axis_angle_repr.x, axis_angle_repr.y, axis_angle_repr.z }, axis_angle_repr.w, scale);
+}
+
+// to transmittable
+
+std::vector<unsigned int> Entity::get_children_ids() const {
+    std::vector<unsigned int> ids = {};
+    for (const auto& child : children) {
+        if (child) {
+            ids.push_back(child->get_id());
+        }
+    }
+}
+
+TransmittableEntity Entity::to_transmittable() const {
+    TransmittableEntity e;
+    e.id = ID;
+    e.parent_id = parent_id;
+    e.children_ids = get_children_ids();
+    e.position = position;
+    e.rotation = rotation;
+    e.scale = scale;
+    
+    return e;
 }

@@ -9,6 +9,10 @@ namespace cereal {
 }
 
 struct TransmittableEntity {
+	// DOES NOT TRANSMIT MODELS
+	// MUST SAVEM ODELS LOCALLY AND CONNECT THEM TO AN ID OR SOMETHING
+
+
 	unsigned int id;
 	unsigned int parent_id;
 	std::vector<unsigned int> children_ids;
@@ -33,7 +37,12 @@ struct TransmittablePlayer : public TransmittableEntity {
 };
 
 // For WORLD_SEND_FULL
-class TransmittableWorld {
+struct TransmittableWorld {
 	std::vector<TransmittablePlayer> players;
 	std::vector<TransmittableEntity> entities;
+
+	template <typename Archive>
+	void serialize(Archive& archive) {
+		archive(players, entities);
+	}
 };

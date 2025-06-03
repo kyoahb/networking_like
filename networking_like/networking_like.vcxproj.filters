@@ -206,10 +206,10 @@
       <Filter>Game\World\Entities</Filter>
     </ClCompile>
     <ClCompile Include="files\Game\World\TransmittableObject.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Game\World</Filter>
     </ClCompile>
     <ClCompile Include="files\Game\World\WorldObject.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Game\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

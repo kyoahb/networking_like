@@ -31,6 +31,20 @@ void SWorldGroup::update(const Events::Server::UpdateData& data) {
 void SWorldGroup::generate_world() {
 	// This should be setup with an actual world generation process
 	// For now, a placeholder will be used
+
+	world = WorldObject();
+	
+	// Allocate a player object for each player in the lobby
+	for (auto &peer : server->peers.get_peers()) {
+		std::shared_ptr<Player> p = std::make_shared<Player>(peer);
+		world.player_map[p->get_id()] = p;
+	}
+
+	// Create entities
+	auto example = std::make_shared<Entity>();
+	example->mult_scale(5);
+
+
 }
 
 void SWorldGroup::send_delta_world() {
@@ -41,9 +55,11 @@ void SWorldGroup::send_delta_world() {
 void SWorldGroup::send_initial_world() {
 	// Send world
 
-	send_world();
+	// Create transmittable stuff
+
 
 }
 
 void SWorldGroup::send_world() {
+
 }

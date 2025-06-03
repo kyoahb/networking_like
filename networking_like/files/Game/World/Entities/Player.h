@@ -5,6 +5,7 @@
 class Player : public Entity {
 public:
 	Player(const NetPeer& peer);
+	Player(const TransmittablePlayer& p); 
 	~Player();
 
 	// Local variables
@@ -12,6 +13,9 @@ public:
 
 	void update(); // Updates camera + position based on mouse / keyboard input
 	void draw(); // Draws model in current position with rotation
+
+
+	TransmittablePlayer to_transmittable() const;
 
 private:
 	int peer_id = -1; // Corresponds to a peer.

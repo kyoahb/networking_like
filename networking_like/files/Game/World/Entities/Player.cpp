@@ -11,6 +11,13 @@ Player::Player(const NetPeer& peer) : Entity(), peer_id(peer.id) {
 	camera.projection = CAMERA_PERSPECTIVE;           // Camera projection type
 }
 
+Player::Player(const TransmittablePlayer& p) : Entity(p.position, p.rotation, p.scale), peer_id(p.peer_id) {
+	// Setup player as much as possible
+	ID = p.id;
+
+	// CANNOT SETUP CHILDREN!
+}
+
 Player::~Player() {
 
 }
@@ -63,4 +70,19 @@ void Player::move_directionally(float amount) {
 	}
 
 	move(position_delta * amount);
+}
+
+
+TransmittablePlayer Player::to_transmittable() const {
+	TransmittablePlayer e;
+
+	e.id = ID;
+	e.parent_id = parent_id;
+	e.children_ids = get_children_ids();
+	e.position = position;
+	e.rotation = rotation;
+	e.scale = scale;
+	e.peer_id = peer_id;
+
+	return e;
 }
