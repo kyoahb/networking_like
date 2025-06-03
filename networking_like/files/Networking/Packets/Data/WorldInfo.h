@@ -4,7 +4,11 @@
 #include "Game/World/WorldObject.h"
 enum WorldInfo : uint8_t {
 	WORLD_ANY = 255,
-	WORLD_SEND_FULL = 1
+	WORLD_SEND_FULL = 1,
+	WORLD_UPDATE_OBJ = 2,
+	WORLD_UPDATE_PLAYER = 3,
+	WORLD_REQUEST_PLAYER = 4,
+	WORLD_SET_PLAYER = 5
 };
 
 // Server -> Client
@@ -50,12 +54,12 @@ public:
 	// No need for any ID, as it is the player that receives this packet we are requesting data from
 	template <typename Archive>
 	void serialize(Archive& archive) {
-		archive(player_id);
+		archive();
 	}
 };
 
 // Client -> Server
-// Subtype 4 (WORLD_SET_PLAYER)
+// Subtype 5 (WORLD_SET_PLAYER)
 class UploadWorldPlayer : public PacketData {
 public:
 	Player player;

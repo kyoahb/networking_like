@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Networking/Packets/Data/WorldInfo.h"
 #include "Entities/Player.h"
 #include "Entities/Entity.h"
 #include "TransmittableObjects.h"
+#include "Networking/Packets/Data/WorldInfo.h"
 
 class WorldObject {
 public:
@@ -12,8 +12,8 @@ public:
 
 	WorldObject() = default;
 
-};	void update_player(UpdateWorldPlayer update_packet); // Updates a player in the world 
-
+	void update_player(UpdateWorldPlayer update_packet); // Updates a player in the world 
+};
 
 class ClientWorldObject : public WorldObject {
 	std::shared_ptr<Player> local_player; // The player that is controlled by the client

@@ -205,6 +205,12 @@
     <ClCompile Include="files\Game\World\Entities\Player.cpp">
       <Filter>Game\World\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="files\Game\World\TransmittableObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\Game\World\WorldObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="files\Utils\Imports\common.h">
@@ -509,6 +515,9 @@
     </ClInclude>
     <ClInclude Include="files\Game\World\Entities\Player.h">
       <Filter>Game\World\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\World\TransmittableObjects.h">
+      <Filter>Game\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
