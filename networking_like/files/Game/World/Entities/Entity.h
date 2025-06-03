@@ -5,7 +5,7 @@
 
 // We must ensure Entities are ONLY (!) made as shared_ptrs
 // Or exist as shared_ptrs before children are added to them
-class Entity : public std::enable_shared_from_this<Entity> {
+class Entity {
 public:
 	Entity(
 		raylib::Vector3 _position = raylib::Vector3(0.0f, 0.0f, 0.0f),
@@ -38,10 +38,10 @@ public:
 
 	unsigned int get_id() const;
 
-	std::weak_ptr<Entity> get_parent() const;
+	unsigned int get_parent_id() const;
 	std::vector<std::shared_ptr<Entity>> get_children() const;
 	void add_child(std::shared_ptr<Entity> child);
-	void set_parent(std::shared_ptr<Entity> _parent);
+	void set_parent_id(unsigned int _parent_id);
 	
 	// Methods
 
@@ -64,5 +64,5 @@ protected:
 	//					- Parent object is moved with a setter
 	//					- Child object is moved independently
 	std::vector<std::shared_ptr<Entity>> children;
-	std::weak_ptr<Entity> parent; // Not all objects will have parents, must check
+	unsigned int parent_id = 0; // Not all objects will have parents, must check if ==0
 };

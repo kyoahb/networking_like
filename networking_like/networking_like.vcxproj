@@ -146,7 +146,9 @@
     <ClCompile Include="files\Game\States\MainMenu.cpp" />
     <ClCompile Include="files\Game\States\WorldState.cpp" />
     <ClCompile Include="files\Game\World\Entities\Entity.cpp" />
-    <ClCompile Include="files\Game\World\Entities\LocalPlayer.cpp" />
+    <ClCompile Include="files\Game\World\Entities\Player.cpp" />
+    <ClCompile Include="files\Game\World\TransmittableObject.cpp" />
+    <ClCompile Include="files\Game\World\WorldObject.cpp" />
     <ClCompile Include="files\Networking\Client\Client.cpp" />
     <ClCompile Include="files\Networking\Client\ClientPeerlist.cpp" />
     <ClCompile Include="files\Networking\Client\Groups\CConnectGroup.cpp" />
@@ -184,7 +186,8 @@
     <ClInclude Include="files\Game\States\MainMenu.h" />
     <ClInclude Include="files\Game\States\WorldState.h" />
     <ClInclude Include="files\Game\World\Entities\Entity.h" />
-    <ClInclude Include="files\Game\World\Entities\LocalPlayer.h" />
+    <ClInclude Include="files\Game\World\Entities\Player.h" />
+    <ClInclude Include="files\Game\World\TransmittableObjects.h" />
     <ClInclude Include="files\Game\World\WorldObject.h" />
     <ClInclude Include="files\Networking\Client\Client.h" />
     <ClInclude Include="files\Networking\Client\ClientPeerlist.h" />

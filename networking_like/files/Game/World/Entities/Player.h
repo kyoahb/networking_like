@@ -1,10 +1,11 @@
 #pragma once
 #include "Entity.h"
+#include "Networking/Shared/NetPeer.h"
 
-class LocalPlayer : public Entity {
+class Player : public Entity {
 public:
-	LocalPlayer();
-	~LocalPlayer();
+	Player(const NetPeer& peer);
+	~Player();
 
 	// Local variables
 	const raylib::Camera& get_camera();
@@ -13,6 +14,8 @@ public:
 	void draw(); // Draws model in current position with rotation
 
 private:
+	int peer_id = -1; // Corresponds to a peer.
+
 	raylib::Camera camera;
 	raylib::Vector3 camera_offset = raylib::Vector3(0.0f, 2.0f, 0.0f); // Distance of camera from player centre
 

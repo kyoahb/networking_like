@@ -202,7 +202,7 @@
     <ClCompile Include="files\Game\World\Entities\Entity.cpp">
       <Filter>Game\World\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="files\Game\World\Entities\LocalPlayer.cpp">
+    <ClCompile Include="files\Game\World\Entities\Player.cpp">
       <Filter>Game\World\Entities</Filter>
     </ClCompile>
   </ItemGroup>
@@ -504,10 +504,10 @@
     <ClInclude Include="files\Game\World\WorldObject.h">
       <Filter>Game\World</Filter>
     </ClInclude>
-    <ClInclude Include="files\Game\World\Entities\LocalPlayer.h">
+    <ClInclude Include="files\Game\World\Entities\Entity.h">
       <Filter>Game\World\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="files\Game\World\Entities\Entity.h">
+    <ClInclude Include="files\Game\World\Entities\Player.h">
       <Filter>Game\World\Entities</Filter>
     </ClInclude>
   </ItemGroup>

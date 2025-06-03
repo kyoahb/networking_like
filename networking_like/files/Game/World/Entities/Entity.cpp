@@ -78,8 +78,8 @@ unsigned int Entity::get_id() const {
 }
 
 // children
-std::weak_ptr<Entity> Entity::get_parent() const {
-    return parent;
+unsigned int Entity::get_parent_id() const {
+    return parent_id; // Remember if parent_id==0 then it does not have a parent
 }
 
 std::vector<std::shared_ptr<Entity>> Entity::get_children() const {
@@ -91,16 +91,15 @@ void Entity::add_child(std::shared_ptr<Entity> child) {
         Log::warn("Entity tried to append itself as its own child.");
         return;
     }
-    auto child_parent = child->get_parent().lock();
-    if (child_parent && child_parent->get_id() != get_id()) {
+    unsigned int child_parentid = child->get_parent_id();
+    if (child_parentid != 0 && child_parentid != get_id()) {
         Log::warn("Entity tried to append an existing child of itself as a new child.");
         return;
     }
 
     // Ensure this entity is managed by a shared_ptr
     try {
-        std::shared_ptr<Entity> parent = shared_from_this();
-        child->set_parent(parent);
+        child->set_parent_id(child_parentid);
         children.push_back(child);
     }
     catch (const std::bad_weak_ptr&) {
@@ -108,8 +107,8 @@ void Entity::add_child(std::shared_ptr<Entity> child) {
     }
 }
 
-void Entity::set_parent(std::shared_ptr<Entity> _parent) {
-    parent = _parent;
+void Entity::set_parent_id(unsigned int _parent_id) {
+    parent_id = _parent_id;
 }
 
 // Methods

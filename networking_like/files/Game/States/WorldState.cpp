@@ -43,7 +43,7 @@ void WorldState::on_activate() {
 	}
 
 	// Just as a test 
-	player = std::make_shared<LocalPlayer>();
+	player = std::make_shared<Player>();
 	Log::trace("test");
 }
 

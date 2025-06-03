@@ -1,6 +1,6 @@
-#include "LocalPlayer.h"
+#include "Player.h"
 
-LocalPlayer::LocalPlayer() : Entity() {
+Player::Player(const NetPeer& peer) : Entity(), peer_id(peer.id) {
 
 	// Setup camera
 	camera = { 0 };
@@ -11,23 +11,23 @@ LocalPlayer::LocalPlayer() : Entity() {
 	camera.projection = CAMERA_PERSPECTIVE;           // Camera projection type
 }
 
-LocalPlayer::~LocalPlayer() {
+Player::~Player() {
 
 }
 
 // Locals
-const raylib::Camera& LocalPlayer::get_camera() {
+const raylib::Camera& Player::get_camera() {
 	return camera;
 }
 
 // Methods
 
-void LocalPlayer::draw() {
+void Player::draw() {
 
 	Entity::draw(); // No need for anything different
 }
 
-void LocalPlayer::update() {
+void Player::update() {
 
 	// Update camera
 	raylib::Vector3 rotation_delta = { GetMouseDelta().y, GetMouseDelta().x, 0.0f };
@@ -43,7 +43,7 @@ void LocalPlayer::update() {
 	camera.target = MathUtils::calculate_target(camera.position, rotation, 1.0f);
 }
 
-void LocalPlayer::move_directionally(float amount) {
+void Player::move_directionally(float amount) {
 	int forward_amt = IsKeyDown(KEY_W) - IsKeyDown(KEY_S);
 	int right_amt = IsKeyDown(KEY_D) - IsKeyDown(KEY_A);
 
