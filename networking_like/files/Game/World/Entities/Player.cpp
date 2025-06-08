@@ -2,13 +2,7 @@
 
 Player::Player(const NetPeer& peer) : Entity(), peer_id(peer.id) {
 
-	// Setup camera
-	camera = { 0 };
-	camera.position = raylib::Vector3(position.x + camera_offset.x, position.y + camera_offset.y, position.z + camera_offset.z);    // Camera position
-	camera.target = raylib::Vector3{ 0.0f, 2.0f, 0.0f };      // Camera looking at point
-	camera.up = raylib::Vector3{ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-	camera.fovy = 90.0f;                              // Camera field-of-view Y
-	camera.projection = CAMERA_PERSPECTIVE;           // Camera projection type
+	setup_camera();
 }
 
 Player::Player(const TransmittablePlayer& p) : Entity(p.position, p.rotation, p.scale), peer_id(p.peer_id) {
@@ -16,6 +10,12 @@ Player::Player(const TransmittablePlayer& p) : Entity(p.position, p.rotation, p.
 	ID = p.id;
 
 	// CANNOT SETUP CHILDREN!
+
+	setup_camera();
+}
+
+Player::Player() : Entity(), peer_id(-1) {
+	setup_camera();
 }
 
 Player::~Player() {
@@ -85,4 +85,14 @@ TransmittablePlayer Player::to_transmittable() const {
 	e.peer_id = peer_id;
 
 	return e;
+}
+
+void Player::setup_camera() {
+	// Setup camera
+	camera = { 0 };
+	camera.position = raylib::Vector3(position.x + camera_offset.x, position.y + camera_offset.y, position.z + camera_offset.z);    // Camera position
+	camera.target = raylib::Vector3{ 0.0f, 2.0f, 0.0f };      // Camera looking at point
+	camera.up = raylib::Vector3{ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+	camera.fovy = 90.0f;                              // Camera field-of-view Y
+	camera.projection = CAMERA_PERSPECTIVE;           // Camera projection type
 }

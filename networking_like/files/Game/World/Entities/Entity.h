@@ -3,6 +3,7 @@
 #include "Utils/Imports/common.h"
 #include "Utils/General/MathUtils.h"
 #include "Game/World/TransmittableObjects.h"
+#include "Game/World/Objects/AssetManager.h"
 
 // We must ensure Entities are ONLY (!) made as shared_ptrs
 // Or exist as shared_ptrs before children are added to them

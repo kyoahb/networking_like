@@ -147,6 +147,7 @@
     <ClCompile Include="files\Game\States\WorldState.cpp" />
     <ClCompile Include="files\Game\World\Entities\Entity.cpp" />
     <ClCompile Include="files\Game\World\Entities\Player.cpp" />
+    <ClCompile Include="files\Game\World\Objects\AssetManager.cpp" />
     <ClCompile Include="files\Game\World\TransmittableObject.cpp" />
     <ClCompile Include="files\Game\World\WorldObject.cpp" />
     <ClCompile Include="files\Networking\Client\Client.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="files\Game\States\WorldState.h" />
     <ClInclude Include="files\Game\World\Entities\Entity.h" />
     <ClInclude Include="files\Game\World\Entities\Player.h" />
+    <ClInclude Include="files\Game\World\Objects\AssetManager.h" />
     <ClInclude Include="files\Game\World\TransmittableObjects.h" />
     <ClInclude Include="files\Game\World\WorldObject.h" />
     <ClInclude Include="files\Networking\Client\Client.h" />

@@ -6,6 +6,7 @@ class Player : public Entity {
 public:
 	Player(const NetPeer& peer);
 	Player(const TransmittablePlayer& p); 
+	Player(); // Default constructor
 	~Player();
 
 	// Local variables
@@ -26,6 +27,7 @@ private:
 	float move_speed = 10.0f;
 	float look_sensitivity = 0.05f;
 
+	void setup_camera(); // Sets up camera with default values
 	void move_directionally(float amount); // Moves amount in direction player is facing
-
+	
 };

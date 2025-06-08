@@ -8,7 +8,7 @@ Entity::Entity(
     raylib::Vector3 _scale
 ) : position(_position), rotation(_rotation), scale(_scale)
 {
-    model = LoadModel("files/Assets/cube.obj");
+    model = AssetManager::getDefaultModel();
 
     ID = next_id++;
 }
@@ -136,6 +136,7 @@ std::vector<unsigned int> Entity::get_children_ids() const {
             ids.push_back(child->get_id());
         }
     }
+    return ids;
 }
 
 TransmittableEntity Entity::to_transmittable() const {

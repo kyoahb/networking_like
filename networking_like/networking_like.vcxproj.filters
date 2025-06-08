@@ -211,6 +211,9 @@
     <ClCompile Include="files\Game\World\WorldObject.cpp">
       <Filter>Game\World</Filter>
     </ClCompile>
+    <ClCompile Include="files\Game\World\Objects\AssetManager.cpp">
+      <Filter>Game\World\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="files\Utils\Imports\common.h">
@@ -518,6 +521,9 @@
     </ClInclude>
     <ClInclude Include="files\Game\World\TransmittableObjects.h">
       <Filter>Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="files\Game\World\Objects\AssetManager.h">
+      <Filter>Game\World\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

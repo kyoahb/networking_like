@@ -32,7 +32,7 @@ struct TransmittablePlayer : public TransmittableEntity {
 
 	template <typename Archive>
 	void serialize(Archive& archive) {
-		archive(static_cast<TransmittableEntity&>(*this), peer_id);
+		archive(id, parent_id, children_ids, position, rotation, scale, peer_id);
 	}
 };
 
